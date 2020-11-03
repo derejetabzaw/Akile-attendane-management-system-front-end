@@ -1,0 +1,13 @@
+.card{
+    border-radius: 15px;
+    /* background: whitesmoke; */
+    width: 30%;
+}
+
+.cardImage {
+    width: 50%;
+    border-radius: 18px;
+    align-items: center;
+    flex: auto;
+    padding-left: 3%;
+}

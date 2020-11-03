@@ -9,14 +9,14 @@ import {
 const TheLayout = () => {
 
   return (
-    <div className="c-app c-default-layout">
+    <div  style={{ background: '#282A39'}}>
       <TheSidebar/>
-      <div className="c-wrapper">
-        <TheHeader/>
-        <div className="c-body">
+      <div className="c-wrapper" >
+        <div className="c-body" >
+        <TheHeader />
           <TheContent/>
         </div>
-        <TheFooter/>
+        {/* <TheFooter/> */}
       </div>
     </div>
   )
