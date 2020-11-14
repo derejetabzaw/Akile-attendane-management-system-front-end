@@ -37,15 +37,15 @@ export default class Dashboard extends Component {
 
   render() {
     const rows = [
-      this.createData("Constraction", '0212', '✔',"x", 'Addis Ababa', 'x6t25H3', '03/05/20', '12:30'),
-      this.createData("John Walsh", '0324', '✔', "✔", 'Addis Ababa', 'ia3Hwoa5',  '03/05/20', '12:20'),
-      this.createData("Bob Herm", '3324', 'x', "x", 'Adama', 'tt288JY',  '03/05/20', '12:35'),
-      this.createData("James Houston", '7702', '✔', "✔", 'Awassa', '999h3tJ',  '03/05/20', '12:33'),
-      // this.createData("Bobby Herm", '39924', 'x', "x", 'Adama', 'tt288JY',  '03/05/20', '12:35'),
-      this.createData("Matt Houston", '77002', '✔', "✔", 'Awassa', '999h3tJ',  '03/05/20', '12:33'),
-      this.createData("Cat", '03212', '✔',"x", 'Addis Ababa', 'x6t25H3', '03/05/20', '12:30'),
-      this.createData("Johnny Walsh", '02324', '✔', "✔", 'Addis Ababa', 'ia3Hwoa5',  '03/05/20', '12:20'),
-      this.createData("Nob Herm", '36324', 'x', "x", 'Adama', 'tt288JY',  '03/05/20', '12:35'),
+      this.createData("Constraction", '0212', '✔',"x", 'Addis Ababa', 'x6t25H3', '03/05/20', '4:30'),
+      this.createData("John Walsh", '0324', '✔', "✔", 'Addis Ababa', 'ia3Hwoa5',  '03/05/20', '5:20'),
+      this.createData("Bob Herm", '3324', 'x', "x", 'Adama', 'tt288JY',  '03/05/20', '4:35'),
+      this.createData("James Houston", '7702', '✔', "✔", 'Awassa', '999h3tJ',  '03/05/20', '5:33'),
+      // this.createData("Bobby Herm", '39924', 'x', "x", 'Adama', 'tt288JY',  '03/05/20', '5:35'),
+      this.createData("Matt Houston", '77002', '✔', "✔", 'Awassa', '999h3tJ',  '03/05/20', '5:33'),
+      this.createData("Cat", '03212', '✔',"x", 'Addis Ababa', 'x6t25H3', '03/05/20', '5:30'),
+      this.createData("Johnny Walsh", '02324', '✔', "✔", 'Addis Ababa', 'ia3Hwoa5',  '03/05/20', '5:20'),
+      this.createData("Nob Herm", '36324', 'x', "x", 'Adama', 'tt288JY',  '03/05/20', '4:35'),
      
       
     ];
