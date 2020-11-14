@@ -14,7 +14,8 @@ import {
   CInputGroupText,
   CRow
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
+import img from './akil.jpg';
 
 const Login = () => {
   return (
@@ -26,8 +27,14 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
+
+                    <div style={{marginLeft: 'auto', marginRight: 'auto', display: 'block'}}>
+                    <div >
+                      <img src={img} style={{ borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto', display: "block", width: '20%' }} />
+                    </div>
+                    <h1 style={{ paddingLeft: '43.5%', paddingTop: '2%'}}>Login</h1>
+                    <p className="text-muted" style={{ paddingLeft: '39%', paddingBottom: '3%'}}>Sign In to your account</p>
+                    </div>
                     <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
                         <CInputGroupText>
@@ -57,7 +64,7 @@ const Login = () => {
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
+              {/* <CCard className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
                     <h2>Sign up</h2>
@@ -68,7 +75,7 @@ const Login = () => {
                     </Link>
                   </div>
                 </CCardBody>
-              </CCard>
+              </CCard> */}
             </CCardGroup>
           </CCol>
         </CRow>

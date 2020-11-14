@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import { Card, Row, Col, Carousel } from "antd";
 import "./landing.css";
 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button,InputGroup, InputGroupAddon, InputGroupText, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -37,10 +37,10 @@ export default class Dashboard extends Component {
 
   render() {
     const rows = [
-      this.createData("Joe James", 30,"Addis Ababa"),
-      this.createData("John Walsh", 42, "CT"),
-      this.createData("Bob Herm", 33, "FL"),
-      this.createData("James Houston", 37, "TX"),
+      this.createData("Joe James", 'Female', 30,"CEO"),
+      this.createData("John Walsh", 'Male', 42, "COO"),
+      this.createData("Bob Herm", 'Female', 33, "Manager"),
+      this.createData("James Houston", 'Male', 37, "Business Analyst"),
     ];
     const useStyles = makeStyles({
       table: {
@@ -48,8 +48,7 @@ export default class Dashboard extends Component {
       },
     });
 
-    const columns = ["Name", "Company", "City", "State"];
-
+  
     const data = [
       ["Joe James", "Test Corp", "Yonkers", "NY"],
       ["John Walsh", "Test Corp", "Hartford", "CT"],
@@ -89,8 +88,9 @@ export default class Dashboard extends Component {
         <TableHead>
           <TableRow>
             <StyledTableCell>Employee Name</StyledTableCell>
-            <StyledTableCell align="right">Age</StyledTableCell>
-            <StyledTableCell align="right">Address</StyledTableCell>
+            <StyledTableCell >Sex</StyledTableCell>
+            <StyledTableCell >Age</StyledTableCell>
+            <StyledTableCell align="right">Position</StyledTableCell>
             {/* <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
             <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell> */}
           </TableRow>
@@ -101,8 +101,10 @@ export default class Dashboard extends Component {
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
+              <StyledTableCell >{row.calories}</StyledTableCell>
+              <StyledTableCell >{row.fat}</StyledTableCell>
+              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+
               {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
               <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
             </StyledTableRow>
@@ -120,16 +122,50 @@ export default class Dashboard extends Component {
         <ModalBody>
           <Form>
           <FormGroup>
-        <Label for="exampleEmail">Name</Label>
-        <Input  name="email" id="exampleEmail" placeholder="with a placeholder" />
+        {/* <Label for="exampleEmail">Name</Label> */}
+      <InputGroup>
+      <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
+
+        <Input placeholder="Name of Employee" />
+      </InputGroup>
+
       </FormGroup>
       <FormGroup>
-        <Label for="exampleEmail">Age</Label>
-        <Input  name="email" id="exampleEmail" placeholder="with a placeholder" />
+        {/* <Label for="exampleEmail">Sex</Label> */}
+      <InputGroup>
+
+        <InputGroupAddon addonType="prepend">Sex</InputGroupAddon>
+
+        <Input type="select" name="backdrop" id="backdrop">
+            <option value="true">Male</option>
+            <option value="false">Female</option>
+          </Input>
+      </InputGroup>
+
       </FormGroup>
       <FormGroup>
-        <Label for="exampleEmail">Address</Label>
-        <Input  name="email" id="exampleEmail" placeholder="with a placeholder" />
+      <InputGroup>
+        {/* <Label for="exampleEmail">Age</Label> */}
+
+        <InputGroupAddon addonType="prepend">Age</InputGroupAddon>
+        <Input placeholder="Age of Employee" min={0} max={100} type="number" step="1" />
+        {/* <InputGroupAddon addonType="append">.00</InputGroupAddon> */}
+      </InputGroup>
+      </FormGroup>
+      <FormGroup>
+        {/* <Label for="exampleEmail">Position</Label> */}
+        <InputGroup>
+        {/* <Label for="exampleEmail">Age</Label> */}
+
+        <InputGroupAddon addonType="prepend">Position</InputGroupAddon>
+        <Input type="select" name="backdrop" id="backdrop">
+            <option value="true">----Select Position----</option>
+            <option value="true">Manager</option>
+
+            <option value="false">Programmer</option>
+        </Input>
+      </InputGroup>
+        
       </FormGroup>
           </Form>
          </ModalBody>

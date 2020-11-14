@@ -12,7 +12,7 @@ import CIcon from '@coreui/icons-react'
 import { Link } from 'react-router-dom'
 
 const TheHeaderDropdownTasks = () => {
-  const itemsCount = 5
+  // const itemsCount = 5
   return (
     <CDropdown
       inNav
@@ -20,7 +20,7 @@ const TheHeaderDropdownTasks = () => {
     >
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <CIcon name="cil-settings" />
-        <CBadge shape="pill" color="warning">{itemsCount}</CBadge>
+        {/* <CBadge shape="pill" color="warning">{itemsCount}</CBadge> */}
       </CDropdownToggle>
       <CDropdownMenu placement="bottom-end" className="pt-0">
         <CDropdownItem
@@ -29,13 +29,9 @@ const TheHeaderDropdownTasks = () => {
           className="text-center"
           color="light"
         >
-          <strong>You have {itemsCount} pending tasks</strong>
+          {/* <strong>You have {itemsCount} pending tasks</strong> */}
         </CDropdownItem>
-        <CDropdownItem className="d-block">
-          <div className="small mb-1">Upgrade NPM &amp; Bower <span
-            className="float-right"><strong>0%</strong></span></div>
-          <CProgress size="xs" color="info" value={0} />
-        </CDropdownItem>
+        
         <Link to="/">
                        
        

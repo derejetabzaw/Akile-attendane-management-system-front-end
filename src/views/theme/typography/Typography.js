@@ -5,18 +5,18 @@ const Typography = () => {
     <>
       <div className="card">
         <div className="card-header">
-          Headings
+          Payroll
         </div>
         <div className="card-body">
-          <p>Documentation and examples for Bootstrap typography, including global settings, headings, body text, lists, and more.</p>
+          <p>Monthly Payroll </p>
           <table className="table">
             <thead>
             <tr>
-              <th>Heading</th>
-              <th>Example</th>
+              <th></th>
+              <th></th>
             </tr>
             </thead>
-            <tbody>
+            {/* <tbody>
             <tr>
               <td>
                 <p><code className="highlighter-rouge">&lt;h1&gt;&lt;/h1&gt;</code></p>
@@ -53,11 +53,11 @@ const Typography = () => {
               </td>
               <td><span className="h6">h6. Bootstrap heading</span></td>
             </tr>
-            </tbody>
+            </tbody> */}
           </table>
         </div>
       </div>
-      <div className="card">
+      {/* <div className="card">
         <div className="card-header">
           Headings
         </div>
@@ -73,8 +73,8 @@ const Typography = () => {
             <p className="h6">h6. Bootstrap heading</p>
           </div>
         </div>
-      </div>
-      <div className="card">
+      </div> */}
+      {/* <div className="card">
         <div className="card-header">
           Display headings
         </div>
@@ -100,8 +100,8 @@ const Typography = () => {
             </table>
           </div>
         </div>
-      </div>
-      <div className="card">
+      </div> */}
+      {/* <div className="card">
         <div className="card-header">
           Inline text elements
         </div>
@@ -125,8 +125,8 @@ const Typography = () => {
             <p><em>This line rendered as italicized text.</em></p>
           </div>
         </div>
-      </div>
-      <div className="card">
+      </div> */}
+      {/* <div className="card">
         <div className="card-header">
           Description list alignment
         </div>
@@ -159,8 +159,8 @@ const Typography = () => {
               </dd>
             </dl>
           </div>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </>
   )
 }
