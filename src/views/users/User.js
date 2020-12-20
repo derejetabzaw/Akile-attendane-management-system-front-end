@@ -1,41 +1,27 @@
-import React from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import React from "react";
+import CIcon from "@coreui/icons-react";
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
+import usersData from "./UsersData";
+import PropTypes from "prop-types";
 
-import usersData from './UsersData'
+class User extends React.Component {
+  render() {
+    return (
+      <Map google={this.props.google} zoom={14}>
+        <Marker onClick={this.onMarkerClick} name={"Current location"} />
 
-const User = ({match}) => {
-  const user = usersData.find( user => user.id.toString() === match.params.id)
-  const userDetails = user ? Object.entries(user) : 
-    [['id', (<span><CIcon className="text-muted" name="cui-icon-ban" /> Not found</span>)]]
-
-  return (
-    <CRow>
-      <CCol lg={6}>
-        <CCard>
-          <CCardHeader>
-            User id: {match.params.id}
-          </CCardHeader>
-          <CCardBody>
-              <table className="table table-striped table-hover">
-                <tbody>
-                  {
-                    userDetails.map(([key, value], index) => {
-                      return (
-                        <tr key={index.toString()}>
-                          <td>{`${key}:`}</td>
-                          <td><strong>{value}</strong></td>
-                        </tr>
-                      )
-                    })
-                  }
-                </tbody>
-              </table>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
-  )
+        <InfoWindow onClose={this.onInfoWindowClose}>
+          <div>{/* <h1>{this.state.selectedPlace.name}</h1> */}</div>
+        </InfoWindow>
+      </Map>
+    );
+  }
 }
 
-export default User
+User.propTypes = {
+  google: PropTypes.object,
+};
+
+export default GoogleApiWrapper({
+  apiKey: "YOUR_GOOGLE_API_KEY_GOES_HERE",
+})(User);

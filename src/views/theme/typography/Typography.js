@@ -1,168 +1,292 @@
-import React from 'react'
+import React from "react";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
-const Typography = () => {
-  return (
-    <>
-      <div className="card">
-        <div className="card-header">
-          Payroll
-        </div>
-        <div className="card-body">
-          <p>Monthly Payroll </p>
-          <table className="table">
-            <thead>
-            <tr>
-              <th></th>
-              <th></th>
-            </tr>
-            </thead>
-            {/* <tbody>
-            <tr>
-              <td>
-                <p><code className="highlighter-rouge">&lt;h1&gt;&lt;/h1&gt;</code></p>
-              </td>
-              <td><span className="h1">h1. Bootstrap heading</span></td>
-            </tr>
-            <tr>
-              <td>
-                <p><code className="highlighter-rouge">&lt;h2&gt;&lt;/h2&gt;</code></p>
-              </td>
-              <td><span className="h2">h2. Bootstrap heading</span></td>
-            </tr>
-            <tr>
-              <td>
-                <p><code className="highlighter-rouge">&lt;h3&gt;&lt;/h3&gt;</code></p>
-              </td>
-              <td><span className="h3">h3. Bootstrap heading</span></td>
-            </tr>
-            <tr>
-              <td>
-                <p><code className="highlighter-rouge">&lt;h4&gt;&lt;/h4&gt;</code></p>
-              </td>
-              <td><span className="h4">h4. Bootstrap heading</span></td>
-            </tr>
-            <tr>
-              <td>
-                <p><code className="highlighter-rouge">&lt;h5&gt;&lt;/h5&gt;</code></p>
-              </td>
-              <td><span className="h5">h5. Bootstrap heading</span></td>
-            </tr>
-            <tr>
-              <td>
-                <p><code className="highlighter-rouge">&lt;h6&gt;&lt;/h6&gt;</code></p>
-              </td>
-              <td><span className="h6">h6. Bootstrap heading</span></td>
-            </tr>
-            </tbody> */}
-          </table>
-        </div>
-      </div>
-      {/* <div className="card">
-        <div className="card-header">
-          Headings
-        </div>
-        <div className="card-body">
-          <p><code className="highlighter-rouge">.h1</code> through <code className="highlighter-rouge">.h6</code> classes are also available, for when you
-            want to match the font styling of a heading but cannot use the associated HTML element.</p>
-          <div className="bd-example">
-            <p className="h1">h1. Bootstrap heading</p>
-            <p className="h2">h2. Bootstrap heading</p>
-            <p className="h3">h3. Bootstrap heading</p>
-            <p className="h4">h4. Bootstrap heading</p>
-            <p className="h5">h5. Bootstrap heading</p>
-            <p className="h6">h6. Bootstrap heading</p>
+class Typography extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+    };
+
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  createData = (
+    name,
+    Id,
+    Position,
+    BSalary,
+    WorkDay,
+    DSalary,
+    TransportAllowance,
+    timeNight,
+    timeWeekend,
+    Comission,
+    TSalary,
+    SalaryAdvance,
+    NETSalary
+  ) => {
+    return {
+      name,
+      Id,
+      Position,
+      BSalary,
+      WorkDay,
+      DSalary,
+      TransportAllowance,
+      timeNight,
+      timeWeekend,
+      Comission,
+      TSalary,
+      SalaryAdvance,
+      NETSalary,
+    };
+  };
+
+  toggleModal = () => {
+    this.setState({
+      showModal: !this.state.showModal,
+    });
+  };
+  render() {
+    const rows = [
+      this.createData(
+        "Zeynu",
+        "Site Manager",
+        "3500",
+        "30",
+        "116.67",
+        "350.00",
+        "816.68",
+        "200.00",
+        "1403.40",
+        "",
+        "",
+        "6270.08"
+      ),
+      this.createData(
+        "Digrom Meri",
+        "Painter",
+        "3500",
+        "30",
+        "116.67",
+        "350.00",
+        "1225.02",
+        "400.00",
+        "1403.40",
+        "",
+        "",
+        "6878.42"
+      ),
+      this.createData(
+        "Marshet Getaneh",
+        "Painter",
+        "3500",
+        "30",
+        "116.67",
+        "350.00",
+        "408.02",
+        "400.00",
+        "1403.40",
+        "",
+        "500",
+        "5561.74"
+      ),
+      this.createData(
+        "Marshet Alemayehu",
+        "Painter",
+        "3500",
+        "30",
+        "116.67",
+        "350.00",
+        "",
+        "200.00",
+        "1403.40",
+        "",
+        "600",
+        "4853.40"
+      ),
+      this.createData(
+        "Getnet Anteneh",
+        "Painter",
+        "3000",
+        "30",
+        "100.00",
+        "350.00",
+        "350.00",
+        "400.00",
+        "1403.40",
+        "",
+        "",
+        "5153.40"
+      ),
+      this.createData(
+        "Getachew Neri",
+        "Painter",
+        "2500",
+        "30",
+        "83.33",
+        "350.00",
+        "729.13",
+        "400.00",
+        "",
+        "",
+        "",
+        "3979.13"
+      ),
+      this.createData(
+        "Andualem Yelmasew",
+        "Painter",
+        "2500",
+        "30",
+        "83.33",
+        "350.00",
+        "291.64",
+        "400.00",
+        "",
+        "",
+        "",
+        "3541.64"
+      ),
+      this.createData(
+        "Habtamu Neguse",
+        "Painter",
+        "2500",
+        "30",
+        "83.33",
+        "350.00",
+        "145.82",
+        "200.00",
+        "",
+        "",
+        "",
+        "3195.82"
+      ),
+      this.createData(
+        "Habtamu Awel",
+        "Painter",
+        "499.90",
+        "30",
+        "83.33",
+        "100.00",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "599.00"
+      ),
+      this.createData(
+        "Nahom Amare",
+        "",
+        "600",
+        "",
+        "",
+        "100.00",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "700.00"
+      ),
+      this.createData(
+        "",
+        "",
+        "25599.90",
+        "",
+        "",
+        "3000.00",
+        "3966.63",
+        "2600.00",
+        "7017.00",
+        "",
+        "",
+        "40732.63"
+      ),
+    ];
+
+    const StyledTableCell = withStyles((theme) => ({
+      head: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+      },
+      body: {
+        fontSize: 14,
+      },
+    }))(TableCell);
+    const StyledTableRow = withStyles((theme) => ({
+      root: {
+        "&:nth-of-type(odd)": {
+          backgroundColor: theme.palette.action.hover,
+        },
+      },
+    }))(TableRow);
+    return (
+      <>
+        <div className="card">
+          <div className="card-header">Payroll</div>
+          <div className="card-body">
+            <p>Monthly Payroll </p>
+            <TableContainer component={Paper}>
+              <Table aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Name of Employee</StyledTableCell>
+                    <StyledTableCell>Position</StyledTableCell>
+                    <StyledTableCell>Basic Salary</StyledTableCell>
+                    <StyledTableCell>Work Day</StyledTableCell>
+                    <StyledTableCell>Dayliy Salary</StyledTableCell>
+                    <StyledTableCell>Transport Allowance</StyledTableCell>
+                    <StyledTableCell>OT1(Night)</StyledTableCell>
+                    <StyledTableCell>OT2(Weekend)</StyledTableCell>
+                    <StyledTableCell>Comission</StyledTableCell>
+                    <StyledTableCell>Total Salary</StyledTableCell>
+                    <StyledTableCell>Salary Advance</StyledTableCell>
+                    <StyledTableCell align="right">NET Salary</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <StyledTableRow key={row.name}>
+                      <StyledTableCell component="th" scope="row">
+                        {row.name}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.Id}</StyledTableCell>
+                      <StyledTableCell>{row.Position}</StyledTableCell>
+                      <StyledTableCell>{row.BSalary}</StyledTableCell>
+                      <StyledTableCell>{row.WorkDay}</StyledTableCell>
+                      <StyledTableCell>{row.DSalary}</StyledTableCell>
+                      <StyledTableCell>
+                        {row.TransportAllowance}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.timeNight}</StyledTableCell>
+                      <StyledTableCell>{row.timeWeekend}</StyledTableCell>
+                      <StyledTableCell>{row.Comission}</StyledTableCell>
+                      <StyledTableCell>{row.TSalary}</StyledTableCell>
+                      <StyledTableCell>{row.SalaryAdvance}</StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.NETSalary}
+                      </StyledTableCell>
+                      {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+              <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
         </div>
-      </div> */}
-      {/* <div className="card">
-        <div className="card-header">
-          Display headings
-        </div>
-        <div className="card-body">
-          <p>Traditional heading elements are designed to work best in the meat of your page content. When you need a heading to stand out, consider using
-            a <strong>display heading</strong>—a larger, slightly more opinionated heading style.</p>
-          <div className="bd-example bd-example-type">
-            <table className="table">
-              <tbody>
-              <tr>
-                <td><span className="display-1">Display 1</span></td>
-              </tr>
-              <tr>
-                <td><span className="display-2">Display 2</span></td>
-              </tr>
-              <tr>
-                <td><span className="display-3">Display 3</span></td>
-              </tr>
-              <tr>
-                <td><span className="display-4">Display 4</span></td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div> */}
-      {/* <div className="card">
-        <div className="card-header">
-          Inline text elements
-        </div>
-        <div className="card-body">
-          <p>Traditional heading elements are designed to work best in the meat of your page content. When you need a heading to stand out, consider using
-            a <strong>display heading</strong>—a larger, slightly more opinionated heading style.</p>
-          <div className="bd-example">
-            <p>You can use the mark tag to <mark>highlight</mark> text.</p>
-            <p>
-              <del>This line of text is meant to be treated as deleted text.</del>
-            </p>
-            <p><s>This line of text is meant to be treated as no longer accurate.</s></p>
-            <p>
-              <ins>This line of text is meant to be treated as an addition to the document.</ins>
-            </p>
-            <p><u>This line of text will render as underlined</u></p>
-            <p>
-              <small>This line of text is meant to be treated as fine print.</small>
-            </p>
-            <p><strong>This line rendered as bold text.</strong></p>
-            <p><em>This line rendered as italicized text.</em></p>
-          </div>
-        </div>
-      </div> */}
-      {/* <div className="card">
-        <div className="card-header">
-          Description list alignment
-        </div>
-        <div className="card-body">
-          <p>Align terms and descriptions horizontally by using our grid system’s predefined classes (or semantic mixins). For longer terms, you can
-            optionally add a <code className="highlighter-rouge">.text-truncate</code> class to truncate the text with an ellipsis.</p>
-          <div className="bd-example">
-            <dl className="row">
-              <dt className="col-sm-3">Description lists</dt>
-              <dd className="col-sm-9">A description list is perfect for defining terms.</dd>
-
-              <dt className="col-sm-3">Euismod</dt>
-              <dd className="col-sm-9">
-                <p>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</p>
-                <p>Donec id elit non mi porta gravida at eget metus.</p>
-              </dd>
-
-              <dt className="col-sm-3">Malesuada porta</dt>
-              <dd className="col-sm-9">Etiam porta sem malesuada magna mollis euismod.</dd>
-
-              <dt className="col-sm-3 text-truncate">Truncated term is truncated</dt>
-              <dd className="col-sm-9">Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
-
-              <dt className="col-sm-3">Nesting</dt>
-              <dd className="col-sm-9">
-                <dl className="row">
-                  <dt className="col-sm-4">Nested definition list</dt>
-                  <dd className="col-sm-8">Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc.</dd>
-                </dl>
-              </dd>
-            </dl>
-          </div>
-        </div> */}
-      {/* </div> */}
-    </>
-  )
+      </>
+    );
+  }
 }
 
-export default Typography
+export default Typography;
