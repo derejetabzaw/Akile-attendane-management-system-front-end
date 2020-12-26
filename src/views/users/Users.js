@@ -72,20 +72,24 @@ const Users = (props) => {
   return (
     <>
       <Row>
-        <Col>
-          <div
-            style={{ display: "flex", justifyContent: "center", height: "100" }}
-          >
-            <DragDropContext
-              onDragEnd={(result) =>
-                // console.log("iiii", result)
-                onDragEnd(result, columns, setColumns)
-              }
-            >
-              <Tabs tabPosition="left">
-                {/* <Row>
+        <Tabs tabPosition="left">
+          {/* <Row>
                   <Col> */}
-                <TabPane tab="Site 1" key="1">
+          <TabPane tab="Site 1" key="1">
+            <Col>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "100",
+                }}
+              >
+                <DragDropContext
+                  onDragEnd={(result) =>
+                    // console.log("iiii", result)
+                    onDragEnd(result, columns, setColumns)
+                  }
+                >
                   {Object.entries(columns).map(([id, column]) => {
                     return (
                       <div
@@ -96,7 +100,7 @@ const Users = (props) => {
                         }}
                       >
                         <h3>{column.name} </h3>
-                        <div style={{ margin: 8 }}>
+                        <div style={{ margin: 20 }}>
                           <Droppable droppableId={id}>
                             {(provided, snapshot) => {
                               return (
@@ -131,8 +135,8 @@ const Users = (props) => {
                                                 padding: 16,
                                                 minHeight: "50px",
                                                 backgroundColor: snapshot.isDragging
-                                                  ? "#263B4A"
-                                                  : "#456C86",
+                                                  ? "black"
+                                                  : "brown",
                                                 color: "white",
                                                 ...provided.draggableProps
                                                   .style,
@@ -153,36 +157,18 @@ const Users = (props) => {
                       </div>
                     );
                   })}
-                </TabPane>
-                {/* </Col>
+                </DragDropContext>
+              </div>
+            </Col>
+            <Col style={{ float: "right", marginLeft: "45%" }}>
+              {" "}
+              <Button ghost>Save</Button>
+            </Col>
+          </TabPane>
+          {/* </Col>
                 </Row> */}
-              </Tabs>
-            </DragDropContext>
-          </div>
-        </Col>
-        <Col style={{ float: "right", marginLeft: "45%" }}>
-          {" "}
-          <Button ghost>Save</Button>
-        </Col>
+        </Tabs>
       </Row>
-      {/* <Row>
-        <Col span={12}>
-          <Tabs tabPosition="left">
-            <TabPane tab="Tab 1" key="1">
-              <p>Bole Site </p>
-            </TabPane>
-            <TabPane tab="Tab 2" key="2">
-              <p>Bole Site2 </p>
-            </TabPane>
-            <TabPane tab="Tab 3" key="3">
-              <p>Bole Site3 </p>
-            </TabPane>
-          </Tabs>
-        </Col>
-        <Col span={12}>
-          <p>ppppp</p>
-        </Col>
-      </Row> */}
     </>
   );
 };
