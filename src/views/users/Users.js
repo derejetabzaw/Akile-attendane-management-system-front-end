@@ -62,19 +62,10 @@ const onDragEnd = (result, columns, setColumns) => {
   }
 };
 
-const Users = () => {
-  // const history = useHistory();
-  // const queryPage = useLocation().search.match(/page=([0-9]+)/, "");
-  // const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1);
-  // const [page, setPage] = useState(currentPage);
-
-  // const pageChange = (newPage) => {
-  //   currentPage !== newPage && history.push(`/users?page=${newPage}`);
-  // };
-
-  // useEffect(() => {
-  //   currentPage !== page && setPage(currentPage);
-  // }, [currentPage, page]);
+const Users = (props) => {
+  useEffect(() => {
+    console.log("props", props);
+  });
 
   const [columns, setColumns] = useState(columnData);
 

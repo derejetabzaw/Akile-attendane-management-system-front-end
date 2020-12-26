@@ -28,9 +28,10 @@ export default function User() {
     const { layerType, layer } = e;
     if (layerType === "marker") {
       const { _leaflet_id } = layer;
+      const { _latlng } = layer;
 
-      setMapLayer((layer) => [...layer, { id: _leaflet_id }]);
-      console.log(layer, "layersss");
+      setMapLayer((layer) => [...layer, { id: _leaflet_id, latlng: _latlng }]);
+      console.log(layer, "layersss", mapLayers);
     }
   };
 
@@ -93,7 +94,7 @@ export default function User() {
         </TabPane>
         <TabPane tab="Assign Site" key="2">
           <div style={{ width: "100%" }}>
-            <Users />
+            <Users mapData={mapLayers} />
           </div>
         </TabPane>
         <TabPane tab="Inforamtion" key="3"></TabPane>
