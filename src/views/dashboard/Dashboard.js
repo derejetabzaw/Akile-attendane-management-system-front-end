@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Slider from "react-slick";
-import { Card, Row, Col, Carousel } from "antd";
+import { Card, Row, Col, Upload, Button as AntButton } from "antd";
 import "./landing.css";
-
+import { UploadOutlined } from "@ant-design/icons";
 import {
   Button,
   InputGroup,
@@ -38,11 +38,32 @@ export default class Dashboard extends Component {
     super(props);
     this.state = {
       showModal: false,
+      uploadFile: [],
+      src: null,
     };
 
     this.toggleModal = this.toggleModal.bind(this);
   }
 
+  beforeUploadFile = (file) => {
+    this.setState({ uploadFile: [file] });
+    return false;
+  };
+
+  onRemove = (file) => {
+    this.setState({
+      uploadFile: [],
+    });
+  };
+  onSelectFile = (file, list, e) => {
+    // if (file) {
+    //   const reader = new FileReader();
+    //   reader.addEventListener("load", () =>
+    //     this.setState({ src: reader.result })
+    //   );
+    //   reader.readAsDataURL(file.file);
+    // }
+  };
   createData = (
     name,
     Position,
@@ -177,33 +198,6 @@ export default class Dashboard extends Component {
                 </InputGroup>
               </FormGroup>
               <FormGroup>
-                {/* <Label for="exampleEmail">Sex</Label> */}
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">Gender</InputGroupAddon>
-
-                  <Input type="select" name="backdrop" id="backdrop">
-                    <option value="true">Male</option>
-                    <option value="false">Female</option>
-                  </Input>
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <InputGroup>
-                  {/* <Label for="exampleEmail">Age</Label> */}
-
-                  <InputGroupAddon addonType="prepend">
-                    Telephone
-                  </InputGroupAddon>
-                  <Input
-                    placeholder="Phone Number of Employee"
-                    min={13}
-                    max={13}
-                    type="number"
-                  />
-                  {/* <InputGroupAddon addonType="append">.00</InputGroupAddon> */}
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
                 {/* <Label for="exampleEmail">Position</Label> */}
                 <InputGroup>
                   {/* <Label for="exampleEmail">Age</Label> */}
@@ -220,12 +214,72 @@ export default class Dashboard extends Component {
                 </InputGroup>
               </FormGroup>
               <FormGroup>
+                {/* <Label for="exampleEmail">Sex</Label> */}
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">Gender</InputGroupAddon>
+
+                  <Input type="select" name="backdrop" id="backdrop">
+                    <option value="true">Male</option>
+                    <option value="false">Female</option>
+                  </Input>
+                </InputGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    Device Id
+                  </InputGroupAddon>
+
+                  <Input placeholder="DeviceId of Employee" />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    Password
+                  </InputGroupAddon>
+
+                  <Input
+                    placeholder="DeviceId of Employee"
+                    value={Math.random().toString(36).slice(-8)}
+                  />
+                </InputGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <InputGroup>
+                  {/* <Label for="exampleEmail">Age</Label> */}
+
+                  <InputGroupAddon addonType="prepend">
+                    Telephone
+                  </InputGroupAddon>
+                  <Input
+                    placeholder="Phone Number of Employee"
+                    min={13}
+                    max={13}
+                    type="number"
+                  />
+                  {/* <InputGroupAddon addonType="append">.00</InputGroupAddon> */}
+                </InputGroup>
+              </FormGroup>
+
+              <FormGroup>
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
 
                   <Input placeholder="Email of Employee" />
                 </InputGroup>
               </FormGroup>
+              <Upload
+                accept="image/*"
+                beforeUpload={this.beforeUploadFile}
+                onRemove={this.onRemove}
+                onChange={this.onSelectFile}
+                listType="picture"
+              >
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              </Upload>
             </Form>
           </ModalBody>
           <ModalFooter>
