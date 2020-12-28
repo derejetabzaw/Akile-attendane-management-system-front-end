@@ -19,6 +19,14 @@ const { TabPane } = Tabs;
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
+function GetIcon(icon) {
+  return L.icon({
+    // iconUrl: require("../../assets/icons/logo.jpg"),
+    iconUrl: require("./src/akil.jpg"),
+    iconSize: icon,
+  });
+}
+
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
 
@@ -69,8 +77,9 @@ export default function User() {
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={[8.980603, 38.757759]}>
+              <Marker position={[8.980603, 38.757759]} icon={GetIcon(30)}>
                 <Popup>
+                  <p>Akile Headquarters</p>
                   <FeatureGroup>
                     <EditControl
                       position="topright"

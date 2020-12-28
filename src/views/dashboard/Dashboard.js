@@ -92,6 +92,13 @@ export default class Dashboard extends Component {
     });
   };
 
+  toggleModalAdd = () => {
+    this.createData();
+    this.setState({
+      showModal: !this.state.showModal,
+    });
+  };
+
   render() {
     const rows = [
       this.createData(
@@ -240,10 +247,11 @@ export default class Dashboard extends Component {
                     Password
                   </InputGroupAddon>
 
-                  <Input
+                  {/* <Input
                     placeholder="DeviceId of Employee"
                     value={Math.random().toString(36).slice(-8)}
-                  />
+                  /> */}
+                  <PasswordWithGenerator />
                 </InputGroup>
               </FormGroup>
 
@@ -283,7 +291,7 @@ export default class Dashboard extends Component {
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggleModal}>
+            <Button color="primary" onClick={this.toggleModalAdd}>
               Add Employee
             </Button>{" "}
             <Button color="secondary" onClick={this.toggleModal}>
