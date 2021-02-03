@@ -70,7 +70,6 @@ export default class Dashboard extends Component {
     Gender,
     DeviceID,
     StaffID,
-    Password,
     Telephone,
     Email
   ) => {
@@ -80,7 +79,6 @@ export default class Dashboard extends Component {
       Gender,
       DeviceID,
       StaffID,
-      Password,
       Telephone,
       Email,
     };
@@ -107,16 +105,14 @@ export default class Dashboard extends Component {
         "Female",
         "deviceId",
         "stuff",
-        "",
         "099382948",
         "example@gmail.co"
       ),
       this.createData(
-        "Joe ",
-        "CEO",
+        "Joe Biden",
+        "Painter",
         "Female",
         "deviceId",
-        "",
         "",
         "099382948",
         "example@gmail.co"
@@ -160,7 +156,6 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Gender</StyledTableCell>
                 <StyledTableCell>DeviceID</StyledTableCell>
                 <StyledTableCell>StaffID</StyledTableCell>
-                <StyledTableCell>Password</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell align="right">Email</StyledTableCell>
               </TableRow>
@@ -175,9 +170,6 @@ export default class Dashboard extends Component {
                   <StyledTableCell>{row.Gender}</StyledTableCell>
                   <StyledTableCell>{row.DeviceID}</StyledTableCell>
                   <StyledTableCell>{nextId("AK-")}</StyledTableCell>
-                  <StyledTableCell>
-                    {Math.random().toString(36).slice(-8)}
-                  </StyledTableCell>
                   <StyledTableCell>{row.Telephone}</StyledTableCell>
                   <StyledTableCell align="right">{row.Email}</StyledTableCell>
                 </StyledTableRow>
