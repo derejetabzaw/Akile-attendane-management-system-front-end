@@ -117,6 +117,15 @@ export default class Dashboard extends Component {
         "099382948",
         "example@gmail.co"
       ),
+      this.createData(
+        "Barack Obama",
+        "President",
+        "Male",
+        "deviceId",
+        "",
+        "0910131258",
+        "Obama@gmail.co"
+      ),
     ];
 
     const StyledTableCell = withStyles((theme) => ({

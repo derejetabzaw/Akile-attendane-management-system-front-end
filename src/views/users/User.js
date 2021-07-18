@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Modal, Button, Form} from "react-bootstrap";
 import usersData from "./UsersData";
 import "./MapViewerComp.css";
 import {
@@ -14,8 +15,12 @@ import { EditControl } from "./src";
 // import { EditControl } from "react-leaflet-draw";
 import { Tabs } from "antd";
 import Users from "./Users";
+import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
+// import Form from "antd/lib/form/Form";
 
 const { TabPane } = Tabs;
+
+
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -27,8 +32,15 @@ function GetIcon(icon) {
   });
 }
 
+
+
+
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
+  const [showModal, setShow] = useState(false);
+
+  const addSiteModal = () => setShow(true);
+  const closeModal = () => setShow(false);
 
   const _onCreate = (e) => {
     console.log(e, "onCreate");
@@ -61,11 +73,61 @@ export default function User() {
     });
     console.log(`onDeleted: removed ${numDeleted} layers`, e);
   };
-
   return (
     <>
-      <Tabs defaultActiveKey="1">
-        <TabPane tab="Add Site" key="1">
+      <Tabs defaultActiveKey="2">
+        <TabPane tab="List of Sites" key="1">
+          <Button
+            color="primary"
+            onClick={closeModal}
+            style={{ float: "right", marginBottom: "2%" }}
+          >
+          Remove {" "}
+          </Button>
+          <Button
+            color="primary"
+            onClick={addSiteModal}
+            style={{ float: "right", marginBottom: "2%" }}
+          >
+          Add{" "}
+          </Button>
+          <Modal show={showModal} onHide = {closeModal}>
+            
+            <Modal.Header>
+              <Modal.Title> Add Sites</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
+
+                    <Input placeholder="Name of Employee" />
+                  </InputGroup>
+                </Form.Group>
+                <Form.Group>
+                  {/* <Label for="exampleEmail">Position</Label> */}
+                  <InputGroup>
+                    {/* <Label for="exampleEmail">Age</Label> */}
+
+                    <InputGroupAddon addonType="prepend">
+                      Position
+                    </InputGroupAddon>
+                    <Input type="select" name="backdrop" id="backdrop">
+                      <option value="true">----Select Position----</option>
+                      <option value="true">Manager</option>
+
+                      <option value="false">Programmer</option>
+                    </Input>
+                  </InputGroup>
+                </Form.Group>
+              </Form>
+            
+              
+              </Modal.Body>
+          </Modal>
+        </TabPane>
+        <TabPane tab="Add Site" key="2">
           <div style={{ height: "82vh", width: "100%" }}>
             <Map
               center={[8.980603, 38.757759]}
@@ -101,13 +163,14 @@ export default function User() {
             <pre>{JSON.stringify(mapLayers, 0, 2)}</pre>
           </div>
         </TabPane>
-        <TabPane tab="Assign Site" key="2">
+        <TabPane tab="Assign Site" key="3">
           <div style={{ width: "100%" }}>
             <Users mapData={mapLayers} />
           </div>
         </TabPane>
-        <TabPane tab="Inforamtion" key="3"></TabPane>
+        <TabPane tab="Inforamtion" key="4"></TabPane>
       </Tabs>
     </>
   );
 }
+

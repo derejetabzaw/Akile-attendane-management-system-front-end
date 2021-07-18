@@ -68,6 +68,7 @@ export default [
     _tag: "CSidebarNavItem",
     name: "Sites",
     to: "/users/User",
-    icon: "cil-file",
+    icon: "cil-paper-plane",
   },
+
 ];
