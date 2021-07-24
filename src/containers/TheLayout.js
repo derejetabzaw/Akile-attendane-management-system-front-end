@@ -9,7 +9,7 @@ import {
 const TheLayout = () => {
 
   return (
-    <div  style={{ background: '#282A39'}}>
+    <div  style={{ background: '#421716'}}>
       <TheSidebar/>
       <div className="c-wrapper" >
         <div className="c-body" >

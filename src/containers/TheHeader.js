@@ -40,7 +40,9 @@ const TheHeader = () => {
   }
 
   return (
-    <CHeader withSubheader>
+    <CHeader withSubheader
+    style={{ background: '#404216'}}
+    >
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"
@@ -55,7 +57,8 @@ const TheHeader = () => {
         {/* <CIcon name="logo" height="48" alt="Logo"/> */}
         {/* <img src={img} style={{ borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto', display: "block", width: '20%' }} /> */}
       </CHeaderBrand>
-      <CHeaderNav className="px-3" style={{marginLeft: '80%'}}>
+      <CHeaderNav className="px-3" style={{marginLeft: '80%'}}
+      >
         <TheHeaderDropdownNotif/>
         <TheHeaderDropdownTasks/>
         {/* <TheHeaderDropdownMssg/> */}

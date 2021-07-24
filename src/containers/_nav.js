@@ -70,5 +70,11 @@ export default [
     to: "/users/User",
     icon: "cil-paper-plane",
   },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Inventory",
+    to: "/inventory",
+    icon: "cil-notes",
+  },
 
 ];
