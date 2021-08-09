@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import { Card, Row, Col, Upload, Button as AntButton } from "antd";
 import "./landing.css";
 import { UploadOutlined } from "@ant-design/icons";
+
 import {
   Button,
   InputGroup,
@@ -38,22 +39,115 @@ export default class Dashboard extends Component {
     super(props);
     this.state = {
       showModal: false,
+      name: '',
+      Position: '',
+      Gender: '',
+      DeviceID:'',
+      StaffID: '',
+      Telephone:'',
+      Email:'',
       uploadFile: [],
       src: null,
     };
 
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   beforeUploadFile = (file) => {
     this.setState({ uploadFile: [file] });
     return false;
   };
+  
+  handleNameChange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const names = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      names: event.target.value
+    });
+    console.log(names)
 
+  }
+
+
+  handlePositionchange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      [name]:value
+    });
+    // console.log(value)
+
+  }
+  handleGenderchange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      [name]:value
+    });
+    // console.log(value)
+
+  }
+  handleDeviceIdchange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const deviceid = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      // [name]:value
+      deviceid: event.target.value
+
+    });
+    console.log(deviceid)
+
+  }
+  handleStaffIdchange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      [name]:value
+    });
+    console.log(value)
+
+  }
+  handleTelephonechange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const telephone = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      // [name]:value
+      telephone: event.target.value
+
+    });
+    console.log(telephone)
+
+  }
+  handleEmailchange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const email = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      // [name]:value
+      email: event.target.value
+
+    });
+    console.log(email)
+  }
+  handleNameSubmit = (event) => {
+    
+    // const krows = [ this.state.names ,this.state.deviceid, this.state.telephone , this.state.email]
+    this.setState({
+      showModal: !this.state.showModal,
+    });
+  }
   onRemove = (file) => {
     this.setState({
       uploadFile: [],
     });
+
   };
   onSelectFile = (file, list, e) => {
     // if (file) {
@@ -91,7 +185,9 @@ export default class Dashboard extends Component {
   };
 
   toggleModalAdd = () => {
-    this.createData();
+    // this.createData();
+    // const krows = [ this.handleNameChange(),this.handleDeviceIdchange(), this.handleTelephonechange(),this.handleEmailchange()]
+    // console.log(krows)
     this.setState({
       showModal: !this.state.showModal,
     });
@@ -100,33 +196,20 @@ export default class Dashboard extends Component {
   render() {
     const rows = [
       this.createData(
-        "Joe James",
-        "CEO",
-        "Female",
-        "deviceId",
-        "stuff",
-        "099382948",
-        "example@gmail.co"
-      ),
-      this.createData(
-        "Joe Biden",
-        "Painter",
-        "Female",
-        "deviceId",
-        "",
-        "099382948",
-        "example@gmail.co"
-      ),
-      this.createData(
-        "Barack Obama",
-        "President",
+        "Beamlak Teshome",
+        "Painter - II",
         "Male",
-        "deviceId",
-        "",
-        "0910131258",
-        "Obama@gmail.co"
+        "f5e90564385492f2",
+        "AK-12156",
+        "0910315980",
+        "dergkat59@gmail.com"
       ),
     ];
+    const krows = [this.createData(this.state.names ,"","",this.state.deviceid,"", this.state.telephone , this.state.email),];
+
+    // const krows = [ this.handleNameChange(),this.handleDeviceIdchange(), this.handleTelephonechange(),this.handleEmailchange()]
+    // console.log(krows)
+    // const rows = [this.handleInputChange()];
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -155,37 +238,7 @@ export default class Dashboard extends Component {
           Add{" "}
         </Button>
 
-        <div style={{ marginTop: "2%" }}></div>
-        <TableContainer component={Paper}>
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Name</StyledTableCell>
-                <StyledTableCell>Position</StyledTableCell>
-                <StyledTableCell>Gender</StyledTableCell>
-                <StyledTableCell>DeviceID</StyledTableCell>
-                <StyledTableCell>StaffID</StyledTableCell>
-                <StyledTableCell>Telephone</StyledTableCell>
-                <StyledTableCell align="right">Email</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
-                  </StyledTableCell>
-                  <StyledTableCell>{row.Position}</StyledTableCell>
-                  <StyledTableCell>{row.Gender}</StyledTableCell>
-                  <StyledTableCell>{row.DeviceID}</StyledTableCell>
-                  <StyledTableCell>{nextId("AK-")}</StyledTableCell>
-                  <StyledTableCell>{row.Telephone}</StyledTableCell>
-                  <StyledTableCell align="right">{row.Email}</StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        
 
         <Modal
           isOpen={this.state.showModal}
@@ -196,13 +249,13 @@ export default class Dashboard extends Component {
         >
           <ModalHeader toggle={this.toggleModal}>Add Employee</ModalHeader>
           <ModalBody>
-            <Form>
+            <Form> 
               <FormGroup>
                 {/* <Label for="exampleEmail">Name</Label> */}
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
 
-                  <Input placeholder="Name of Employee" />
+                  <Input   onChange={this.handleNameChange} placeholder="Name of Employee" />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -213,10 +266,9 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Position
                   </InputGroupAddon>
-                  <Input type="select" name="backdrop" id="backdrop">
+                  <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop">
                     <option value="true">----Select Position----</option>
                     <option value="true">Manager</option>
-
                     <option value="false">Programmer</option>
                   </Input>
                 </InputGroup>
@@ -226,7 +278,7 @@ export default class Dashboard extends Component {
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Gender</InputGroupAddon>
 
-                  <Input type="select" name="backdrop" id="backdrop">
+                  <Input onChange ={this.handleGenderchange} type="select" name="backdrop" id="backdrop">
                     <option value="true">Male</option>
                     <option value="false">Female</option>
                   </Input>
@@ -239,7 +291,7 @@ export default class Dashboard extends Component {
                     Device Id
                   </InputGroupAddon>
 
-                  <Input placeholder="DeviceId of Employee" />
+                  <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -264,6 +316,7 @@ export default class Dashboard extends Component {
                     Telephone
                   </InputGroupAddon>
                   <Input
+                    onChange ={this.handleTelephonechange}
                     placeholder="Phone Number of Employee"
                     min={13}
                     max={13}
@@ -277,7 +330,7 @@ export default class Dashboard extends Component {
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
 
-                  <Input placeholder="Email of Employee" />
+                  <Input onChange ={this.handleEmailchange} placeholder="Email of Employee" />
                 </InputGroup>
               </FormGroup>
               <Upload
@@ -292,7 +345,7 @@ export default class Dashboard extends Component {
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggleModalAdd}>
+            <Button color="primary" onClick={this.handleNameSubmit}>
               Add Employee
             </Button>{" "}
             <Button color="secondary" onClick={this.toggleModal}>
@@ -300,6 +353,41 @@ export default class Dashboard extends Component {
             </Button>
           </ModalFooter>
         </Modal>
+        
+        
+        <div style={{ marginTop: "2%" }}></div>
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>Position</StyledTableCell>
+                <StyledTableCell>Gender</StyledTableCell>
+                <StyledTableCell>DeviceID</StyledTableCell>
+                <StyledTableCell>StaffID</StyledTableCell>
+                <StyledTableCell>Telephone</StyledTableCell>
+                <StyledTableCell align="right">Email</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {krows.map((krow) => (
+                <StyledTableRow key={krows.name}>
+                  <StyledTableCell component="th" scope="row">
+                    {krow.name}
+                  </StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell>{krow.DeviceID}</StyledTableCell>
+                  {/* <StyledTableCell>{nextId("AK-")}</StyledTableCell> */}
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell>{krow.Telephone}</StyledTableCell>
+                  <StyledTableCell align="right">{krow.Email}</StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      
       </>
     );
   }

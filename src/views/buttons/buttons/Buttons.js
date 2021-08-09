@@ -51,85 +51,14 @@ export default class Dashboard extends Component {
   render() {
     const rows = [
       this.createData(
-        "Constraction",
-        "0212",
-        "7:30",
-        "4:50",
-        "Addis Ababa",
-        "x6t25H3",
-        "03/05/20",
-        "4:30"
-      ),
-      this.createData(
-        "John Walsh",
-        "0324",
-        "8:30",
-        "4:30",
-        "Addis Ababa",
-        "ia3Hwoa5",
-        "03/05/20",
-        "5:20"
-      ),
-      this.createData(
-        "Bob Herm",
-        "3324",
-        "8:20",
-        "5:10",
-        "Adama",
-        "tt288JY",
-        "03/05/20",
-        "4:35"
-      ),
-      this.createData(
-        "James Houston",
-        "7702",
-        "7:40",
-        "4:53",
-        "Awassa",
-        "999h3tJ",
-        "03/05/20",
-        "5:33"
-      ),
-      // this.createData("Bobby Herm", '39924', 'x', "x", 'Adama', 'tt288JY',  '03/05/20', '5:35'),
-      this.createData(
-        "Matt Houston",
-        "77002",
-        "7:50",
-        "5:01",
-        "Awassa",
-        "999h3tJ",
-        "03/05/20",
-        "5:33"
-      ),
-      this.createData(
-        "Cat",
-        "03212",
-        "7:34",
-        "4:40",
-        "Addis Ababa",
-        "x6t25H3",
-        "03/05/20",
-        "5:30"
-      ),
-      this.createData(
-        "Johnny Walsh",
-        "02324",
-        "7:41",
-        "4:30",
-        "Addis Ababa",
-        "ia3Hwoa5",
-        "03/05/20",
-        "5:20"
-      ),
-      this.createData(
-        "Nob Herm",
-        "36324",
-        "7:50",
-        "4:57",
-        "Adama",
-        "tt288JY",
-        "03/05/20",
-        "4:35"
+        "Beamlak Teshome",
+        "AK-12156",
+        "",
+        "",
+        "",
+        "f5e90564385492f2",
+        "",
+        ""
       ),
     ];
 
