@@ -40,6 +40,10 @@ export default class Dashboard extends Component {
     this.state = {
       showModal: false,
       name: '',
+      count: 0,
+      items: [],
+      deviceids: [],
+      message: "",
       Position: '',
       Gender: '',
       DeviceID:'',
@@ -48,6 +52,7 @@ export default class Dashboard extends Component {
       Email:'',
       uploadFile: [],
       src: null,
+      krows: [],
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -66,7 +71,6 @@ export default class Dashboard extends Component {
     this.setState({
       names: event.target.value
     });
-    console.log(names)
 
   }
 
@@ -96,11 +100,9 @@ export default class Dashboard extends Component {
     const name = target.name
     const deviceid = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      // [name]:value
       deviceid: event.target.value
 
     });
-    console.log(deviceid)
 
   }
   handleStaffIdchange = (event) => {
@@ -136,13 +138,50 @@ export default class Dashboard extends Component {
     });
     console.log(email)
   }
-  handleNameSubmit = (event) => {
+  
+  
+  
+
+
+
+
+  
+  handleNameSubmit = () => {
+
+    var items = this.state.items;
+    var deviceids = this.state.deviceids
+    deviceids.push(this.state.deviceid)
+    items.push(this.state.names);
+    // items.push(this.state.deviceid);
+
+
+
     
     // const krows = [ this.state.names ,this.state.deviceid, this.state.telephone , this.state.email]
-    this.setState({
-      showModal: !this.state.showModal,
+    this.setState(event => {
+      return { 
+        items: items,
+        message: "",
+        showModal: !this.state.showModal,
+        count: event.count + 1}
     });
   }
+
+
+  handleItemChanged(i, event) {
+    var items = this.state.items;
+
+    // items[i] = event.target.value;
+    console.log(items[i])
+  
+
+    this.setState({
+      items: items
+    });
+  }
+  
+
+
   onRemove = (file) => {
     this.setState({
       uploadFile: [],
@@ -193,6 +232,9 @@ export default class Dashboard extends Component {
     });
   };
 
+
+
+
   render() {
     const rows = [
       this.createData(
@@ -205,11 +247,10 @@ export default class Dashboard extends Component {
         "dergkat59@gmail.com"
       ),
     ];
-    const krows = [this.createData(this.state.names ,"","",this.state.deviceid,"", this.state.telephone , this.state.email),];
-
-    // const krows = [ this.handleNameChange(),this.handleDeviceIdchange(), this.handleTelephonechange(),this.handleEmailchange()]
-    // console.log(krows)
-    // const rows = [this.handleInputChange()];
+    // var krows = [this.state.items,this.state.deviceids];
+    var namerows = this.state.items;
+    var krows = this.createData(this.state.items ,"","",this.state.deviceids,"", this.state.telephone , this.state.email);
+    var rowcount = parseInt(this.state.count);
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -227,7 +268,9 @@ export default class Dashboard extends Component {
         },
       },
     }))(TableRow);
-    console.log("id1 is", id1);
+
+
+    // console.log("id1 is", id1);
     return (
       <>
         <Button
@@ -290,8 +333,7 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Device Id
                   </InputGroupAddon>
-
-                  <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
+                  <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" /> */}
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -318,7 +360,7 @@ export default class Dashboard extends Component {
                   <Input
                     onChange ={this.handleTelephonechange}
                     placeholder="Phone Number of Employee"
-                    min={13}
+                    min={10}
                     max={13}
                     type="number"
                   />
@@ -348,7 +390,7 @@ export default class Dashboard extends Component {
             <Button color="primary" onClick={this.handleNameSubmit}>
               Add Employee
             </Button>{" "}
-            <Button color="secondary" onClick={this.toggleModal}>
+            <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
               Cancel
             </Button>
           </ModalFooter>
@@ -369,25 +411,24 @@ export default class Dashboard extends Component {
                 <StyledTableCell align="right">Email</StyledTableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {krows.map((krow) => (
-                <StyledTableRow key={krows.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {krow.name}
-                  </StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-                  <StyledTableCell>{krow.DeviceID}</StyledTableCell>
-                  {/* <StyledTableCell>{nextId("AK-")}</StyledTableCell> */}
-                  <StyledTableCell></StyledTableCell>
-                  <StyledTableCell>{krow.Telephone}</StyledTableCell>
-                  <StyledTableCell align="right">{krow.Email}</StyledTableCell>
+            <TableBody>     
+              {namerows.map((krow,idx) => (
+                <StyledTableRow krow={krow} key={krow.rowcount}>
+                  <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
                 </StyledTableRow>
+
               ))}
+                
+
             </TableBody>
           </Table>
-        </TableContainer>
-      
+        </TableContainer>      
       </>
     );
   }
