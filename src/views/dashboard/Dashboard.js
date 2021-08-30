@@ -42,14 +42,12 @@ export default class Dashboard extends Component {
       name: '',
       count: 0,
       items: [],
+      position:[],
+      gender:[],
       deviceids: [],
-      message: "",
-      Position: '',
-      Gender: '',
-      DeviceID:'',
-      StaffID: '',
-      Telephone:'',
-      Email:'',
+      staffid:[],
+      telephones:[],
+      emails:[],
       uploadFile: [],
       src: null,
       krows: [],
@@ -78,9 +76,9 @@ export default class Dashboard extends Component {
   handlePositionchange = (event) => {
     const target = event.target;
     const name = target.name
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const positions = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      [name]:value
+      positions: event.target.value
     });
     // console.log(value)
 
@@ -88,9 +86,9 @@ export default class Dashboard extends Component {
   handleGenderchange = (event) => {
     const target = event.target;
     const name = target.name
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const genders = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      [name]:value
+      genders: event.target.value
     });
     // console.log(value)
 
@@ -108,24 +106,21 @@ export default class Dashboard extends Component {
   handleStaffIdchange = (event) => {
     const target = event.target;
     const name = target.name
-    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const staffids = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      [name]:value
+      staffids: event.target.value
     });
-    console.log(value)
-
   }
   handleTelephonechange = (event) => {
     const target = event.target;
     const name = target.name
-    const telephone = target.type === 'checkbox' ? target.checked : target.value;
+    console.log(target)
+    const new_telephone = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
       // [name]:value
-      telephone: event.target.value
+      new_telephone: event.target.value
 
     });
-    console.log(telephone)
-
   }
   handleEmailchange = (event) => {
     const target = event.target;
@@ -136,7 +131,6 @@ export default class Dashboard extends Component {
       email: event.target.value
 
     });
-    console.log(email)
   }
   
   
@@ -149,19 +143,28 @@ export default class Dashboard extends Component {
   handleNameSubmit = () => {
 
     var items = this.state.items;
-    var deviceids = this.state.deviceids
-    deviceids.push(this.state.deviceid)
+    var position = this.state.positions;
+    var gender = this.state.genders;
+    var deviceids = this.state.deviceids;
+    var staffid = this.state.staffids;
+    var telephones = this.state.telephones;
+    var emails = this.state.emails;
+    
     items.push(this.state.names);
+    // position.push(this.state.positions);
+    // gender.push(this.state.genders);
+    deviceids.push(this.state.deviceid);
+    // staffid.push(this.state.staffids);
+    telephones.push(this.state.new_telephone);
+    emails.push(this.state.email);
     // items.push(this.state.deviceid);
 
 
 
     
-    // const krows = [ this.state.names ,this.state.deviceid, this.state.telephone , this.state.email]
     this.setState(event => {
       return { 
         items: items,
-        message: "",
         showModal: !this.state.showModal,
         count: event.count + 1}
     });
@@ -247,9 +250,14 @@ export default class Dashboard extends Component {
         "dergkat59@gmail.com"
       ),
     ];
-    // var krows = [this.state.items,this.state.deviceids];
+
+
     var namerows = this.state.items;
-    var krows = this.createData(this.state.items ,"","",this.state.deviceids,"", this.state.telephone , this.state.email);
+
+
+    var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.telephones , this.state.emails);
+    // var krows = this.createData(this.state.items ,"","",this.state.deviceids,this.state.staffids, "" , "");
+    console.log("krows",krows)
     var rowcount = parseInt(this.state.count);
 
     const StyledTableCell = withStyles((theme) => ({
@@ -412,6 +420,7 @@ export default class Dashboard extends Component {
               </TableRow>
             </TableHead>
             <TableBody>     
+
               {namerows.map((krow,idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
@@ -419,8 +428,8 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
                 </StyledTableRow>
 
               ))}
