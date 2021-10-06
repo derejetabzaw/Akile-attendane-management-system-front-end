@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import { Card, Row, Col, Upload, Button as AntButton } from "antd";
 import "./landing.css";
 import { UploadOutlined } from "@ant-design/icons";
+import axios from 'axios';
 
 import {
   Button,
@@ -30,10 +31,12 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { imageOverlay } from "leaflet";
 
 const { Meta } = Card;
 
 const id1 = nextId("AK");
+console.log(id1)
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -42,15 +45,18 @@ export default class Dashboard extends Component {
       name: '',
       count: 0,
       items: [],
-      position:[],
-      gender:[],
+      positions:[],
+      genders:[],
       deviceids: [],
-      staffid:[],
+      staffids:[],
       telephones:[],
       emails:[],
       uploadFile: [],
       src: null,
       krows: [],
+      passwords: [],
+      gender: 'Male',
+      position: ''
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -74,23 +80,17 @@ export default class Dashboard extends Component {
 
 
   handlePositionchange = (event) => {
-    const target = event.target;
-    const name = target.name
-    const positions = target.type === 'checkbox' ? target.checked : target.value;
+
     this.setState({
-      positions: event.target.value
+      position: event.target.value
     });
-    // console.log(value)
 
   }
   handleGenderchange = (event) => {
-    const target = event.target;
-    const name = target.name
-    const genders = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      genders: event.target.value
+      gender: event.target.value
+
     });
-    // console.log(value)
 
   }
   handleDeviceIdchange = (event) => {
@@ -103,18 +103,27 @@ export default class Dashboard extends Component {
     });
 
   }
+  handlePassword = (event) => {
+    const target = event.target;
+    const name = target.name
+    const password = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      password: event.target.value
+
+    });
+
+  }
   handleStaffIdchange = (event) => {
     const target = event.target;
     const name = target.name
-    const staffids = target.type === 'checkbox' ? target.checked : target.value;
+    const staffid = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      staffids: event.target.value
+      staffid: event.target.value
     });
   }
   handleTelephonechange = (event) => {
     const target = event.target;
     const name = target.name
-    console.log(target)
     const new_telephone = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
       // [name]:value
@@ -143,22 +152,50 @@ export default class Dashboard extends Component {
   handleNameSubmit = () => {
 
     var items = this.state.items;
-    var position = this.state.positions;
-    var gender = this.state.genders;
+    var positions = this.state.positions;
+    var genders = this.state.genders;
     var deviceids = this.state.deviceids;
-    var staffid = this.state.staffids;
+    var staffids = this.state.staffids;
     var telephones = this.state.telephones;
     var emails = this.state.emails;
+    var passwords = this.state.passwords;
     
     items.push(this.state.names);
-    // position.push(this.state.positions);
-    // gender.push(this.state.genders);
+    positions.push(this.state.position);
+    genders.push(this.state.gender);
     deviceids.push(this.state.deviceid);
-    // staffid.push(this.state.staffids);
+    staffids.push(this.state.staffid);
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
-    // items.push(this.state.deviceid);
+    passwords.push(this.state.password);
 
+    console.log("genders:",genders)
+
+
+
+
+    const user = {
+        _id: "",
+        name: this.state.names,
+        staffId: this.state.staffid,
+        password: "akilepass",
+        isAdmin: false,
+        email:this.state.email,
+        gender: this.state.gender,
+        imageUrl: "",
+        workingSite: "-"
+    };
+
+
+    axios
+    .post('http://localhost:9000/api/v1/users/signup', user)
+    .then(() => console.log('User Created',user))
+    .catch(err => {
+      console.error("The Error:",err);
+    });
+
+
+    
 
 
     
@@ -175,7 +212,6 @@ export default class Dashboard extends Component {
     var items = this.state.items;
 
     // items[i] = event.target.value;
-    console.log(items[i])
   
 
     this.setState({
@@ -227,10 +263,7 @@ export default class Dashboard extends Component {
   };
 
   toggleModalAdd = () => {
-    // this.createData();
-    // const krows = [ this.handleNameChange(),this.handleDeviceIdchange(), this.handleTelephonechange(),this.handleEmailchange()]
-    // console.log(krows)
-    this.setState({
+       this.setState({
       showModal: !this.state.showModal,
     });
   };
@@ -241,24 +274,65 @@ export default class Dashboard extends Component {
   render() {
     const rows = [
       this.createData(
-        "Beamlak Teshome",
-        "Painter - II",
+        "Nahom Amare",
+        "Project Manager",
         "Male",
         "f5e90564385492f2",
-        "AK-12156",
-        "0910315980",
-        "dergkat59@gmail.com"
+        "AK-001",
+        "",
+        "nahom@akile.com"
+      ),
+      this.createData(
+        "Zeynu Nasre",
+        "Site Manager, PMP",
+        "Male",
+        "",
+        "AK-002",
+        "",
+        "Zeynu@akile.com"
+      ),
+      this.createData(
+        "Digro Mero",
+        "PMP",
+        "Male",
+        "",
+        "AK-003",
+        "",
+        "Digro@akile.com"
+      ),
+      this.createData(
+        "Meserate Alemayehu",
+        "PMP",
+        "Female",
+        "",
+        "AK-004",
+        "",
+        "Meserate@akile.com"
+      ),
+      this.createData(
+        "Marshet Getaneh",
+        "PMP",
+        "Female",
+        "",
+        "AK-005",
+        "",
+        "Marshet@akile.com"
+      ),
+      this.createData(
+        "Getnet",
+        "PMP",
+        "Male",
+        "",
+        "AK-006",
+        "",
+        "Getnet@akile.com"
       ),
     ];
 
 
     var namerows = this.state.items;
 
-
     var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.telephones , this.state.emails);
-    // var krows = this.createData(this.state.items ,"","",this.state.deviceids,this.state.staffids, "" , "");
-    console.log("krows",krows)
-    var rowcount = parseInt(this.state.count);
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -306,7 +380,7 @@ export default class Dashboard extends Component {
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
 
-                  <Input   onChange={this.handleNameChange} placeholder="Name of Employee" />
+                  <Input onChange={this.handleNameChange} placeholder="Name of Employee" />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -317,10 +391,12 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Position
                   </InputGroupAddon>
-                  <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop">
-                    <option value="true">----Select Position----</option>
-                    <option value="true">Manager</option>
-                    <option value="false">Programmer</option>
+                  <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position}>
+                    <option value=" ">Select Position</option>
+                    <option value="Site Manager">Site Manager</option>
+                    <option value="Project Manager">Project Manager</option>
+                    <option value="PMP">Professional Machine Painter - PMP</option>
+                    <option value="Painter">Painter</option>
                   </Input>
                 </InputGroup>
               </FormGroup>
@@ -328,10 +404,9 @@ export default class Dashboard extends Component {
                 {/* <Label for="exampleEmail">Sex</Label> */}
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Gender</InputGroupAddon>
-
-                  <Input onChange ={this.handleGenderchange} type="select" name="backdrop" id="backdrop">
-                    <option value="true">Male</option>
-                    <option value="false">Female</option>
+                  <Input onChange ={this.handleGenderchange} type="select" name="backdrop" id="backdrop" value={this.state.gender}>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
                   </Input>
                 </InputGroup>
               </FormGroup>
@@ -341,20 +416,13 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Device Id
                   </InputGroupAddon>
-                  <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" /> */}
+                  <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
                 <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    Password
-                  </InputGroupAddon>
-
-                  {/* <Input
-                    placeholder="DeviceId of Employee"
-                    value={Math.random().toString(36).slice(-8)}
-                  /> */}
-                  <PasswordWithGenerator />
+                  <InputGroupAddon addonType="prepend">StaffID</InputGroupAddon>
+                  <Input onChange ={this.handleStaffIdchange} placeholder={"AK-00" + (this.state.count + 7)}/>
                 </InputGroup>
               </FormGroup>
 
@@ -416,23 +484,38 @@ export default class Dashboard extends Component {
                 <StyledTableCell>DeviceID</StyledTableCell>
                 <StyledTableCell>StaffID</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
-                <StyledTableCell align="right">Email</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>     
 
+
+              {rows.map((row) => (
+                <StyledTableRow key={row.name}>
+                  <StyledTableCell component="th" scope="row">
+                    {row.name}
+                  </StyledTableCell>
+                  <StyledTableCell>{row.Position}</StyledTableCell>
+                  <StyledTableCell>{row.Gender}</StyledTableCell>
+                  <StyledTableCell>{row.DeviceID}</StyledTableCell>
+                  <StyledTableCell>{row.StaffID}</StyledTableCell>
+                  <StyledTableCell>{row.Telephone}</StyledTableCell>
+                  <StyledTableCell align="right">{row.Email}</StyledTableCell>
+                </StyledTableRow>
+              ))}
               {namerows.map((krow,idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{"AK-00" + (idx + 7) }</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
+                  <StyledTableCell align="right">{krows.Email[idx]}</StyledTableCell>
                 </StyledTableRow>
 
               ))}
+                
                 
 
             </TableBody>
@@ -442,3 +525,18 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+
+            //  {/* <FormGroup>
+            //     <InputGroup>
+            //       <InputGroupAddon addonType="prepend">
+            //         Password
+            //       </InputGroupAddon>
+
+            //       {/* <Input
+            //         placeholder="DeviceId of Employee"
+            //         value={Math.random().toString(36).slice(-8)}
+            //       /> */}
+            //       <PasswordWithGenerator onChange={this.handlePassword} />
+            //     </InputGroup>
+            //   </FormGroup> */}

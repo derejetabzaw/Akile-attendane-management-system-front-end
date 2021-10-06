@@ -41,7 +41,7 @@ const TheHeader = () => {
 
   return (
     <CHeader withSubheader
-    style={{ background: '#404216'}}
+    style={{ background: '#bcbcbc'}}
     >
       <CToggler
         inHeader

@@ -16,7 +16,7 @@ import {
   FeatureGroup,
   Circle,
 } from "react-leaflet";
-import L from "leaflet";
+import L, { map } from "leaflet";
 import { EditControl } from "./src";
 // import { EditControl } from "react-leaflet-draw";
 import { Tabs } from "antd";
@@ -63,6 +63,8 @@ const rows = [
     "4:30"
   ]
 
+
+
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 function GetIcon(icon) {
@@ -73,29 +75,236 @@ function GetIcon(icon) {
   });
 }
 
+// const akile_icon = GetIcon(30) 
 
+// function setMarkers(){
+//   var akile_pointer = L.icon({
+//     iconUrl: require("./src/akil.jpg"),
 
+//     iconSize:     [38, 95], 
+//     iconAnchor:   [22, 94], 
+//     shadowAnchor: [4, 62],  
+//     popupAnchor:  [-3, -76] 
+// });
+//   return L.marker([51.5, -0.09], {icon: akile_pointer}).addTo(Map);
 
+// }
+
+// var akile_pointer = L.icon({
+//   iconUrl: require("./src/akil.jpg"),
+
+//   iconSize:     [38, 95], 
+//   iconAnchor:   [22, 94], 
+//   shadowAnchor: [4, 62],  
+//   popupAnchor:  [-3, -76] 
+// });
+
+// const akile_markers = L.marker([51.5, -0.09], {icon: akile_pointer}).addTo()
+
+var Name = [];
+var Location = [];
+var Location_Name = [];
+var Sitemanager = [];
+var Paint_Area = [];
+var Starts = [];
+var Ends = [];
+var Sanding_Material = [];
+var Painting_Material = [];
+var Conctact_Person = [];
+var Information = [];
+var latitude = [];
+var longitude = [];
+var count = 0;
+var namerows = [];
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
   const [showModal, setShow] = useState(false);
+  const [showModal2, setShow2] = useState(false);
+  const [fullscreen, setFullscreen] = useState(true);
+
   const [startDate,setStartDate] = useState(new Date());
   const [endDate,setEndDate] = useState(new Date());
 
 
 
+
+//   var akile_marker= L.Icon.extend({
+//     options: {
+//         shadowUrl: null,
+//         iconAnchor: new L.Point(12, 12),
+//         iconSize: new L.Point(24, 24),
+//         iconUrl: require("./src/akil.jpg")
+//     }
+// });
+
+
+
+// function drawControl(layer) {
+//   return L.Control.Draw({
+//     // iconUrl: require("../../assets/icons/logo.jpg"),
+//     draw : {
+//       position : 'topleft',
+//       polygon : {
+//         shapeOptions: {
+//           color: 'red'
+//         }
+//       },
+//       marker: {
+//         icon: new akile_marker() //Here assign your custom marker
+//       },
+//       polyline : false,
+//       rectangle : {
+//         shapeOptions: {
+//           color: 'blue'
+//         }
+//       },
+//       circle : false
+//     },
+//     edit: {
+//       featureGroup: layer, //REQUIRED!!
+//       remove: true
+//     }
+//   });
+// }
+
+
+
+
+
+
+
+
+
+
+  const mapopener = () => {
+    setShow2(true);
+
+
+  };
+
+  const backmodule = () => {
+    setShow2(false);
+
+
+  };
+
+  const pinlocation = (location) => {
+    console.log("Location:",location)
+    Location = location
+    latitude = latitude.concat(location.lat)
+    longitude = longitude.concat(location.lng)
+    return location 
+    // setShow(false);
+
+  };
+  
+  const closemap = (event) => {
+
+    setShow2(false);
+    
+
+  };
+
+  const handleSiteChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    Name = value
+    console.log("names",Name)
+  };
+  const handleLocationChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    Location_Name = value
+    console.log("Location_Name",Location_Name)
+  };
+  
+  const handleManagerChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    Sitemanager = value
+    console.log("Sitemanager",Sitemanager)
+  };
+
+
+  const handlePaintChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    Paint_Area = value
+    console.log("Paint_Area",Paint_Area)
+  };
+  // const handlelatitude =(event) => {
+  //   const target = event.target;
+  //   const value = target.type === 'checkbox' ? target.checked : target.value;
+  //   latitude = latitude.concat(value)
+  //   console.log("latitude",latitude)
+
+  // }  
+  // const handlelongitude =(event) => {
+  //   const target = event.target;
+  //   const value = target.type === 'checkbox' ? target.checked : target.value;
+  //   longitude = longitude.concat(value)
+  //   console.log("longitude",longitude)
+  // }
+
+  const addsiteinformation = (event) => {
+    count  = count + 1;
+    namerows = namerows.concat(Name);
+    console.log("count:",count);
+    Information = Information.concat(createData(Name,Location_Name,longitude,latitude,Sitemanager,Paint_Area));
+    console.log("Information:",Information);
+    
+    console.log("Names",namerows);
+    closeModal()
+
+  };
+  
+
+
+
+
+  const createData = (
+    site_name,
+    location,
+    longitude,
+    latitude,
+    manager,
+    paint_area,
+  ) => {
+    return {
+      site_name,
+      location,
+      longitude,
+      latitude,
+      manager,
+      paint_area,
+    };
+  };
+  
+
+
+  
+
   const addSiteModal = () => setShow(true);
   const closeModal = () => setShow(false);
-
+  const closeModal2 = () => setShow(false);
   const _onCreate = (e) => {
+
+    
+
     console.log(e, "onCreate");
 
     const { layerType, layer } = e;
+
+
+
     if (layerType === "marker") {
       const { _leaflet_id } = layer;
       const { _latlng } = layer;
+      
+      
 
       setMapLayer((layer) => [...layer, { id: _leaflet_id, latlng: _latlng }]);
+      pinlocation(_latlng)
       console.log(layer, "layersss", mapLayers);
     }
   };
@@ -118,6 +327,13 @@ export default function User() {
     });
     console.log(`onDeleted: removed ${numDeleted} layers`, e);
   };
+
+  
+
+
+  
+
+
   return (
     <>
       <Tabs defaultActiveKey="2">
@@ -142,36 +358,39 @@ export default function User() {
             <TableHead>
               <TableRow>
                 <StyledTableCell>Site Name</StyledTableCell>
+                <StyledTableCell>Location</StyledTableCell>
+                <StyledTableCell>Latitude</StyledTableCell>
+                <StyledTableCell>Longitude</StyledTableCell>
                 <StyledTableCell>Site Manager</StyledTableCell>
                 <StyledTableCell>Paint Area</StyledTableCell>
-                <StyledTableCell>Starts</StyledTableCell>
+                {/* <StyledTableCell>Starts</StyledTableCell>
                 <StyledTableCell>Ends</StyledTableCell>
                 <StyledTableCell>Sanding Material</StyledTableCell>
                 <StyledTableCell>Painting Material</StyledTableCell>
                 <StyledTableCell align="right">
                   Contact Person
-                </StyledTableCell>
+                </StyledTableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
-                  </StyledTableCell>
-                  <StyledTableCell>{row.Id}</StyledTableCell>
-                  <StyledTableCell>{row.CIN}</StyledTableCell>
-                  <StyledTableCell>{row.COUT}</StyledTableCell>
-                  <StyledTableCell>{row.Location}</StyledTableCell>
-                  <StyledTableCell>{row.DId}</StyledTableCell>
-                  <StyledTableCell>{row.date}</StyledTableCell>
-                  <StyledTableCell align="right">{row.time}</StyledTableCell>
+              {namerows.map((krow,idx) => (
+                <StyledTableRow krow={krow} key={krow.rowcount}>
+                  <StyledTableCell component="th" scope="row">{Information[idx].site_name}</StyledTableCell>
+                  <StyledTableCell>{Information[idx].location}</StyledTableCell>
+                  <StyledTableCell>{latitude[idx]}</StyledTableCell>
+                  <StyledTableCell>{longitude[idx]}</StyledTableCell>
+                  <StyledTableCell>{Information[idx].manager}</StyledTableCell>
+                  <StyledTableCell>{Information[idx].paint_area}</StyledTableCell>
+                  {/* <StyledTableCell>{Information.starts}</StyledTableCell>
+                  <StyledTableCell>{Information.ends}</StyledTableCell> */}
+                  {/* <StyledTableCell>{row.sanding_material}</StyledTableCell>
+                  <StyledTableCell>{row.painting_area}</StyledTableCell>
+                  <StyledTableCell align="right">{row.contact_person}</StyledTableCell> */}
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-
 
 
 
@@ -191,13 +410,30 @@ export default function User() {
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
 
-                    <Input placeholder="Name of Site" />
+                    <Input onChange={handleSiteChange}  placeholder="Name of Site" />
+                  </InputGroup>
+                  <br/>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Location</InputGroupAddon>
+
+                    <Input onChange={handleLocationChange}  placeholder="Location of Site" />
+
                     <Button
                     color="primary"
+                    onClick={mapopener}
                     // style={{ float: "right", marginBottom: "2%" }}
                     >
                     Pin on Map{" "}
                     </Button>
+                
+
+                  </InputGroup>
+                  <br/>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
+                    <Input placeholder = {Location.lat}  />
+                    <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
+                    <Input placeholder = {Location.lng} />
                   </InputGroup>
                 </Form.Group>
                 <br/>
@@ -207,10 +443,11 @@ export default function User() {
                     {/* <Label for="exampleEmail">Age</Label> */}
 
                     <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
-                    <Input type="select" name="backdrop" id="backdrop">
+                    <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="true">----Select Name----</option>
-                      <option value="true">Site Manager 1</option>
-                      <option value="false">Site Manager 2</option>
+                      <option value="Nahom Amare">Nahome Amare</option>
+                      <option value="Zeynu Nesru">Zeynu Nesru</option>
+                      <option value="Getnet">Getnet</option>
                     </Input>
                   </InputGroup>
                   </Form.Group>
@@ -218,13 +455,13 @@ export default function User() {
                   <Form.Group>
                   <InputGroup>
                   <InputGroupAddon addonType="prepend">Paint Area</InputGroupAddon>
-                    <Input placeholder="Area in meter-square" />
+                    <Input onChange={handlePaintChange} placeholder="Area in meter-square" />
                   </InputGroup>
                 </Form.Group>
                 <br/>
 
 
-                  <Form.Group>
+                  {/* <Form.Group>
                     <Accordion>
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>Paint</Accordion.Header>
@@ -382,7 +619,62 @@ export default function User() {
                         </Accordion.Body>
                       </Accordion.Item>
                     </Accordion>
-                  </Form.Group>
+                  </Form.Group> */}
+                  <Modal show={showModal2} fullscreen={fullscreen} onHide = {closeModal2}>
+                    <Modal.Header >
+                      <Modal.Title> Pin on Map</Modal.Title>
+                    </Modal.Header>
+                      <Modal.Body >
+                          <Map
+                            center={[8.980603, 38.757759]}
+                            zoom={12}
+                            scrollWheelZoom={true}
+                            className="mapContainer"
+                          >
+                          <TileLayer
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          />
+                            <Marker position={[8.980603, 38.757759]} icon={GetIcon(30)}>
+                              <Popup>
+                                <p>Akile Main-Office</p>
+                                  <FeatureGroup>
+                                    <EditControl
+                                      position="topleft"
+                                      onEdited={_onEditPath}
+                                      onCreated={_onCreate}
+                                      onDeleted={_onDeleted}
+                                      draw={{
+                                        rectangle: false,
+                                        circle: false,
+                                        polyline: false,
+                                        polygone: false,
+                                      }}
+                                  />
+                                  <Circle center={[51.51, -0.06]} radius={200} />
+                                  </FeatureGroup>
+                              </Popup>
+                            </Marker>
+                          </Map>
+                          <pre>{JSON.stringify(mapLayers, 0, 2)}</pre>  
+                          <Button
+                            color="primary"
+                            style={{ float: "right", marginBottom: "2%" }}
+                            onClick={backmodule}
+                            >
+                            Back{" "}
+                          </Button>
+                          <Button
+                            color="primary"
+                            style={{ float: "right", marginBottom: "2%" }}
+                            onClick={closemap} 
+                            >
+                            Pin{" "}
+                          </Button>                  
+                      
+                      </Modal.Body>
+                  </Modal>                  
+
 
 
 {/* 
@@ -397,6 +689,7 @@ export default function User() {
                   </InputGroup>
                   </Form.Group> */}
                   <Button
+                    onClick={closeModal}
                     color="primary"
                     style={{ float: "right", marginBottom: "2%" }}
                     >
@@ -404,8 +697,12 @@ export default function User() {
                   </Button>
                   <Button
                     color="primary"
+                    onClick={addsiteinformation}
                     style={{ float: "right", marginBottom: "2%" }}
+                    
+                    
                     >
+                      
                     Add{" "}
                   </Button>
                   
@@ -421,7 +718,7 @@ export default function User() {
               </Modal.Body>
           </Modal>
         </TabPane>
-        <TabPane tab="Map" key="2">
+        {/* <TabPane tab="Map" key="2">
           <div style={{ height: "82vh", width: "100%" }}>
             <Map
               center={[8.980603, 38.757759]}
@@ -435,7 +732,7 @@ export default function User() {
               />
               <Marker position={[8.980603, 38.757759]} icon={GetIcon(30)}>
                 <Popup>
-                  <p>Akile Headquarters</p>
+                  <p>Akile Main-Office</p>
                   <FeatureGroup>
                     <EditControl
                       position="topright"
@@ -456,7 +753,7 @@ export default function User() {
             </Map>
             <pre>{JSON.stringify(mapLayers, 0, 2)}</pre>
           </div>
-        </TabPane>
+        </TabPane> */}
         <TabPane tab="Assign Site" key="3">
           <div style={{ width: "100%" }}>
             <Users mapData={mapLayers} />
