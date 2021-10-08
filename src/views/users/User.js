@@ -30,6 +30,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Users from "./Users";
 import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
+// import { concat } from "core-js/core/array";
 // import Form from "antd/lib/form/Form";
 
 const { TabPane } = Tabs;
@@ -116,6 +117,10 @@ var latitude = [];
 var longitude = [];
 var count = 0;
 var namerows = [];
+var staffnames = ["Zeynu Nasre","Getachew Anteneh","Berekert Haile","Nardos Ephrem",
+"Mulualem Tesfaye","Ismael","Asnakech Tesfaye","Gebiru",
+"Atsede","Zenebe","Hirut Fanta","Abayneh","Nahom Amare"];
+var sites = [];
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
   const [showModal, setShow] = useState(false);
@@ -222,7 +227,6 @@ export default function User() {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Sitemanager = value
-    console.log("Sitemanager",Sitemanager)
   };
 
 
@@ -230,32 +234,21 @@ export default function User() {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Paint_Area = value
-    console.log("Paint_Area",Paint_Area)
   };
-  // const handlelatitude =(event) => {
-  //   const target = event.target;
-  //   const value = target.type === 'checkbox' ? target.checked : target.value;
-  //   latitude = latitude.concat(value)
-  //   console.log("latitude",latitude)
-
-  // }  
-  // const handlelongitude =(event) => {
-  //   const target = event.target;
-  //   const value = target.type === 'checkbox' ? target.checked : target.value;
-  //   longitude = longitude.concat(value)
-  //   console.log("longitude",longitude)
-  // }
 
   const addsiteinformation = (event) => {
     count  = count + 1;
     namerows = namerows.concat(Name);
-    console.log("count:",count);
+    sites = sites.concat(Name);
+
     Information = Information.concat(createData(Name,Location_Name,longitude,latitude,Sitemanager,Paint_Area));
-    console.log("Information:",Information);
     
-    console.log("Names",namerows);
     closeModal()
 
+  };
+
+  const MakeItem  = (X) => {
+    return <option>{X}</option>;
   };
   
 
@@ -444,10 +437,10 @@ export default function User() {
 
                     <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
-                      <option value="true">----Select Name----</option>
+                      <option value="">----Select Name----</option>
                       <option value="Nahom Amare">Nahome Amare</option>
                       <option value="Zeynu Nesru">Zeynu Nesru</option>
-                      <option value="Getnet">Getnet</option>
+                      <option value="Getachew Anteneh">Getachew Anteneh</option>
                     </Input>
                   </InputGroup>
                   </Form.Group>
@@ -755,11 +748,38 @@ export default function User() {
           </div>
         </TabPane> */}
         <TabPane tab="Assign Site" key="3">
-          <div style={{ width: "100%" }}>
+          {/* <div style={{ width: "100%" }}>
             <Users mapData={mapLayers} />
-          </div>
+          </div> */}
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Employee Name</StyledTableCell>
+                <StyledTableCell>Assignment</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {staffnames.map((krow,idy) => (
+                <StyledTableRow krow={krow} key={krow.rowcount}>
+                  <StyledTableCell component="th" scope="row">{staffnames[idy]}</StyledTableCell>
+                  <StyledTableCell>  
+                    <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
+                      <option value="">Choose Site</option>
+                      {sites.map((site,idz) => (    
+                      <option value={MakeItem(site)}>{sites[idz]}</option>
+                      ))}
+                    </Input>
+                  </StyledTableCell>  
+
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
         </TabPane>
-        <TabPane tab="Inforamtion" key="4"></TabPane>
+        <TabPane tab="Information" key="4"></TabPane>
       </Tabs>
     </>
   );
