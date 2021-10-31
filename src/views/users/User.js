@@ -30,6 +30,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Users from "./Users";
 import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
+import { optionsSupported } from "dom-helpers/cjs/addEventListener";
 // import { concat } from "core-js/core/array";
 // import Form from "antd/lib/form/Form";
 
@@ -117,9 +118,9 @@ var latitude = [];
 var longitude = [];
 var count = 0;
 var namerows = [];
-var staffnames = ["Zeynu Nasre","Getachew Anteneh","Berekert Haile","Nardos Ephrem",
+var staffnames = ["Berekert Haile","Nardos Ephrem",
 "Mulualem Tesfaye","Ismael","Asnakech Tesfaye","Gebiru",
-"Atsede","Zenebe","Hirut Fanta","Abayneh","Nahom Amare"];
+"Atsede","Zenebe","Hirut Fanta","Abayneh"];
 var sites = [];
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
@@ -236,6 +237,19 @@ export default function User() {
     Paint_Area = value
   };
 
+  const assignmodule = (event) => {
+    // disable assign Button
+    // disable dropdown options
+    // send assignment to user
+  }
+  const changemodule = (event) => {
+    // enable assign Button
+    // enable dropdown options
+    // unsend assignment to user
+
+  }
+
+
   const addsiteinformation = (event) => {
     count  = count + 1;
     namerows = namerows.concat(Name);
@@ -336,14 +350,14 @@ export default function User() {
             onClick={closeModal}
             style={{ float: "right", marginBottom: "2%" }}
           >
-          Remove {" "}
+          Remove{""} 
           </Button>
           <Button
             color="primary"
             onClick={addSiteModal}
-            style={{ float: "right", marginBottom: "2%" }}
+            style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
           >
-          Add{" "}
+          Add{""}
           </Button>
 
           <TableContainer component={Paper}>
@@ -659,7 +673,7 @@ export default function User() {
                           </Button>
                           <Button
                             color="primary"
-                            style={{ float: "right", marginBottom: "2%" }}
+                            style={{ float: "right", marginBottom: "2%", marginRight: "1%"}}
                             onClick={closemap} 
                             >
                             Pin{" "}
@@ -691,7 +705,7 @@ export default function User() {
                   <Button
                     color="primary"
                     onClick={addsiteinformation}
-                    style={{ float: "right", marginBottom: "2%" }}
+                    style={{ float: "right", marginBottom: "2%" , marginRight: "1%"}}
                     
                     
                     >
@@ -770,6 +784,21 @@ export default function User() {
                       <option value={MakeItem(site)}>{sites[idz]}</option>
                       ))}
                     </Input>
+                    <Button
+                    color="primary"
+                    onClick={addsiteinformation}
+                    style={{ float: "right", marginTop: "2%" }}
+                    >
+                    Change
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={addsiteinformation}
+                    style={{ float: "right", marginTop: "2%" , marginRight: "2%" }}
+                    >
+                    Assign
+                  </Button>
+                    
                   </StyledTableCell>  
 
                 </StyledTableRow>
