@@ -1,7 +1,7 @@
 export default [
   {
     _tag: "CSidebarNavItem",
-    name: "Employe",
+    name: "Employee",
     to: "/dashboard",
     icon: "cil-people",
     // badge: {
@@ -15,7 +15,7 @@ export default [
   // },
   // {
   //   _tag: 'CSidebarNavItem',
-  //   name: 'Employe',
+  //   name: 'Employee',
   //   to: '/theme/colors',
   //   icon: 'cil-people',
   // },

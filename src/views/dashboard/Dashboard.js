@@ -227,6 +227,13 @@ export default class Dashboard extends Component {
     });
 
   };
+
+  cancelItem_onClick = () => {
+    this.setState({
+      showModal: !this.state.showModal,
+    });
+  };
+
   onSelectFile = (file, list, e) => {
     // if (file) {
     //   const reader = new FileReader();
@@ -278,7 +285,7 @@ export default class Dashboard extends Component {
         "Project Manager",
         "Male",
         "f5e90564385492f2",
-        "AK-001",
+        "AK-0001",
         "",
         "nahom@akile.com"
       ),
@@ -287,7 +294,7 @@ export default class Dashboard extends Component {
         "Site Manager, PMP",
         "Male",
         "",
-        "AK-002",
+        "AK-0002",
         "",
         "Zeynu@akile.com"
       ),
@@ -296,7 +303,7 @@ export default class Dashboard extends Component {
         "PMP",
         "Male",
         "",
-        "AK-003",
+        "AK-0003",
         "",
         "Digro@akile.com"
       ),
@@ -305,7 +312,7 @@ export default class Dashboard extends Component {
         "PMP",
         "Female",
         "",
-        "AK-004",
+        "AK-0004",
         "",
         "Meserate@akile.com"
       ),
@@ -314,7 +321,7 @@ export default class Dashboard extends Component {
         "PMP",
         "Female",
         "",
-        "AK-005",
+        "AK-0005",
         "",
         "Marshet@akile.com"
       ),
@@ -323,7 +330,7 @@ export default class Dashboard extends Component {
         "PMP",
         "Male",
         "",
-        "AK-006",
+        "AK-0006",
         "",
         "Getnet@akile.com"
       ),
@@ -422,7 +429,7 @@ export default class Dashboard extends Component {
               <FormGroup>
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">StaffID</InputGroupAddon>
-                  <Input onChange ={this.handleStaffIdchange} placeholder={"AK-00" + (this.state.count + 7)}/>
+                  <Input onChange ={this.handleStaffIdchange} placeholder={"AK-000" + (this.state.count + 7)}/>
                 </InputGroup>
               </FormGroup>
 
@@ -466,9 +473,9 @@ export default class Dashboard extends Component {
             <Button color="primary" onClick={this.handleNameSubmit}>
               Add Employee
             </Button>{" "}
-            <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+            <Button color="secondary" onClick={this.cancelItem_onClick}>
               Cancel
-            </Button>
+            </Button>{" "}
           </ModalFooter>
         </Modal>
         
@@ -485,6 +492,7 @@ export default class Dashboard extends Component {
                 <StyledTableCell>StaffID</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Remove</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>     
@@ -492,15 +500,24 @@ export default class Dashboard extends Component {
 
               {rows.map((row) => (
                 <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
-                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{row.name}</StyledTableCell>
                   <StyledTableCell>{row.Position}</StyledTableCell>
                   <StyledTableCell>{row.Gender}</StyledTableCell>
                   <StyledTableCell>{row.DeviceID}</StyledTableCell>
                   <StyledTableCell>{row.StaffID}</StyledTableCell>
                   <StyledTableCell>{row.Telephone}</StyledTableCell>
                   <StyledTableCell align="right">{row.Email}</StyledTableCell>
+
+              {/* //Add the below comment after fetching from database
+                  //Add Authentication 
+              */}
+                  <StyledTableCell align="right">
+                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                      Remove
+                    </Button>
+                  </StyledTableCell>
+
+
                 </StyledTableRow>
               ))}
               {namerows.map((krow,idx) => (
@@ -509,9 +526,18 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{"AK-00" + (idx + 7) }</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell align="right">{krows.Email[idx]}</StyledTableCell>
+                  
+
+                  <StyledTableCell align="right">
+                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                      Remove
+                    </Button>
+                  </StyledTableCell>
+
+
                 </StyledTableRow>
 
               ))}
