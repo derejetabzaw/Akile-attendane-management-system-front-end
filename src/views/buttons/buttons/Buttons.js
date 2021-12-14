@@ -34,6 +34,7 @@ import Paper from "@material-ui/core/Paper";
 const { Meta } = Card;
 // const [state, setState] = useState({data: []});
 const url = 'http://localhost:9000/api/v1/attendance/';
+const url_users = 'http://localhost:9000/api/v1/users/';
 
 
 export default class Dashboard extends Component {
@@ -41,6 +42,8 @@ export default class Dashboard extends Component {
     super(props);
     this.state = {
       showModal: false,
+      posts: [],
+      users: [],
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -57,90 +60,55 @@ export default class Dashboard extends Component {
       showModal: !this.state.showModal,
     });
   };
-  
-  // fetchApi() {
-  //   const [temp, setTemp] = useState(0);
 
+  componentDidMount = () =>{
+    this.getmongodb();
+  };
 
-  //   useEffect(() => {
-  //     setInterval(()=>{
-  //       setTemp((prevTemp)=>prevTemp+1)
-  //     }, 2000);
-  //   });
-
-
-  //   useEffect(()=>{
-  //     fetchData()
-  //   }, [temp])
-
-  //   const fetchData = async () => {
-
-  //     try { 
-  //         var obj;
-  //         var length;
-  //         const access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzODk3MGJiZDNlMGQxMTVjY2RjMDc3In0sImlhdCI6MTYzMjEzODAyMiwiZXhwIjoxNjMyMjI0NDIyfQ.biGdfMK57tfDcH__IqJgXtp2L-5ZPN-ZKSHrFK17cw4'
-  //         const datas = fetch(url, {
-  //           method: 'GET',
-  //           headers: {
-  //               'Content-Type': 'application/json',
-  //               'Authorization': `${access_token}`
-  //           },
-  //           })
-  //           .then(res => res.json())
-  //           .then(data => obj = data)
-  //           .then(() => length = (obj.attendances).length)
-  //           // .then(data => obj = data.attendances[0].checkInTime);
-  //           .then(() => console.log("number:",length)); 
-  //           return obj
-  //         }   
-  //     catch (error) {console.log(error);
-  //       return error
-  //     }
-    
-  //   }
-  // }
-  
-
-
-  async fetchApi() {
-    const [data, setData] = React.useState(null);
-    const access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzODk3MGJiZDNlMGQxMTVjY2RjMDc3In0sImlhdCI6MTYzMjIwMTAzOCwiZXhwIjoxNjMyMjg3NDM4fQ.xidqX3VJ3AxoYDGivc8lMDflvWeGwF8tdkH28QO-W1M'
-
-    React.useEffect(() => {
-        fetch(url,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${access_token}`
-        },
-        })
-        .then((res) => res.json())
-        .then((data) => setData(data.message));
-    }, []);
-    
-    // var obj;
-    // var length;
-    // const access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzODk3MGJiZDNlMGQxMTVjY2RjMDc3In0sImlhdCI6MTYzMjIwMTAzOCwiZXhwIjoxNjMyMjg3NDM4fQ.xidqX3VJ3AxoYDGivc8lMDflvWeGwF8tdkH28QO-W1M'
-    // console.log(access_token)
-    // const datas = fetch(url, {
-    //   method: 'GET',
-    //   headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `${access_token}`
-    //   },
-    //   })
-    //   .then(console.log("data",datas))
-    //   .then(res => res.json())
-    //   .then(data => obj = data)
-    //   .then(() => length = (obj.attendances).length)
-    //   // .then(data => obj = data.attendances[0].checkInTime);
-    //   .then(() => console.log("number:",length));
-
-
+  getmongodb = () => {
+    axios.get(url)
+      .then((response) => {
+        const data = response.data
+        this.setState({posts:data});
+        // console.log("ALL DATA:" , data.attendances)
+        // console.log("ALL dates:" , data.attendances.at(5))
+        // console.log("Recieved",data.attendances.at(-1).checkInTime)
+        console.log("date:",data.attendances.at(-1).date)
+        console.log("CIT:",data.attendances.at(-1).checkInTime)
+        console.log("COT:",data.attendances.at(-1).checkOutTime)
+      })
+      .catch(() => {
+        console.log("Error");
+      });
+      axios.get(url_users)
+      .then((response) => {
+        const data = response.data
+        this.setState({users:data});
+        // console.log("ALL Users:" , data.users.at(5))
+        console.log("Name:",data.users.at(-1).name)
+        console.log("staffID:",data.users.at(-1).staffId)
+        console.log("WS:",data.users.at(-1).workingSite)
+        console.log("Id:",data.users.at(-1)._id)
+      })
+      .catch(() => {
+        console.log("Error");
+      });
   }
 
 
+
+  // This will help to check when new information[Checking in/Checking Out] is added to the database
+
+  // displaymongodbpost = (posts) => {
+  //   if (posts.length==0) return console.log("posts has not been updated");
+  //   console.log("Before Change Posts:" , posts.attendances)
+  //   if (!posts.length) return null; 
+  //   return console.log("Incoming Data")
+  // }; 
+
+
   render() {
+    
     const rows = [
       this.createData(
         "Beamlak Teshome",
@@ -155,27 +123,7 @@ export default class Dashboard extends Component {
     ];
 
 
-    
-    // fetchApi() {
-    //   const datas = fetch(url, {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': `${access_token}`
-    //     },
-    //     })
-    //     .then(console.log("data",datas))
-    //     .then(res => res.json())
-    //     .then(data => obj = data)
-    //     .then(() => length = (obj.attendances).length)
-    //     // .then(data => obj = data.attendances[0].checkInTime);
-    //     .then(() => console.log("number:",length)); 
-
-    // }
-
-
-
-    
+        
   
     
 

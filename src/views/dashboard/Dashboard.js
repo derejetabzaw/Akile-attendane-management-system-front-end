@@ -57,6 +57,7 @@ export default class Dashboard extends Component {
       passwords: [],
       gender: 'Male',
       position: ''
+      // posts: []
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -196,7 +197,7 @@ export default class Dashboard extends Component {
 
 
     
-
+    // this.getmongodb();
 
     
     this.setState(event => {
@@ -207,6 +208,18 @@ export default class Dashboard extends Component {
     });
   }
 
+
+  // getmongodb = () => {
+  //   axios.get('http://localhost:9000/api/v1/attendance')
+  //     .then((response) => {
+  //       const data = response.data
+  //       this.setState({posts:data});
+  //       console.log("Recieved",data.attendances.at(-1).checkInTime)
+  //     })
+  //     .catch(() => {
+  //       console.log("Error");
+  //     });
+  // }
 
   handleItemChanged(i, event) {
     var items = this.state.items;
