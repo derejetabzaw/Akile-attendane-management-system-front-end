@@ -33,16 +33,15 @@ import Paper from "@material-ui/core/Paper";
 
 const { Meta } = Card;
 // const [state, setState] = useState({data: []});
-const url = 'http://localhost:9000/api/v1/attendance/';
-const url_users = 'http://localhost:9000/api/v1/users/';
 
+const base_url = 'http://localhost:9000/api/v1' ;
 
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
-      posts: [],
+      attendance: [],
       users: [],
     };
 
@@ -66,29 +65,18 @@ export default class Dashboard extends Component {
   };
 
   getmongodb = () => {
-    axios.get(url)
+    axios.get(base_url + '/attendance/')
       .then((response) => {
-        const data = response.data
-        this.setState({posts:data});
-        // console.log("ALL DATA:" , data.attendances)
-        // console.log("ALL dates:" , data.attendances.at(5))
-        // console.log("Recieved",data.attendances.at(-1).checkInTime)
-        console.log("date:",data.attendances.at(-1).date)
-        console.log("CIT:",data.attendances.at(-1).checkInTime)
-        console.log("COT:",data.attendances.at(-1).checkOutTime)
+        const attendance_info = response.data
+        this.setState({attendance:attendance_info});
       })
       .catch(() => {
         console.log("Error");
       });
-      axios.get(url_users)
+      axios.get(base_url + '/users/')
       .then((response) => {
-        const data = response.data
-        this.setState({users:data});
-        // console.log("ALL Users:" , data.users.at(5))
-        console.log("Name:",data.users.at(-1).name)
-        console.log("staffID:",data.users.at(-1).staffId)
-        console.log("WS:",data.users.at(-1).workingSite)
-        console.log("Id:",data.users.at(-1)._id)
+        const users_info = response.data
+        this.setState({users:users_info});
       })
       .catch(() => {
         console.log("Error");
@@ -121,9 +109,32 @@ export default class Dashboard extends Component {
         ""
       ),
     ];
+    // console.log(this.state.users,this.state.attendance)
+    // if (this.state.attendance.length > 0)
+    // console.log("NOW:",this.state.attendance.attendances)
 
+    // console.log("Length:",this.state.users.length);
 
-        
+    if (this.state.attendance.length !== 0) {
+      const id = this.state.attendance.attendances.at(-1)._id
+      console.log("ID", this.state.attendance.attendances.at(-1)._id)
+      console.log("CIN", this.state.attendance.attendances.at(-1).checkInTime)
+      console.log("COUT", this.state.attendance.attendances.at(-1).checkOutTime)
+      console.log("DATE", this.state.attendance.attendances.at(-1).date)
+      if (this.state.users.length !== 0) {
+        var user_length = this.state.users.users.length
+        for (var i = 0; i < user_length; i++) {
+          if (this.state.attendance.attendances.at(-1).user === this.state.users.users.at(i)._id){
+            console.log("Name:",this.state.users.users.at(i).name)
+            console.log("staffID",this.state.users.users.at(i).staffId)
+            console.log("WorkingSite:",this.state.users.users.at(i).workingSite)
+          }
+          
+        }
+    
+    }
+
+  }
   
     
 
@@ -145,7 +156,6 @@ export default class Dashboard extends Component {
       },
     }))(TableRow);
 
-    console.log("checkin", rows, rows.CIN, rows.COUT);
     
 
     return (
