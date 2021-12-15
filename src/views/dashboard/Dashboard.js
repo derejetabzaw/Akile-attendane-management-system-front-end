@@ -284,7 +284,7 @@ export default class Dashboard extends Component {
 
   toggleModalAdd = () => {
        this.setState({
-      showModal: !this.state.showModal,
+        showModal: !this.state.showModal,
     });
   };
 
@@ -523,6 +523,8 @@ export default class Dashboard extends Component {
 
               {/* //Add the below comment after fetching from database
                   //Add Authentication 
+                  // Create a handle for the Remove button to remove user on that row 
+                    and also from the database after the right authentications from admins
               */}
                   <StyledTableCell align="right">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
@@ -533,7 +535,7 @@ export default class Dashboard extends Component {
 
                 </StyledTableRow>
               ))}
-              {namerows.map((krow,idx) => (
+              {namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
