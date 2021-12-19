@@ -43,6 +43,13 @@ export default class Dashboard extends Component {
       showModal: false,
       attendance: [],
       users: [],
+      names: [],
+      staffids: [],
+      clockins: [],
+      clockouts: [],
+      locations: [],
+      // deviceids: [],
+      dates: [],
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -50,8 +57,8 @@ export default class Dashboard extends Component {
 
 
 
-  createData = (name, Id, CIN, COUT, Location, DId, date, time) => {
-    return { name, Id, CIN, COUT, Location, DId, date, time };
+  createData = (name, Id, CIN, COUT, Location, date, time) => {
+    return { name, Id, CIN, COUT, Location, date, time };
   };
 
   toggleModal = () => {
@@ -104,30 +111,39 @@ export default class Dashboard extends Component {
         "",
         "",
         "",
-        "f5e90564385492f2",
         "",
         ""
       ),
     ];
-    // console.log(this.state.users,this.state.attendance)
-    // if (this.state.attendance.length > 0)
-    // console.log("NOW:",this.state.attendance.attendances)
 
-    // console.log("Length:",this.state.users.length);
+
+
+    
+
+    
+
 
     if (this.state.attendance.length !== 0) {
       const id = this.state.attendance.attendances.at(-1)._id
-      console.log("ID", this.state.attendance.attendances.at(-1)._id)
-      console.log("CIN", this.state.attendance.attendances.at(-1).checkInTime)
-      console.log("COUT", this.state.attendance.attendances.at(-1).checkOutTime)
-      console.log("DATE", this.state.attendance.attendances.at(-1).date)
+      // console.log("ID", this.state.attendance.attendances.at(-1)._id)
+      // console.log("CIN", this.state.attendance.attendances.at(-1).checkInTime)
+      // console.log("COUT", this.state.attendance.attendances.at(-1).checkOutTime)
+      // console.log("DATE", this.state.attendance.attendances.at(-1).date)
+      this.state.clockins.push(this.state.attendance.attendances.at(-1).checkInTime);
+      this.state.clockouts.push(this.state.attendance.attendances.at(-1).checkOutTime);
+      this.state.dates.push(this.state.attendance.attendances.at(-1).date);
       if (this.state.users.length !== 0) {
         var user_length = this.state.users.users.length
         for (var i = 0; i < user_length; i++) {
           if (this.state.attendance.attendances.at(-1).user === this.state.users.users.at(i)._id){
-            console.log("Name:",this.state.users.users.at(i).name)
-            console.log("staffID",this.state.users.users.at(i).staffId)
-            console.log("WorkingSite:",this.state.users.users.at(i).workingSite)
+            // console.log("Name:",this.state.users.users.at(i).name)
+            // console.log("staffID",this.state.users.users.at(i).staffId)
+            // console.log("WorkingSite:",this.state.users.users.at(i).workingSite)
+            this.state.names.push(this.state.users.users.at(i).name);
+            this.state.staffids.push(this.state.users.users.at(i).staffId);
+            this.state.locations.push(this.state.users.users.at(i).workingSite);
+            // this.state.deviceids.push(this.state.users.users.at(i).deviceId);
+
           }
           
         }
@@ -135,9 +151,8 @@ export default class Dashboard extends Component {
     }
 
   }
-  
-    
-
+    var namerows = this.state.names;
+    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates);
     
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -171,7 +186,7 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Clock-In</StyledTableCell>
                 <StyledTableCell>Clock-Out</StyledTableCell>
                 <StyledTableCell>Location</StyledTableCell>
-                <StyledTableCell>Device ID</StyledTableCell>
+                {/* <StyledTableCell>Device ID</StyledTableCell> */}
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell align="right">
                   Total Daily Work Hour
@@ -179,7 +194,7 @@ export default class Dashboard extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {/* {rows.map((row) => (
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">
                     {row.name}
@@ -187,11 +202,26 @@ export default class Dashboard extends Component {
                   <StyledTableCell>{row.Id}</StyledTableCell>
                   <StyledTableCell>{row.CIN}</StyledTableCell>
                   <StyledTableCell>{row.COUT}</StyledTableCell>
-                  <StyledTableCell>{row.Location}</StyledTableCell>
-                  <StyledTableCell>{row.DId}</StyledTableCell>
-                  <StyledTableCell>{row.date}</StyledTableCell>
+                  <StyledTableCell>{row.Location}</StyledTableCell> */}
+                  {/* <StyledTableCell>{row.DId}</StyledTableCell> */}
+                  {/* <StyledTableCell>{row.date}</StyledTableCell>
                   <StyledTableCell align="right">{row.time}</StyledTableCell>
                 </StyledTableRow>
+              ))} */}
+
+              {namerows.map((krow,idx) => ( 
+                <StyledTableRow krow={krow} key={krow.rowcount}>
+                  <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.CIN[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.COUT[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Location[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.date[idx]}</StyledTableCell>
+
+
+
+                </StyledTableRow>
+
               ))}
             </TableBody>
           </Table>
