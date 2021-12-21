@@ -35,8 +35,11 @@ import { imageOverlay } from "leaflet";
 
 const { Meta } = Card;
 
-const id1 = nextId("AK");
-console.log(id1)
+// const id1 = nextId("AK");
+// console.log(id1)
+
+const base_url = 'http://localhost:9000/api/v1' ;
+
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -44,6 +47,7 @@ export default class Dashboard extends Component {
       showModal: false,
       name: '',
       count: 0,
+      users: [],
       items: [],
       positions:[],
       genders:[],
@@ -56,7 +60,14 @@ export default class Dashboard extends Component {
       krows: [],
       passwords: [],
       gender: 'Male',
-      position: ''
+      position: '',
+      database_name: [],
+      database_position: [],
+      database_gender: [],
+      database_deviceid: [],
+      database_staffid: [],
+      database_telephone: [],
+      database_email: [],
       // posts: []
     };
 
@@ -287,6 +298,33 @@ export default class Dashboard extends Component {
         showModal: !this.state.showModal,
     });
   };
+  componentDidMount = () =>{
+    this.getmongodb();
+  };
+
+  getmongodb = () => {
+      axios.get(base_url + '/users/')
+      .then((response) => {
+        const users_info = response.data
+        this.setState({users:users_info});
+        if (this.state.users.length !== 0) {
+          var user_length = this.state.users.users.length
+          for (var j = 0; j < user_length; j++) {
+              this.state.database_name.push(this.state.users.users.at(j).name);
+              this.state.database_position.push(this.state.users.users.at(j).position);
+              this.state.database_gender.push(this.state.users.users.at(j).gender);
+              this.state.database_deviceid.push(this.state.users.users.at(j).deviceid);
+              this.state.database_staffid.push(this.state.users.users.at(j).staffId);
+              this.state.database_telephone.push(this.state.users.users.at(j).telephone);
+              this.state.database_email.push(this.state.users.users.at(j).email);
+              
+          }
+        }
+      })
+      .catch(() => {
+        console.log("Error");
+      });
+  }
 
 
 
@@ -348,12 +386,17 @@ export default class Dashboard extends Component {
         "Getnet@akile.com"
       ),
     ];
+    
+
+
 
 
     var namerows = this.state.items;
-
+    var database_namerows = this.state.database_name;
+    // var rows = this.createData()
     var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.telephones , this.state.emails);
 
+    var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_email)
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -510,7 +553,7 @@ export default class Dashboard extends Component {
             </TableHead>
             <TableBody>     
 
-
+{/* 
               {rows.map((row) => (
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{row.name}</StyledTableCell>
@@ -519,13 +562,35 @@ export default class Dashboard extends Component {
                   <StyledTableCell>{row.DeviceID}</StyledTableCell>
                   <StyledTableCell>{row.StaffID}</StyledTableCell>
                   <StyledTableCell>{row.Telephone}</StyledTableCell>
-                  <StyledTableCell align="right">{row.Email}</StyledTableCell>
+                  <StyledTableCell align="right">{row.Email}</StyledTableCell> */}
 
               {/* //Add the below comment after fetching from database
                   //Add Authentication 
                   // Create a handle for the Remove button to remove user on that row 
                     and also from the database after the right authentications from admins
               */}
+                  {/* <StyledTableCell align="right">
+                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                      Remove
+                    </Button>
+                  </StyledTableCell>
+
+
+                </StyledTableRow>
+              ))} */}
+              
+              
+              {database_namerows.map((krow,idx) => ( 
+                <StyledTableRow krow={krow} key={krow.rowcount}>
+                  <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.DeviceID[idx]}</StyledTableCell>
+                  {/* <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell> */}
+                  <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
+                  {/* <StyledTableCell align="right">{jrows.Email[idx]}</StyledTableCell> */}
+                  
+
                   <StyledTableCell align="right">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Remove
@@ -534,6 +599,7 @@ export default class Dashboard extends Component {
 
 
                 </StyledTableRow>
+
               ))}
               {namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
