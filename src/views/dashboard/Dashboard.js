@@ -393,7 +393,6 @@ export default class Dashboard extends Component {
 
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;
-    // var rows = this.createData()
     var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.telephones , this.state.emails);
 
     var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_email)
@@ -548,13 +547,13 @@ export default class Dashboard extends Component {
                 <StyledTableCell>StaffID</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
-                <StyledTableCell>Remove</StyledTableCell>
+                <StyledTableCell></StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>     
 
-{/* 
-              {rows.map((row) => (
+
+              {/* {rows.map((row) => ( 
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{row.name}</StyledTableCell>
                   <StyledTableCell>{row.Position}</StyledTableCell>
@@ -562,7 +561,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell>{row.DeviceID}</StyledTableCell>
                   <StyledTableCell>{row.StaffID}</StyledTableCell>
                   <StyledTableCell>{row.Telephone}</StyledTableCell>
-                  <StyledTableCell align="right">{row.Email}</StyledTableCell> */}
+                  <StyledTableCell align="right">{row.Email}</StyledTableCell>  */}
 
               {/* //Add the below comment after fetching from database
                   //Add Authentication 
@@ -577,7 +576,7 @@ export default class Dashboard extends Component {
 
 
                 </StyledTableRow>
-              ))} */}
+              ))}  */}
               
               
               {database_namerows.map((krow,idx) => ( 
@@ -586,9 +585,10 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.DeviceID[idx]}</StyledTableCell>
-                  {/* <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell> */}
+                  <StyledTableCell component="th" scope="row"></StyledTableCell>
+                  <StyledTableCell align="right"></StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
-                  {/* <StyledTableCell align="right">{jrows.Email[idx]}</StyledTableCell> */}
+
                   
 
                   <StyledTableCell align="right">
@@ -609,7 +609,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
-                  <StyledTableCell align="right">{krows.Email[idx]}</StyledTableCell>
+                  <StyledTableCell>{krows.Email[idx]}</StyledTableCell>
                   
 
                   <StyledTableCell align="right">
