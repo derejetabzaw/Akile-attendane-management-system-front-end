@@ -53,6 +53,7 @@ export default class Dashboard extends Component {
       genders:[],
       deviceids: [],
       staffids:[],
+      salarys:[],
       telephones:[],
       emails:[],
       uploadFile: [],
@@ -133,6 +134,14 @@ export default class Dashboard extends Component {
       staffid: event.target.value
     });
   }
+  handleSalarychange = (event) => {
+    const target = event.target;
+    const name = target.name
+    const salary = target.type === 'checkbox' ? target.checked : target.value;
+    this.setState({
+      salary: event.target.value
+    });
+  }
   handleTelephonechange = (event) => {
     const target = event.target;
     const name = target.name
@@ -168,6 +177,7 @@ export default class Dashboard extends Component {
     var genders = this.state.genders;
     var deviceids = this.state.deviceids;
     var staffids = this.state.staffids;
+    var salarys = this.state.salarys;
     var telephones = this.state.telephones;
     var emails = this.state.emails;
     var passwords = this.state.passwords;
@@ -177,6 +187,7 @@ export default class Dashboard extends Component {
     genders.push(this.state.gender);
     deviceids.push(this.state.deviceid);
     staffids.push(this.state.staffid);
+    salarys.push(this.state.salary);
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
     passwords.push(this.state.password);
@@ -195,7 +206,9 @@ export default class Dashboard extends Component {
         email:this.state.email,
         gender: this.state.gender,
         imageUrl: "",
-        workingSite: "-"
+        workingSite: "Piassa",
+        salary: this.state.salary,
+        deviceId: this.state.deviceid
     };
 
 
@@ -273,6 +286,7 @@ export default class Dashboard extends Component {
     Gender,
     DeviceID,
     StaffID,
+    Salary,
     Telephone,
     Email
   ) => {
@@ -282,6 +296,7 @@ export default class Dashboard extends Component {
       Gender,
       DeviceID,
       StaffID,
+      Salary,
       Telephone,
       Email,
     };
@@ -393,7 +408,7 @@ export default class Dashboard extends Component {
 
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;
-    var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.telephones , this.state.emails);
+    var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.salarys,this.state.telephones , this.state.emails);
 
     var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_email)
     const StyledTableCell = withStyles((theme) => ({
@@ -490,6 +505,17 @@ export default class Dashboard extends Component {
 
               <FormGroup>
                 <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    Basic Salary
+                  </InputGroupAddon>
+                  <Input onChange ={this.handleSalarychange} placeholder="Salary" />
+                </InputGroup>
+              </FormGroup>
+
+
+
+              <FormGroup>
+                <InputGroup>
                   {/* <Label for="exampleEmail">Age</Label> */}
 
                   <InputGroupAddon addonType="prepend">
@@ -545,6 +571,7 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Gender</StyledTableCell>
                 <StyledTableCell>DeviceID</StyledTableCell>
                 <StyledTableCell>StaffID</StyledTableCell>
+                <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
                 <StyledTableCell></StyledTableCell>
@@ -585,7 +612,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.DeviceID[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row"></StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell align="right"></StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
 
