@@ -574,7 +574,9 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
-                <StyledTableCell></StyledTableCell>
+
+                <StyledTableCell>Remove</StyledTableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>     
@@ -588,6 +590,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell>{row.DeviceID}</StyledTableCell>
                   <StyledTableCell>{row.StaffID}</StyledTableCell>
                   <StyledTableCell>{row.Telephone}</StyledTableCell>
+
                   <StyledTableCell align="right">{row.Email}</StyledTableCell>  */}
 
               {/* //Add the below comment after fetching from database
@@ -618,6 +621,13 @@ export default class Dashboard extends Component {
 
                   
 
+
+                  <StyledTableCell align="right">{row.Email}</StyledTableCell>
+
+              {/* //Add the below comment after fetching from database
+                  //Add Authentication 
+              */}
+
                   <StyledTableCell align="right">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Remove
@@ -636,6 +646,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
+
                   <StyledTableCell>{krows.Email[idx]}</StyledTableCell>
                   
 
