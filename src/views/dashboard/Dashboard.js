@@ -70,6 +70,7 @@ export default class Dashboard extends Component {
       database_telephone: [],
       database_email: [],
       database_salary: [],
+      vals:'',
       // posts: []
     };
 
@@ -182,6 +183,9 @@ export default class Dashboard extends Component {
     var telephones = this.state.telephones;
     var emails = this.state.emails;
     var passwords = this.state.passwords;
+    var vals = this.state.vals;
+    
+
     
     items.push(this.state.names);
     positions.push(this.state.position);
@@ -194,7 +198,10 @@ export default class Dashboard extends Component {
     passwords.push(this.state.password);
 
     console.log("genders:",genders)
-
+    
+    vals = Math.floor(1000 + Math.random() * 9000);
+    console.log("Random Numbers: ",vals);
+    
 
 
     const user = {
@@ -344,6 +351,7 @@ export default class Dashboard extends Component {
 
 
 
+  
 
   render() {
     // const rows = [
