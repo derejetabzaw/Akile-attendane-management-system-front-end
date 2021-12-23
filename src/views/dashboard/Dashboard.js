@@ -67,6 +67,7 @@ export default class Dashboard extends Component {
       database_gender: [],
       database_deviceid: [],
       database_staffid: [],
+      database_salary: [],
       database_telephone: [],
       database_email: [],
       // posts: []
@@ -202,12 +203,14 @@ export default class Dashboard extends Component {
         name: this.state.names,
         staffId: this.state.staffid,
         password: "akilepass",
+        position: this.state.position,
         isAdmin: false,
         email:this.state.email,
         gender: this.state.gender,
         imageUrl: "",
         workingSite: "Piassa",
         salary: this.state.salary,
+        telephone:this.state.new_telephone,
         deviceId: this.state.deviceid
     };
 
@@ -328,8 +331,9 @@ export default class Dashboard extends Component {
               this.state.database_name.push(this.state.users.users.at(j).name);
               this.state.database_position.push(this.state.users.users.at(j).position);
               this.state.database_gender.push(this.state.users.users.at(j).gender);
-              this.state.database_deviceid.push(this.state.users.users.at(j).deviceid);
+              this.state.database_deviceid.push(this.state.users.users.at(j).deviceId);
               this.state.database_staffid.push(this.state.users.users.at(j).staffId);
+              this.state.database_salary.push(this.state.users.users.at(j).salary);
               this.state.database_telephone.push(this.state.users.users.at(j).telephone);
               this.state.database_email.push(this.state.users.users.at(j).email);
               
@@ -404,13 +408,14 @@ export default class Dashboard extends Component {
     
 
 
-
-
+    console.log("Tele:",this.state.telephones)
+    console.log("salary:",this.state.salarys)
+  
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;
     var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.salarys,this.state.telephones , this.state.emails);
 
-    var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_email)
+    var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_salary,this.state.database_telephone,this.state.database_email)
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -574,9 +579,14 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
+<<<<<<< HEAD
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+=======
 
                 <StyledTableCell>Remove</StyledTableCell>
 
+>>>>>>> 1d70a11ae6cc9084234c7405212bf7cb5b195f44
               </TableRow>
             </TableHead>
             <TableBody>     
@@ -615,9 +625,11 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.DeviceID[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.StaffID[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Salary[idx]}</StyledTableCell>
-                  <StyledTableCell align="right"></StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
+
 
                   
 
@@ -630,6 +642,12 @@ export default class Dashboard extends Component {
 
                   <StyledTableCell align="right">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                      Edit
+                    </Button>
+                  </StyledTableCell>
+                  
+                  <StyledTableCell align="left">
+                    <Button color="secondary">
                       Remove
                     </Button>
                   </StyledTableCell>
@@ -645,6 +663,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
 
                   <StyledTableCell>{krows.Email[idx]}</StyledTableCell>
@@ -652,6 +671,12 @@ export default class Dashboard extends Component {
 
                   <StyledTableCell align="right">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                      Edit
+                    </Button>
+                  </StyledTableCell>
+
+                  <StyledTableCell align="left">
+                    <Button color="secondary">
                       Remove
                     </Button>
                   </StyledTableCell>
