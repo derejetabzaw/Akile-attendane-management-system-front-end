@@ -7,6 +7,7 @@ import es from 'date-fns/locale/es';
 import "./MapViewerComp.css";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios'
 
 import {
   Map,
@@ -237,6 +238,46 @@ export default function User() {
     Paint_Area = value
   };
 
+    const handleLongtudeChange = (event) =>{
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    longitude = value
+  }
+    const handleLatitudeChange = (event) =>{
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    latitude = value
+  }
+
+    const handleSiteSubmit = ()=>{
+      var name = Name;
+      var Latitude = latitude;
+      var Longitude = longitude;
+      var sitemanager = Sitemanager
+      var area = true; //this needs to be checked!!!!
+      var loc = Location;
+
+
+
+      const Site = {
+        _id:"",
+        name:name,
+        Location:loc,
+        latitude:Latitude,
+        longitude:Longitude,
+        sitemanager:sitemanager,
+        area:area
+      }
+        axios
+    .get('http://localhost:9000/api/v1/sites', Site)
+    .then(() => console.log('Site Created',Site))
+    .catch(err => {
+      console.error("The Error:",err);
+    });
+      addsiteinformation()
+  }
+
+
   const assignmodule = (event) => {
     // disable assign Button
     // disable dropdown options
@@ -438,9 +479,9 @@ export default function User() {
                   <br/>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
-                    <Input placeholder = {Location.lat}  />
+                    <Input placeholder = {Location.lat} onChange={handleLatitudeChange} />
                     <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
-                    <Input placeholder = {Location.lng} />
+                    <Input placeholder = {Location.lng}  onChange={handleLongtudeChange}/>
                   </InputGroup>
                 </Form.Group>
                 <br/>
@@ -705,12 +746,13 @@ export default function User() {
                   <Button
                     color="primary"
                     onClick={addsiteinformation}
+                    onClick={handleSiteSubmit}
                     style={{ float: "right", marginBottom: "2%" , marginRight: "1%"}}
                     
                     
                     >
                       
-                    Add{" "}
+                    save{" "}
                   </Button>
                   
 
