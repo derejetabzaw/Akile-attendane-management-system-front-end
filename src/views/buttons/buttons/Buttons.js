@@ -50,6 +50,7 @@ export default class Dashboard extends Component {
       locations: [],
       // deviceids: [],
       dates: [],
+      total: [],
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -116,43 +117,54 @@ export default class Dashboard extends Component {
       ),
     ];
 
+    const getCurrentDate = () =>{
+      const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      const d = new Date();
+      let day = weekday[d.getDay()];
+      var date = new Date().getDate();
+      var month = new Date().getMonth() + 1;
+      var year = new Date().getFullYear();
+      return day + ',' + ' '+  date + '-' + month + '-' + year;
+
+    }
+
 
 
     
-
-    
-
-
-    if (this.state.attendance.length !== 0) {
+    var today = getCurrentDate();
+    // console.log("attendance:",this.state.attendance.attendances)
+    // console.log("user:",this.state.users.users)
+    if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
+      var attendance_length = this.state.attendance.attendances.length
+      var user_length = this.state.users.users.length
       const id = this.state.attendance.attendances.at(-1)._id
-      // console.log("ID", this.state.attendance.attendances.at(-1)._id)
-      // console.log("CIN", this.state.attendance.attendances.at(-1).checkInTime)
-      // console.log("COUT", this.state.attendance.attendances.at(-1).checkOutTime)
-      // console.log("DATE", this.state.attendance.attendances.at(-1).date)
-      this.state.clockins.push(this.state.attendance.attendances.at(-1).checkInTime);
-      this.state.clockouts.push(this.state.attendance.attendances.at(-1).checkOutTime);
-      this.state.dates.push(this.state.attendance.attendances.at(-1).date);
-      if (this.state.users.length !== 0) {
-        var user_length = this.state.users.users.length
-        for (var i = 0; i < user_length; i++) {
-          if (this.state.attendance.attendances.at(-1).user === this.state.users.users.at(i)._id){
-            // console.log("Name:",this.state.users.users.at(i).name)
-            // console.log("staffID",this.state.users.users.at(i).staffId)
-            // console.log("WorkingSite:",this.state.users.users.at(i).workingSite)
-            this.state.names.push(this.state.users.users.at(i).name);
-            this.state.staffids.push(this.state.users.users.at(i).staffId);
-            this.state.locations.push(this.state.users.users.at(i).workingSite);
-            // this.state.deviceids.push(this.state.users.users.at(i).deviceId);
-
-          }
-          
+      for (var j = 0; j < user_length; j++) {
+        for (var i = 0; i < attendance_length; i++) {
+          if (today==this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id){
+            this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
+            this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
+            this.state.dates.push(this.state.attendance.attendances.at(-1).date);
+            this.state.names.push(this.state.users.users.at(j).name);
+            this.state.staffids.push(this.state.users.users.at(j).staffId);
+            this.state.locations.push(this.state.users.users.at(j).workingSite);
+            console.log(this.state.attendance.attendances.at(i).checkOutTime === '')
+            if (this.state.attendance.attendances.at(i).checkOutTime === '') {
+              this.state.total.push("")
+            }
+            else{
+              this.state.total.push(this.state.users.users.at(j).workedHours)
+            }
+            
         }
-    
+      }
     }
 
   }
+
+
+
     var namerows = this.state.names;
-    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates);
+    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates,this.state.total);
     
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -217,6 +229,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.COUT[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Location[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.date[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.time[idx]}</StyledTableCell>
 
 
 
