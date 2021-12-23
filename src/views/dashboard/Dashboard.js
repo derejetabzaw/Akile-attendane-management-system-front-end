@@ -69,6 +69,7 @@ export default class Dashboard extends Component {
       database_staffid: [],
       database_telephone: [],
       database_email: [],
+      database_salary: [],
       // posts: []
     };
 
@@ -196,7 +197,6 @@ export default class Dashboard extends Component {
 
 
 
-
     const user = {
         _id: "",
         name: this.state.names,
@@ -207,11 +207,11 @@ export default class Dashboard extends Component {
         gender: this.state.gender,
         imageUrl: "",
         workingSite: "Piassa",
-        salary: this.state.salary,
-        deviceId: this.state.deviceid
+        salary: this.state.salary,        
+        deviceId: this.state.deviceid,
+        position: this.state.position,
+        telephone: this.state.telephone,
     };
-
-
     axios
     .post('http://localhost:9000/api/v1/users/signup', user)
     .then(() => console.log('User Created',user))
@@ -330,6 +330,7 @@ export default class Dashboard extends Component {
               this.state.database_gender.push(this.state.users.users.at(j).gender);
               this.state.database_deviceid.push(this.state.users.users.at(j).deviceid);
               this.state.database_staffid.push(this.state.users.users.at(j).staffId);
+              this.state.database_salary.push(this.state.users.users.at(j).salary);
               this.state.database_telephone.push(this.state.users.users.at(j).telephone);
               this.state.database_email.push(this.state.users.users.at(j).email);
               
@@ -345,62 +346,62 @@ export default class Dashboard extends Component {
 
 
   render() {
-    const rows = [
-      this.createData(
-        "Nahom Amare",
-        "Project Manager",
-        "Male",
-        "f5e90564385492f2",
-        "AK-0001",
-        "",
-        "nahom@akile.com"
-      ),
-      this.createData(
-        "Zeynu Nasre",
-        "Site Manager, PMP",
-        "Male",
-        "",
-        "AK-0002",
-        "",
-        "Zeynu@akile.com"
-      ),
-      this.createData(
-        "Digro Mero",
-        "PMP",
-        "Male",
-        "",
-        "AK-0003",
-        "",
-        "Digro@akile.com"
-      ),
-      this.createData(
-        "Meserate Alemayehu",
-        "PMP",
-        "Female",
-        "",
-        "AK-0004",
-        "",
-        "Meserate@akile.com"
-      ),
-      this.createData(
-        "Marshet Getaneh",
-        "PMP",
-        "Female",
-        "",
-        "AK-0005",
-        "",
-        "Marshet@akile.com"
-      ),
-      this.createData(
-        "Getnet",
-        "PMP",
-        "Male",
-        "",
-        "AK-0006",
-        "",
-        "Getnet@akile.com"
-      ),
-    ];
+    // const rows = [
+    //   this.createData(
+    //     "Nahom Amare",
+    //     "Project Manager",
+    //     "Male",
+    //     "f5e90564385492f2",
+    //     "AK-0001",
+    //     "",
+    //     "nahom@akile.com"
+    //   ),
+    //   this.createData(
+    //     "Zeynu Nasre",
+    //     "Site Manager, PMP",
+    //     "Male",
+    //     "",
+    //     "AK-0002",
+    //     "",
+    //     "Zeynu@akile.com"
+    //   ),
+    //   this.createData(
+    //     "Digro Mero",
+    //     "PMP",
+    //     "Male",
+    //     "",
+    //     "AK-0003",
+    //     "",
+    //     "Digro@akile.com"
+    //   ),
+    //   this.createData(
+    //     "Meserate Alemayehu",
+    //     "PMP",
+    //     "Female",
+    //     "",
+    //     "AK-0004",
+    //     "",
+    //     "Meserate@akile.com"
+    //   ),
+    //   this.createData(
+    //     "Marshet Getaneh",
+    //     "PMP",
+    //     "Female",
+    //     "",
+    //     "AK-0005",
+    //     "",
+    //     "Marshet@akile.com"
+    //   ),
+    //   this.createData(
+    //     "Getnet",
+    //     "PMP",
+    //     "Male",
+    //     "",
+    //     "AK-0006",
+    //     "",
+    //     "Getnet@akile.com"
+    //   ),
+    // ];
     
 
 
@@ -408,9 +409,26 @@ export default class Dashboard extends Component {
 
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;
-    var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.salarys,this.state.telephones , this.state.emails);
+    var krows = this.createData(
+      this.state.items ,
+      this.state.positions,
+      this.state.genders,
+      this.state.deviceids,
+      this.state.staffids,
+      this.state.salarys,
+      this.state.telephones , 
+      this.state.emails);
 
-    var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_email)
+    var jrows = this.createData(
+      this.state.database_name,
+      this.state.database_position,
+      this.state.database_gender,
+      this.state.database_deviceid,
+      this.state.database_staffid,
+      this.state.database_salary,
+      this.state.database_telephone, 
+      this.state.database_email);
+
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -574,7 +592,7 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
-
+                <StyledTableCell>Update</StyledTableCell>
                 <StyledTableCell>Remove</StyledTableCell>
 
               </TableRow>
@@ -591,7 +609,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell>{row.StaffID}</StyledTableCell>
                   <StyledTableCell>{row.Telephone}</StyledTableCell>
 
-                  <StyledTableCell align="right">{row.Email}</StyledTableCell>  */}
+              <StyledTableCell align="right">{row.Email}</StyledTableCell>  */}
 
               {/* //Add the below comment after fetching from database
                   //Add Authentication 
@@ -607,50 +625,53 @@ export default class Dashboard extends Component {
 
                 </StyledTableRow>
               ))}  */}
-              
-              
+
+                            
               {database_namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.DeviceID[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.StaffID[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Salary[idx]}</StyledTableCell>
-                  <StyledTableCell align="right"></StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
-                  
+                  <StyledTableCell component="th" scope="row">
+                    <Button color="secondary" >
+                      Update
+                    </Button>
+                  </StyledTableCell>
 
-
-                  <StyledTableCell align="right">{row.Email}</StyledTableCell>
-
-              {/* //Add the below comment after fetching from database
-                  //Add Authentication 
-              */}
-
-                  <StyledTableCell align="right">
+                  <StyledTableCell component="th" scope="row">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Remove
                     </Button>
                   </StyledTableCell>
 
-
                 </StyledTableRow>
 
-              ))}
+              ))} 
+
               {namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.StaffID[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
-
-                  <StyledTableCell>{krows.Email[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
                   
+                  <StyledTableCell component="th" scope="row">
+                    <Button color="secondary" >
+                      Update
+                    </Button>
+                  </StyledTableCell>
 
-                  <StyledTableCell align="right">
+                  <StyledTableCell component="th" scope="row">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Remove
                     </Button>
