@@ -5,6 +5,7 @@ import "./landing.css";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from 'axios';
 
+
 import {
   Button,
   InputGroup,
@@ -40,6 +41,8 @@ const { Meta } = Card;
 
 const base_url = 'http://localhost:9000/api/v1' ;
 
+
+
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -70,13 +73,16 @@ export default class Dashboard extends Component {
       database_salary: [],
       database_telephone: [],
       database_email: [],
+      intial_load : 0,
       vals: Math.floor(1000 + Math.random() * 9000),
+      
       // posts: []
     };
 
     this.toggleModal = this.toggleModal.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
+    
 
   beforeUploadFile = (file) => {
     this.setState({ uploadFile: [file] });
@@ -92,6 +98,7 @@ export default class Dashboard extends Component {
     });
 
   }
+
 
 
   handlePositionchange = (event) => {
@@ -358,6 +365,7 @@ export default class Dashboard extends Component {
   componentDidMount = () =>{
     this.getmongodb();
   };
+    
 
   getmongodb = () => {
       axios.get(base_url + '/users/')
@@ -385,11 +393,14 @@ export default class Dashboard extends Component {
   }
 
 
+      
 
   
-
+componentWillMount(){
+  this.getmongodb();
+}
   render() {  
-  
+
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;    
     var krows = this.createData(

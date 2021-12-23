@@ -269,7 +269,7 @@ export default function User() {
         area:area
       }
         axios
-    .get('http://localhost:9000/api/v1/sites', Site)
+    .post('http://localhost:9000/api/v1/sites', Site)
     .then(() => console.log('Site Created',Site))
     .catch(err => {
       console.error("The Error:",err);
