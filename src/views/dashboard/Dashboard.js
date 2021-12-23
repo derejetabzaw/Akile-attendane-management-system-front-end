@@ -606,7 +606,7 @@ export default class Dashboard extends Component {
                     </Button>
                   </StyledTableCell>
                   
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" onClick={this.handleDelete, jrows.StaffID[idx]}>
                     <Button color="secondary">
                       Remove
                     </Button>
