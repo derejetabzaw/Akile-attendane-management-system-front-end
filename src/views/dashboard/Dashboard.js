@@ -70,8 +70,7 @@ export default class Dashboard extends Component {
       database_salary: [],
       database_telephone: [],
       database_email: [],
-      database_salary: [],
-      vals:'',
+      vals: Math.floor(1000 + Math.random() * 9000),
       // posts: []
     };
 
@@ -130,11 +129,12 @@ export default class Dashboard extends Component {
 
   }
   handleStaffIdchange = (event) => {
-    const target = event.target;
-    const name = target.name
-    const staffid = target.type === 'checkbox' ? target.checked : target.value;
+    // const target = event.target;
+    // const name = target.name
+    // const staffid = target.type === 'checkbox' ? target.checked : target.value;
+    
     this.setState({
-      staffid: event.target.value
+      staffid: "AK-" + this.state.vals
     });
   }
   handleSalarychange = (event) => {
@@ -184,10 +184,8 @@ export default class Dashboard extends Component {
     var telephones = this.state.telephones;
     var emails = this.state.emails;
     var passwords = this.state.passwords;
-    var vals = this.state.vals;
-    
+       
 
-    
     items.push(this.state.names);
     positions.push(this.state.position);
     genders.push(this.state.gender);
@@ -199,10 +197,8 @@ export default class Dashboard extends Component {
     passwords.push(this.state.password);
 
     console.log("genders:",genders)
-    
-    vals = Math.floor(1000 + Math.random() * 9000);
-    console.log("Random Numbers: ",vals);
-    
+     
+    console.log("aaaaaaa",this.staffid)
 
 
     const user = {
@@ -216,37 +212,68 @@ export default class Dashboard extends Component {
         gender: this.state.gender,
         imageUrl: "",
         workingSite: "Piassa",
-
         salary: this.state.salary,
         telephone:this.state.new_telephone,
         deviceId: this.state.deviceid
 
-        //salary: this.state.salary,        
-        //deviceId: this.state.deviceid,
-        //position: this.state.position,
-        //telephone: this.state.telephone,
-
     };
+
+    console.log("StaffIDs:",staffids)
+
     axios
     .post('http://localhost:9000/api/v1/users/signup', user)
     .then(() => console.log('User Created',user))
     .catch(err => {
       console.error("The Error:",err);
     });
-
-
     
     // this.getmongodb();
-
-    
+    var temp;
     this.setState(event => {
       return { 
+        temp: this.componentDidMount,
         items: items,
         showModal: !this.state.showModal,
         count: event.count + 1}
     });
   }
 
+  reload = ()=>{
+    var temp;
+
+    this.setState(event =>{
+      return{
+        temp: this.componentDidMount
+      }
+    });
+
+  }
+  
+  handleDelete = ()=>{
+    var staffids = this.state.staffids;
+
+    staffids.push(this.state.staffid);
+
+    console.log("Random Numbers: ");
+    
+    const user = {
+        staffId: this.state.staffid,
+    };
+
+    axios
+    .post('http://localhost:9000/api/v1/users/:id', user)
+    .then(() => console.log('User Deleted',user))
+    .catch(err => {
+      console.error("The Error:",err);
+    });
+    
+    this.setState(event => {
+      return { 
+        
+        count: event.count - 1}
+    });
+
+  }
 
   // getmongodb = () => {
   //   axios.get('http://localhost:9000/api/v1/attendance')
@@ -361,71 +388,10 @@ export default class Dashboard extends Component {
 
   
 
-  render() {
-    // const rows = [
-    //   this.createData(
-    //     "Nahom Amare",
-    //     "Project Manager",
-    //     "Male",
-    //     "f5e90564385492f2",
-    //     "AK-0001",
-    //     "",
-    //     "nahom@akile.com"
-    //   ),
-    //   this.createData(
-    //     "Zeynu Nasre",
-    //     "Site Manager, PMP",
-    //     "Male",
-    //     "",
-    //     "AK-0002",
-    //     "",
-    //     "Zeynu@akile.com"
-    //   ),
-    //   this.createData(
-    //     "Digro Mero",
-    //     "PMP",
-    //     "Male",
-    //     "",
-    //     "AK-0003",
-    //     "",
-    //     "Digro@akile.com"
-    //   ),
-    //   this.createData(
-    //     "Meserate Alemayehu",
-    //     "PMP",
-    //     "Female",
-    //     "",
-    //     "AK-0004",
-    //     "",
-    //     "Meserate@akile.com"
-    //   ),
-    //   this.createData(
-    //     "Marshet Getaneh",
-    //     "PMP",
-    //     "Female",
-    //     "",
-    //     "AK-0005",
-    //     "",
-    //     "Marshet@akile.com"
-    //   ),
-    //   this.createData(
-    //     "Getnet",
-    //     "PMP",
-    //     "Male",
-    //     "",
-    //     "AK-0006",
-    //     "",
-    //     "Getnet@akile.com"
-    //   ),
-    // ];
-    
-
-
-    console.log("Tele:",this.state.telephones)
-    console.log("salary:",this.state.salarys)
+  render() {  
   
     var namerows = this.state.items;
-    var database_namerows = this.state.database_name;
+    var database_namerows = this.state.database_name;    
     var krows = this.createData(
       this.state.items ,
       this.state.positions,
@@ -445,9 +411,6 @@ export default class Dashboard extends Component {
       this.state.database_salary,
       this.state.database_telephone, 
       this.state.database_email);
-
-
-    var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_salary,this.state.database_telephone,this.state.database_email)
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -546,7 +509,7 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Basic Salary
                   </InputGroupAddon>
-                  <Input onChange ={this.handleSalarychange} placeholder="Salary" />
+                  <Input onChange ={this.handleSalarychange} type="number" placeholder="Salary" />
                 </InputGroup>
               </FormGroup>
 
@@ -613,46 +576,18 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
 
-//                <StyledTableCell></StyledTableCell>
-  //              <StyledTableCell></StyledTableCell>
-
-
-
-                <StyledTableCell>Update</StyledTableCell>
-
-                <StyledTableCell>Remove</StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
 
               </TableRow>
             </TableHead>
             <TableBody>     
-
-
-              {/* {rows.map((row) => ( 
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">{row.name}</StyledTableCell>
-                  <StyledTableCell>{row.Position}</StyledTableCell>
-                  <StyledTableCell>{row.Gender}</StyledTableCell>
-                  <StyledTableCell>{row.DeviceID}</StyledTableCell>
-                  <StyledTableCell>{row.StaffID}</StyledTableCell>
-                  <StyledTableCell>{row.Telephone}</StyledTableCell>
-
-              <StyledTableCell align="right">{row.Email}</StyledTableCell>  */}
 
               {/* //Add the below comment after fetching from database
                   //Add Authentication 
                   // Create a handle for the Remove button to remove user on that row 
                     and also from the database after the right authentications from admins
               */}
-                  {/* <StyledTableCell align="right">
-                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
-                      Remove
-                    </Button>
-                  </StyledTableCell>
-
-
-                </StyledTableRow>
-              ))}  */}
-
                             
               {database_namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
@@ -665,14 +600,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
-
-                  <StyledTableCell component="th" scope="row">
-                    <Button color="secondary" >
-                      Update
-                    </Button>
-                  </StyledTableCell>
-
-                  <StyledTableCell component="th" scope="row">
+                  <StyledTableCell component="th" scope="row" >
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Edit
                     </Button>
@@ -700,12 +628,6 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
-                  
-                  <StyledTableCell component="th" scope="row">
-                    <Button color="secondary" >
-                      Update
-                    </Button>
-                  </StyledTableCell>
 
                   <StyledTableCell component="th" scope="row">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
