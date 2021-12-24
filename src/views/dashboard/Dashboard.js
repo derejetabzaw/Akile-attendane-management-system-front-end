@@ -5,6 +5,7 @@ import "./landing.css";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from 'axios';
 
+
 import {
   Button,
   InputGroup,
@@ -40,6 +41,8 @@ const { Meta } = Card;
 
 const base_url = 'http://localhost:9000/api/v1' ;
 
+
+
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -70,12 +73,16 @@ export default class Dashboard extends Component {
       database_salary: [],
       database_telephone: [],
       database_email: [],
+      intial_load : 0,
+      vals: Math.floor(1000 + Math.random() * 9000),
+      
       // posts: []
     };
 
     this.toggleModal = this.toggleModal.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
+    
 
   beforeUploadFile = (file) => {
     this.setState({ uploadFile: [file] });
@@ -91,6 +98,7 @@ export default class Dashboard extends Component {
     });
 
   }
+
 
 
   handlePositionchange = (event) => {
@@ -128,11 +136,12 @@ export default class Dashboard extends Component {
 
   }
   handleStaffIdchange = (event) => {
-    const target = event.target;
-    const name = target.name
-    const staffid = target.type === 'checkbox' ? target.checked : target.value;
+    // const target = event.target;
+    // const name = target.name
+    // const staffid = target.type === 'checkbox' ? target.checked : target.value;
+    
     this.setState({
-      staffid: event.target.value
+      staffid: "AK-" + this.state.vals
     });
   }
   handleSalarychange = (event) => {
@@ -182,7 +191,8 @@ export default class Dashboard extends Component {
     var telephones = this.state.telephones;
     var emails = this.state.emails;
     var passwords = this.state.passwords;
-    
+       
+
     items.push(this.state.names);
     positions.push(this.state.position);
     genders.push(this.state.gender);
@@ -194,8 +204,8 @@ export default class Dashboard extends Component {
     passwords.push(this.state.password);
 
     console.log("genders:",genders)
-
-
+     
+    console.log("aaaaaaa",this.staffid)
 
 
     const user = {
@@ -212,8 +222,10 @@ export default class Dashboard extends Component {
         salary: this.state.salary,
         telephone:this.state.new_telephone,
         deviceId: this.state.deviceid
+
     };
 
+    console.log("StaffIDs:",staffids)
 
     axios
     .post('http://localhost:9000/api/v1/users/signup', user)
@@ -221,20 +233,54 @@ export default class Dashboard extends Component {
     .catch(err => {
       console.error("The Error:",err);
     });
-
-
     
     // this.getmongodb();
-
-    
+    var temp;
     this.setState(event => {
       return { 
+        temp: this.componentDidMount,
         items: items,
         showModal: !this.state.showModal,
         count: event.count + 1}
     });
   }
 
+  reload = ()=>{
+    var temp;
+
+    this.setState(event =>{
+      return{
+        temp: this.componentDidMount
+      }
+    });
+
+  }
+  
+  handleDelete = ()=>{
+    var staffids = this.state.staffids;
+
+    staffids.push(this.state.staffid);
+
+    console.log("Random Numbers: ");
+    
+    const user = {
+        staffId: this.state.staffid,
+    };
+
+    axios
+    .post('http://localhost:9000/api/v1/users/:id', user)
+    .then(() => console.log('User Deleted',user))
+    .catch(err => {
+      console.error("The Error:",err);
+    });
+    
+    this.setState(event => {
+      return { 
+        
+        count: event.count - 1}
+    });
+
+  }
 
   // getmongodb = () => {
   //   axios.get('http://localhost:9000/api/v1/attendance')
@@ -319,6 +365,7 @@ export default class Dashboard extends Component {
   componentDidMount = () =>{
     this.getmongodb();
   };
+    
 
   getmongodb = () => {
       axios.get(base_url + '/users/')
@@ -346,7 +393,9 @@ export default class Dashboard extends Component {
   }
 
 
+      
 
+<<<<<<< HEAD
 
   render() {
     const rows = [
@@ -406,12 +455,36 @@ export default class Dashboard extends Component {
       ),
     ];
 
+=======
+>>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
   
-    var namerows = this.state.items;
-    var database_namerows = this.state.database_name;
-    var krows = this.createData(this.state.items ,this.state.positions,this.state.genders,this.state.deviceids,this.state.staffids, this.state.salarys,this.state.telephones , this.state.emails);
+componentWillMount(){
+  this.getmongodb();
+}
+  render() {  
 
-    var jrows = this.createData(this.state.database_name,this.state.database_position,this.state.database_gender,this.state.database_deviceid,this.state.database_staffid,this.state.database_salary,this.state.database_telephone,this.state.database_email)
+    var namerows = this.state.items;
+    var database_namerows = this.state.database_name;    
+    var krows = this.createData(
+      this.state.items ,
+      this.state.positions,
+      this.state.genders,
+      this.state.deviceids,
+      this.state.staffids,
+      this.state.salarys,
+      this.state.telephones , 
+      this.state.emails);
+
+    var jrows = this.createData(
+      this.state.database_name,
+      this.state.database_position,
+      this.state.database_gender,
+      this.state.database_deviceid,
+      this.state.database_staffid,
+      this.state.database_salary,
+      this.state.database_telephone, 
+      this.state.database_email);
+
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -508,7 +581,7 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Basic Salary
                   </InputGroupAddon>
-                  <Input onChange ={this.handleSalarychange} placeholder="Salary" />
+                  <Input onChange ={this.handleSalarychange} type="number" placeholder="Salary" />
                 </InputGroup>
               </FormGroup>
 
@@ -574,43 +647,28 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
+<<<<<<< HEAD
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>
 
                 <StyledTableCell>Remove</StyledTableCell>
 
+=======
+
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+
+>>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
               </TableRow>
             </TableHead>
             <TableBody>     
-
-
-              {/* {rows.map((row) => ( 
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">{row.name}</StyledTableCell>
-                  <StyledTableCell>{row.Position}</StyledTableCell>
-                  <StyledTableCell>{row.Gender}</StyledTableCell>
-                  <StyledTableCell>{row.DeviceID}</StyledTableCell>
-                  <StyledTableCell>{row.StaffID}</StyledTableCell>
-                  <StyledTableCell>{row.Telephone}</StyledTableCell>
-
-                  <StyledTableCell align="right">{row.Email}</StyledTableCell>  */}
 
               {/* //Add the below comment after fetching from database
                   //Add Authentication 
                   // Create a handle for the Remove button to remove user on that row 
                     and also from the database after the right authentications from admins
               */}
-                  {/* <StyledTableCell align="right">
-                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
-                      Remove
-                    </Button>
-                  </StyledTableCell>
-
-
-                </StyledTableRow>
-              ))}  */}
-              
-              
+                            
               {database_namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>
@@ -622,6 +680,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
+<<<<<<< HEAD
 
                   
 
@@ -632,35 +691,38 @@ export default class Dashboard extends Component {
               */}
 
                   <StyledTableCell align="right">
+=======
+                  <StyledTableCell component="th" scope="row" >
+>>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Edit
                     </Button>
                   </StyledTableCell>
                   
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" onClick={this.handleDelete, jrows.StaffID[idx]}>
                     <Button color="secondary">
                       Remove
                     </Button>
                   </StyledTableCell>
 
-
                 </StyledTableRow>
 
-              ))}
+              ))} 
+
               {namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{"AK-000" + (idx + 7) }</StyledTableCell>
+
+                  <StyledTableCell component="th" scope="row">{krows.StaffID[idx]}</StyledTableCell>
+
                   <StyledTableCell component="th" scope="row">{krows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
 
-                  <StyledTableCell>{krows.Email[idx]}</StyledTableCell>
-                  
-
-                  <StyledTableCell align="right">
+                  <StyledTableCell component="th" scope="row">
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Edit
                     </Button>
