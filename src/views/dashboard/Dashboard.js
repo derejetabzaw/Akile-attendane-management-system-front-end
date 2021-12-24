@@ -405,11 +405,7 @@ export default class Dashboard extends Component {
         "Getnet@akile.com"
       ),
     ];
-    
 
-
-    console.log("Tele:",this.state.telephones)
-    console.log("salary:",this.state.salarys)
   
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;
@@ -434,7 +430,6 @@ export default class Dashboard extends Component {
     }))(TableRow);
 
 
-    // console.log("id1 is", id1);
     return (
       <>
         <Button
@@ -579,14 +574,11 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
-<<<<<<< HEAD
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>
-=======
 
                 <StyledTableCell>Remove</StyledTableCell>
 
->>>>>>> 1d70a11ae6cc9084234c7405212bf7cb5b195f44
               </TableRow>
             </TableHead>
             <TableBody>     
@@ -634,8 +626,7 @@ export default class Dashboard extends Component {
                   
 
 
-                  <StyledTableCell align="right">{row.Email}</StyledTableCell>
-
+                  
               {/* //Add the below comment after fetching from database
                   //Add Authentication 
               */}
