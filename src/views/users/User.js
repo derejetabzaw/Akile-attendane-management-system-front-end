@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Modal, Button, Form , Accordion, Card, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import usersData from "./UsersData";
 import DatePicker from "react-datepicker";
@@ -32,6 +32,7 @@ import Paper from "@material-ui/core/Paper";
 import Users from "./Users";
 import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
 import { optionsSupported } from "dom-helpers/cjs/addEventListener";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 // import { concat } from "core-js/core/array";
 // import Form from "antd/lib/form/Form";
 
@@ -122,18 +123,41 @@ var namerows = [];
 var staffnames = ["Berekert Haile","Nardos Ephrem",
 "Mulualem Tesfaye","Ismael","Asnakech Tesfaye","Gebiru",
 "Atsede","Zenebe","Hirut Fanta","Abayneh"];
+
+var database_siteName=[];
+var database_location=[];
+var database_latitude=[];
+var database_longitude=[];
+var database_sitemanager=[];
+var database_paintarea=[];
+
+
 var sites = [];
+const url = 'http://localhost:9000/api/v1/sites/'
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
   const [showModal, setShow] = useState(false);
   const [showModal2, setShow2] = useState(false);
   const [fullscreen, setFullscreen] = useState(true);
+  const [site,setSites] = useState([])
 
   const [startDate,setStartDate] = useState(new Date());
   const [endDate,setEndDate] = useState(new Date());
+  
+  // const getUsers = ()=>{
+  //   axios.get(url).then((response)=>{
+  //     const user_info = response.data;
+  //     const {users} = user_info
+  //     console.log(user_info)
+  //     setStaffNames(users)
+  //   })
+  // }
 
-
-
+  //   useEffect(async ()=>{
+  
+  //   getUsers();
+   
+  // },[]);
 
 //   var akile_marker= L.Icon.extend({
 //     options: {
@@ -216,13 +240,13 @@ export default function User() {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Name = value
-    console.log("names",Name)
+   
   };
   const handleLocationChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Location_Name = value
-    console.log("Location_Name",Location_Name)
+    
   };
   
   const handleManagerChange = (event) => {
@@ -254,22 +278,23 @@ export default function User() {
       var Latitude = latitude;
       var Longitude = longitude;
       var sitemanager = Sitemanager
-      var area = true; //this needs to be checked!!!!
+      var area = area; //this needs to be checked!!!!
       var loc = Location;
 
 
 
       const Site = {
         _id:"",
-        name:name,
-        Location:loc,
+        sitename:name,
+        location:Location_Name,
         latitude:Latitude,
         longitude:Longitude,
         sitemanager:sitemanager,
-        area:area
+        paintarea:Paint_Area
       }
+      console.log(Site);
         axios
-    .post('http://localhost:9000/api/v1/sites', Site)
+    .post('http://localhost:9000/api/v1/sites/addsite', Site)
     .then(() => console.log('Site Created',Site))
     .catch(err => {
       console.error("The Error:",err);
@@ -376,14 +401,54 @@ export default function User() {
     console.log(`onDeleted: removed ${numDeleted} layers`, e);
   };
 
-  
+  const getSites = ()=>{
+    axios.get(url).then((response)=>{
+      const sites_info = response.data;
+      const {sites} = sites_info
+      console.log(sites,"all GOOD!")
+      console.log(sites.length)
+      setSites(sites)
+      var counter =0;
+      if(sites.length !== 0){
+        var length = site.length;
+        sites.forEach(element => {
+          database_siteName[counter]=(element.sitename);
+          database_location[counter]=(element.location);
+          database_longitude[counter]=(element.latitude);
+          database_latitude[counter]=(element.longitude);
+          database_sitemanager[counter]=(element.sitemanager);
+          database_paintarea[counter]=(element.paintarea);
+
+          counter++;
+          
 
 
+
+
+        });
+
+        
+      }
+      
+
+    }).catch((err)=>{
+        console.log(err,'Api error')
+    })
+  }
+ 
+
+useEffect(()=>{
+  getSites();
+},[])
+const arr = [];
+console.log(database_siteName);
   
 
 
   return (
+    
     <>
+    
       <Tabs defaultActiveKey="2">
         <TabPane tab="Sites" key="1">
           <Button
@@ -421,14 +486,14 @@ export default function User() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {namerows.map((krow,idx) => (
+              {site.map((krow,idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
-                  <StyledTableCell component="th" scope="row">{Information[idx].site_name}</StyledTableCell>
-                  <StyledTableCell>{Information[idx].location}</StyledTableCell>
-                  <StyledTableCell>{latitude[idx]}</StyledTableCell>
-                  <StyledTableCell>{longitude[idx]}</StyledTableCell>
-                  <StyledTableCell>{Information[idx].manager}</StyledTableCell>
-                  <StyledTableCell>{Information[idx].paint_area}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krow.sitename}</StyledTableCell>
+                  <StyledTableCell>{krow.location}</StyledTableCell>
+                  <StyledTableCell>{krow.latitude}</StyledTableCell>
+                  <StyledTableCell>{krow.longitude}</StyledTableCell>
+                  <StyledTableCell>{krow.sitemanager}</StyledTableCell>
+                  <StyledTableCell>{krow.paintarea}</StyledTableCell>
                   {/* <StyledTableCell>{Information.starts}</StyledTableCell>
                   <StyledTableCell>{Information.ends}</StyledTableCell> */}
                   {/* <StyledTableCell>{row.sanding_material}</StyledTableCell>
@@ -815,7 +880,7 @@ export default function User() {
                 <StyledTableCell>Assignment</StyledTableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+                        <TableBody>
               {staffnames.map((krow,idy) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{staffnames[idy]}</StyledTableCell>
@@ -848,7 +913,6 @@ export default function User() {
             </TableBody>
           </Table>
         </TableContainer>
-
         </TabPane>
         <TabPane tab="Information" key="4"></TabPane>
       </Tabs>
