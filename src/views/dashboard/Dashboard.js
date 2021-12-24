@@ -396,6 +396,7 @@ export default class Dashboard extends Component {
       
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   render() {
     const rows = [
@@ -455,6 +456,8 @@ export default class Dashboard extends Component {
       ),
     ];
 
+=======
+>>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
 =======
 >>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
   
@@ -647,10 +650,11 @@ componentWillMount(){
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
-<<<<<<< HEAD
+
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>
 
+<<<<<<< HEAD
                 <StyledTableCell>Remove</StyledTableCell>
 
 =======
@@ -658,6 +662,8 @@ componentWillMount(){
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>
 
+>>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
+=======
 >>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
               </TableRow>
             </TableHead>
@@ -681,6 +687,7 @@ componentWillMount(){
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                   
 
@@ -691,6 +698,9 @@ componentWillMount(){
               */}
 
                   <StyledTableCell align="right">
+=======
+                  <StyledTableCell component="th" scope="row" >
+>>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
 =======
                   <StyledTableCell component="th" scope="row" >
 >>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
