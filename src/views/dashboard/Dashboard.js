@@ -395,71 +395,6 @@ export default class Dashboard extends Component {
 
       
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-  render() {
-    const rows = [
-      this.createData(
-        "Nahom Amare",
-        "Project Manager",
-        "Male",
-        "f5e90564385492f2",
-        "AK-0001",
-        "",
-        "nahom@akile.com"
-      ),
-      this.createData(
-        "Zeynu Nasre",
-        "Site Manager, PMP",
-        "Male",
-        "",
-        "AK-0002",
-        "",
-        "Zeynu@akile.com"
-      ),
-      this.createData(
-        "Digro Mero",
-        "PMP",
-        "Male",
-        "",
-        "AK-0003",
-        "",
-        "Digro@akile.com"
-      ),
-      this.createData(
-        "Meserate Alemayehu",
-        "PMP",
-        "Female",
-        "",
-        "AK-0004",
-        "",
-        "Meserate@akile.com"
-      ),
-      this.createData(
-        "Marshet Getaneh",
-        "PMP",
-        "Female",
-        "",
-        "AK-0005",
-        "",
-        "Marshet@akile.com"
-      ),
-      this.createData(
-        "Getnet",
-        "PMP",
-        "Male",
-        "",
-        "AK-0006",
-        "",
-        "Getnet@akile.com"
-      ),
-    ];
-
-=======
->>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
-=======
->>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
   
 componentWillMount(){
   this.getmongodb();
@@ -506,6 +441,7 @@ componentWillMount(){
     }))(TableRow);
 
 
+    // console.log("id1 is", id1);
     return (
       <>
         <Button
@@ -654,17 +590,6 @@ componentWillMount(){
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>
 
-<<<<<<< HEAD
-                <StyledTableCell>Remove</StyledTableCell>
-
-=======
-
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-
->>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
-=======
->>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
               </TableRow>
             </TableHead>
             <TableBody>     
@@ -686,24 +611,7 @@ componentWillMount(){
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-                  
-
-
-                  
-              {/* //Add the below comment after fetching from database
-                  //Add Authentication 
-              */}
-
-                  <StyledTableCell align="right">
-=======
                   <StyledTableCell component="th" scope="row" >
->>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
-=======
-                  <StyledTableCell component="th" scope="row" >
->>>>>>> ed6fc51f7a95ce4aabaae03dd92bae34b3d567d7
                     <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
                       Edit
                     </Button>
