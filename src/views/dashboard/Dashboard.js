@@ -135,15 +135,18 @@ export default class Dashboard extends Component {
     });
 
   }
-  handleStaffIdchange = (event) => {
+  // Commented out handleStaffIdchange because the text field is removed and also the autogeneration 
+  // is done in the handleNameSubmit
+
+  // handleStaffIdchange = (event) => {
     // const target = event.target;
     // const name = target.name
     // const staffid = target.type === 'checkbox' ? target.checked : target.value;
     
-    this.setState({
-      staffid: "AK-" + this.state.vals
-    });
-  }
+  //   this.setState({
+  //     staffid: "AK-" + this.state.vals
+  //   });
+  // }
   handleSalarychange = (event) => {
     const target = event.target;
     const name = target.name
@@ -186,7 +189,7 @@ export default class Dashboard extends Component {
     var positions = this.state.positions;
     var genders = this.state.genders;
     var deviceids = this.state.deviceids;
-    var staffids = this.state.staffids;
+    //var staffids = this.state.staffids;
     var salarys = this.state.salarys;
     var telephones = this.state.telephones;
     var emails = this.state.emails;
@@ -197,7 +200,7 @@ export default class Dashboard extends Component {
     positions.push(this.state.position);
     genders.push(this.state.gender);
     deviceids.push(this.state.deviceid);
-    staffids.push(this.state.staffid);
+    //staffids.push(this.state.staffid);
     salarys.push(this.state.salary);
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
@@ -205,13 +208,13 @@ export default class Dashboard extends Component {
 
     console.log("genders:",genders)
      
-    console.log("aaaaaaa",this.staffid)
-
 
     const user = {
         _id: "",
         name: this.state.names,
-        staffId: this.state.staffid,
+        //staffId: this.state.staffid,
+        staffId: "AK-" + this.state.vals,
+        
         password: "akilepass",
         position: this.state.position,
         isAdmin: false,
@@ -225,7 +228,6 @@ export default class Dashboard extends Component {
 
     };
 
-    console.log("StaffIDs:",staffids)
 
     axios
     .post('http://localhost:9000/api/v1/users/signup', user)
@@ -235,27 +237,15 @@ export default class Dashboard extends Component {
     });
     
     // this.getmongodb();
-    var temp;
+    
     this.setState(event => {
       return { 
-        temp: this.componentDidMount,
         items: items,
         showModal: !this.state.showModal,
         count: event.count + 1}
     });
   }
 
-  reload = ()=>{
-    var temp;
-
-    this.setState(event =>{
-      return{
-        temp: this.componentDidMount
-      }
-    });
-
-  }
-  
   handleDelete = ()=>{
     var staffids = this.state.staffids;
 
@@ -508,12 +498,13 @@ componentWillMount(){
                   <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
                 </InputGroup>
               </FormGroup>
-              <FormGroup>
+              {/* <FormGroup>
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">StaffID</InputGroupAddon>
                   <Input onChange ={this.handleStaffIdchange} placeholder={"AK-000" + (this.state.count + 7)}/>
+                  <Input onChange ={this.handleStaffIdchange} placeholder={this.state.staffid}/>
                 </InputGroup>
-              </FormGroup>
+              </FormGroup> */}
 
               <FormGroup>
                 <InputGroup>
@@ -612,13 +603,13 @@ componentWillMount(){
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
                       Edit
                     </Button>
                   </StyledTableCell>
                   
-                  <StyledTableCell align="left" onClick={this.handleDelete, jrows.StaffID[idx]}>
-                    <Button color="secondary">
+                  <StyledTableCell align="left">
+                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
                       Remove
                     </Button>
                   </StyledTableCell>
@@ -641,13 +632,13 @@ componentWillMount(){
                   <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row">
-                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
                       Edit
                     </Button>
                   </StyledTableCell>
 
                   <StyledTableCell align="left">
-                    <Button color="secondary">
+                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
                       Remove
                     </Button>
                   </StyledTableCell>
