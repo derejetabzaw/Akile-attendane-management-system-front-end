@@ -140,7 +140,7 @@ export default function User() {
   const [showModal2, setShow2] = useState(false);
   const [fullscreen, setFullscreen] = useState(true);
   const [site,setSites] = useState([])
-
+  const [sitemanager,setSiteManager] = useState([])
   const [startDate,setStartDate] = useState(new Date());
   const [endDate,setEndDate] = useState(new Date());
   
@@ -405,8 +405,6 @@ export default function User() {
     axios.get(url).then((response)=>{
       const sites_info = response.data;
       const {sites} = sites_info
-      console.log(sites,"all GOOD!")
-      console.log(sites.length)
       setSites(sites)
       var counter =0;
       if(sites.length !== 0){
@@ -435,13 +433,29 @@ export default function User() {
         console.log(err,'Api error')
     })
   }
+const getSiteManagers = ()=>{
+const users = axios.get('http://localhost:9000/api/v1/users/').then((response)=>{
+  const user_info = response.data;
+  const {users} = user_info;
+  const sitemanagers =users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
+  setSiteManager(sitemanagers);
+}).catch((err)=>{
+  console.log(err);
+})
+}
+
  
 
 useEffect(()=>{
   getSites();
+  
 },[])
-const arr = [];
-console.log(database_siteName);
+useEffect(()=>{
+  getSiteManagers();
+  
+},[])
+
+
   
 
 
@@ -881,9 +895,9 @@ console.log(database_siteName);
               </TableRow>
             </TableHead>
                         <TableBody>
-              {staffnames.map((krow,idy) => (
+              {sitemanager.map((krow,idy) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
-                  <StyledTableCell component="th" scope="row">{staffnames[idy]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
                   <StyledTableCell>  
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="">Choose Site</option>
