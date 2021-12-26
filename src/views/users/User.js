@@ -443,13 +443,20 @@ const users = axios.get('http://localhost:9000/api/v1/users/').then((response)=>
   console.log(err);
 })
 }
+//delete-sites/
+const removeSite =  (id)=>{
+  var site_id = id;
+  axios.delete('http://localhost:9000/api/v1/sites/delete-sites/'+id);
+  setSites(site.filter(sid => sid.id !== site_id));
+  console.log("operation successfull");
+}
 
  
 
 useEffect(()=>{
   getSites();
   
-},[])
+},[site])
 useEffect(()=>{
   getSiteManagers();
   
@@ -465,13 +472,7 @@ useEffect(()=>{
     
       <Tabs defaultActiveKey="2">
         <TabPane tab="Sites" key="1">
-          <Button
-            color="primary"
-            onClick={closeModal}
-            style={{ float: "right", marginBottom: "2%" }}
-          >
-          Remove{""} 
-          </Button>
+         
           <Button
             color="primary"
             onClick={addSiteModal}
@@ -513,7 +514,20 @@ useEffect(()=>{
                   {/* <StyledTableCell>{row.sanding_material}</StyledTableCell>
                   <StyledTableCell>{row.painting_area}</StyledTableCell>
                   <StyledTableCell align="right">{row.contact_person}</StyledTableCell> */}
+                   <StyledTableCell component="th" scope="row" >
+                    <Button color="secondary" >
+                      Edit
+                    </Button>
+                  </StyledTableCell>
+                  
+                  <StyledTableCell align="left">
+                    <Button color="secondary" onClick={()=>{removeSite(krow._id)}}>
+                      Remove
+                    </Button>
+                  </StyledTableCell>
                 </StyledTableRow>
+
+                
               ))}
             </TableBody>
           </Table>
@@ -901,8 +915,8 @@ useEffect(()=>{
                   <StyledTableCell>  
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="">Choose Site</option>
-                      {sites.map((site,idz) => (    
-                      <option value={MakeItem(site)}>{sites[idz]}</option>
+                      {site.map((site,idz) => (    
+                      <option value={MakeItem(site)}>{site.sitename}</option>
                       ))}
                     </Input>
                     <Button
