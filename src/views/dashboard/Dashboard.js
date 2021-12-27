@@ -33,7 +33,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { imageOverlay } from "leaflet";
-
+import {useState} from "react";
 const { Meta } = Card;
 
 // const id1 = nextId("AK");
@@ -42,6 +42,7 @@ const { Meta } = Card;
 const base_url = 'http://localhost:9000/api/v1' ;
 
 
+const [user,setUsers] = useState([]);
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -246,32 +247,44 @@ export default class Dashboard extends Component {
     });
   }
 
-  handleDelete = ()=>{
-    var staffids = this.state.staffids;
-
-    staffids.push(this.state.staffid);
-
-    console.log("Random Numbers: ");
-    
-    const user = {
-        staffId: this.state.staffid,
-    };
-
-    axios
-    .post('http://localhost:9000/api/v1/users/:id', user)
-    .then(() => console.log('User Deleted',user))
+  handleDelete = (staffid)=>{
+   var staffids = staffid;
+ 
+    axios.delete('http://localhost:9000/api/v1/users/delete-user/'+staffid)
+    .then(() => console.log('User Deleted'))
     .catch(err => {
       console.error("The Error:",err);
     });
-    
-    this.setState(event => {
-      return { 
-        
-        count: event.count - 1}
-    });
-
+    setUsers(user.filter(staffId => staffId.id !== staffids));
   }
 
+  // handleDelete = ()=>{
+  //   var staffids = this.state.staffids;
+
+  //   staffids.push(this.state.staffid);
+
+  //   console.log("Random Numbers: ");
+    
+  //   const user = {
+  //       staffId: this.state.staffid,
+  //   };
+
+  //   axios
+  //   .post('http://localhost:9000/api/v1/users/:id', user)
+  //   .then(() => console.log('User Deleted',user))
+  //   .catch(err => {
+  //     console.error("The Error:",err);
+  //   });
+    
+  //   this.setState(event => {
+  //     return { 
+        
+  //       count: event.count - 1}
+  //   });
+
+  // }
+  
+  
   // getmongodb = () => {
   //   axios.get('http://localhost:9000/api/v1/attendance')
   //     .then((response) => {
@@ -609,7 +622,8 @@ componentWillMount(){
                   </StyledTableCell>
                   
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
+                    {/* <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}> */}
+                    <Button color="secondary" onClick={this.handleDelete(jrows.StaffID[idx])}>
                       Remove
                     </Button>
                   </StyledTableCell>
@@ -638,7 +652,8 @@ componentWillMount(){
                   </StyledTableCell>
 
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
+                    {/* <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}> */}
+                    <Button color="secondary" onClick={this.handleDelete(krow.StaffID[idx])}>
                       Remove
                     </Button>
                   </StyledTableCell>
