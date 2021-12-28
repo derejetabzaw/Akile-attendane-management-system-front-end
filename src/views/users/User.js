@@ -123,6 +123,7 @@ var namerows = [];
 var staffnames = ["Berekert Haile","Nardos Ephrem",
 "Mulualem Tesfaye","Ismael","Asnakech Tesfaye","Gebiru",
 "Atsede","Zenebe","Hirut Fanta","Abayneh"];
+const otherEmps = [];
 
 var database_siteName=[];
 var database_location=[];
@@ -144,7 +145,7 @@ export default function User() {
   const [startDate,setStartDate] = useState(new Date());
   const [endDate,setEndDate] = useState(new Date());
   const [openUpdateModal,setOpenUpdateModal] = useState(false);
-
+  const [allEmployees,setallEmployees] = useState([]);
   
   
   // const getUsers = ()=>{
@@ -441,11 +442,17 @@ const users = axios.get('http://localhost:9000/api/v1/users/').then((response)=>
   const user_info = response.data;
   const {users} = user_info;
   const sitemanagers =users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
+  const otherEmps =users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
+  console.log('All emps',otherEmps);
+  console.log("management",sitemanagers)
   setSiteManager(sitemanagers);
 }).catch((err)=>{
   console.log(err);
 })
 }
+
+
+
 //delete-sites/
 const removeSite =  (id)=>{
   var site_id = id;
@@ -491,6 +498,7 @@ useEffect(()=>{
   getSiteManagers();
   
 },[])
+
 
 
 const handleOpenUpdateModal = (id) =>{
@@ -704,9 +712,12 @@ const handleOpenUpdateModal = (id) =>{
                     <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="">----Select Name----</option>
-                      <option value="Nahom Amare">Nahome Amare</option>
-                      <option value="Zeynu Nesru">Zeynu Nesru</option>
-                      <option value="Getachew Anteneh">Getachew Anteneh</option>
+                      {sitemanager.map((manager)=>(
+                        <option value={manager.name} key={manager.id}>{manager.name}</option>
+                      ))}
+                      
+                      
+ 
                     </Input>
                   </InputGroup>
                   </Form.Group>
@@ -1028,7 +1039,7 @@ const handleOpenUpdateModal = (id) =>{
               </TableRow>
             </TableHead>
                         <TableBody>
-              {sitemanager.map((krow,idy) => (
+              {staffnames.map((krow,idy) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
                   <StyledTableCell>  
