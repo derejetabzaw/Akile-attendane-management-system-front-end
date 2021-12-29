@@ -249,32 +249,64 @@ export default class Dashboard extends Component {
         count: event.count + 1}
     });
   }
-
-  handleDelete = ()=>{
-    var staffids = this.state.staffids;
-    
-    staffids.push(this.state.staffid);
-
-    console.log("Random Numbers: ");
-    
+  //update-User
+  handleUpdate = (id) => {
+    var positions = this.state.positions;
+    var deviceids = this.state.deviceids;
+    var salarys = this.state.salarys;
+    var telephones = this.state.telephones;
+    var emails = this.state.emails;
+    var passwords = this.state.passwords;
+       
+    positions.push(this.state.position);
+    deviceids.push(this.state.deviceid);
+    salarys.push(this.state.salary);
+    telephones.push(this.state.new_telephone);
+    emails.push(this.state.email);
+    passwords.push(this.state.password);
+ 
     const user = {
-        staffId: this.state.staffid,
+        _id: "",
+        password: "akilepass",
+        isAdmin: false,
+        workingSite: "Bole",
+        position: this.state.position,
+        deviceId: this.state.deviceid,
+        salary: this.state.salary,
+        telephone:this.state.new_telephone,
+        email:this.state.email,
     };
 
     axios
-    .post('http://localhost:9000/api/v1/users/:id', user)
-    .then(() => console.log('User Deleted',user))
+    .put('http://localhost:9000/api/v1/users/update-user'+id, user)
+    .then(() => {
+      alert("User Updated")})
     .catch(err => {
-      console.error("The Error:",err);
+      alert.error("User Not Updated\n", err );
     });
     
     this.setState(event => {
-      return { 
-        
-        count: event.count - 1}
+      return {
+        showModal: !this.state.showModal,
+        count: event.count}
+    });
+  }
+  //delete-users/
+  handleRemoveUser =  (id)=>{
+    axios
+    .delete('http://localhost:9000/api/v1/users/delete-user/'+id)
+    .then(()=> alert("User Successfully Deleted"))
+    .catch(err=>{
+        alert.error("Couldn't Delete User", err)
     });
 
+    // this.setState(event => {
+    //   return { 
+    //     temp: this.componentDidMount,
+    //     count: event.count - 1}
+    // });
   }
+
 
   // getmongodb = () => {
   //   axios.get('http://localhost:9000/api/v1/attendance')
@@ -375,6 +407,7 @@ export default class Dashboard extends Component {
       .then((response) => {
         const users_info = response.data
         this.setState({users:users_info});
+
         if (this.state.users.length !== 0) {
           var user_length = this.state.users.users.length
           for (var j = 0; j < user_length; j++) {
@@ -395,13 +428,13 @@ export default class Dashboard extends Component {
       });
   }
 
+  
 
-      
 
   
-componentWillMount(){
-  this.getmongodb();
-}
+  componentWillMount(){
+    this.getmongodb();
+  }
 
   render() {  
 
@@ -616,9 +649,9 @@ componentWillMount(){
                   </StyledTableCell>
                   
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
+                    <Button color="secondary" onClick={() => {this.handleRemoveUser(jrows.StaffID[idx])}}>
                       Remove
-                    </Button>
+                    </Button>{" "}
                   </StyledTableCell>
 
                 </StyledTableRow>
@@ -643,9 +676,9 @@ componentWillMount(){
                   </StyledTableCell>
 
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
+                  <Button color="secondary" onClick={() => {this.handleRemoveUser(krows.StaffID[idx])}}>
                       Remove
-                    </Button>
+                    </Button>{" "}
                   </StyledTableCell>
 
 
