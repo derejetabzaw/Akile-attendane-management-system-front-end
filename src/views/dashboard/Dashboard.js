@@ -5,6 +5,7 @@ import "./landing.css";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from 'axios';
 
+
 import {
   Button,
   InputGroup,
@@ -40,6 +41,8 @@ const { Meta } = Card;
 
 const base_url = 'http://localhost:9000/api/v1' ;
 
+
+
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -70,13 +73,16 @@ export default class Dashboard extends Component {
       database_salary: [],
       database_telephone: [],
       database_email: [],
+      intial_load : 0,
       vals: Math.floor(1000 + Math.random() * 9000),
+      
       // posts: []
     };
 
     this.toggleModal = this.toggleModal.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
+    
 
   beforeUploadFile = (file) => {
     this.setState({ uploadFile: [file] });
@@ -92,6 +98,7 @@ export default class Dashboard extends Component {
     });
 
   }
+
 
 
   handlePositionchange = (event) => {
@@ -128,15 +135,18 @@ export default class Dashboard extends Component {
     });
 
   }
-  handleStaffIdchange = (event) => {
+  // Commented out handleStaffIdchange because the text field is removed and also the autogeneration 
+  // is done in the handleNameSubmit
+
+  // handleStaffIdchange = (event) => {
     // const target = event.target;
     // const name = target.name
     // const staffid = target.type === 'checkbox' ? target.checked : target.value;
     
-    this.setState({
-      staffid: "AK-" + this.state.vals
-    });
-  }
+  //   this.setState({
+  //     staffid: "AK-" + this.state.vals
+  //   });
+  // }
   handleSalarychange = (event) => {
     const target = event.target;
     const name = target.name
@@ -179,7 +189,7 @@ export default class Dashboard extends Component {
     var positions = this.state.positions;
     var genders = this.state.genders;
     var deviceids = this.state.deviceids;
-    var staffids = this.state.staffids;
+    //var staffids = this.state.staffids;
     var salarys = this.state.salarys;
     var telephones = this.state.telephones;
     var emails = this.state.emails;
@@ -190,7 +200,7 @@ export default class Dashboard extends Component {
     positions.push(this.state.position);
     genders.push(this.state.gender);
     deviceids.push(this.state.deviceid);
-    staffids.push(this.state.staffid);
+    //staffids.push(this.state.staffid);
     salarys.push(this.state.salary);
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
@@ -198,13 +208,13 @@ export default class Dashboard extends Component {
 
     console.log("genders:",genders)
      
-    console.log("aaaaaaa",this.staffid)
-
 
     const user = {
         _id: "",
         name: this.state.names,
-        staffId: this.state.staffid,
+        //staffId: this.state.staffid,
+        staffId: "AK-" + this.state.vals,
+        
         password: "akilepass",
         position: this.state.position,
         isAdmin: false,
@@ -218,7 +228,6 @@ export default class Dashboard extends Component {
 
     };
 
-    console.log("StaffIDs:",staffids)
 
     axios
     .post('http://localhost:9000/api/v1/users/signup', user)
@@ -228,27 +237,15 @@ export default class Dashboard extends Component {
     });
     
     // this.getmongodb();
-    var temp;
+    
     this.setState(event => {
       return { 
-        temp: this.componentDidMount,
         items: items,
         showModal: !this.state.showModal,
         count: event.count + 1}
     });
   }
 
-  reload = ()=>{
-    var temp;
-
-    this.setState(event =>{
-      return{
-        temp: this.componentDidMount
-      }
-    });
-
-  }
-  
   handleDelete = ()=>{
     var staffids = this.state.staffids;
 
@@ -358,6 +355,7 @@ export default class Dashboard extends Component {
   componentDidMount = () =>{
     this.getmongodb();
   };
+    
 
   getmongodb = () => {
       axios.get(base_url + '/users/')
@@ -385,11 +383,14 @@ export default class Dashboard extends Component {
   }
 
 
+      
 
   
-
+componentWillMount(){
+  this.getmongodb();
+}
   render() {  
-  
+
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;    
     var krows = this.createData(
@@ -497,12 +498,13 @@ export default class Dashboard extends Component {
                   <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
                 </InputGroup>
               </FormGroup>
-              <FormGroup>
+              {/* <FormGroup>
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">StaffID</InputGroupAddon>
                   <Input onChange ={this.handleStaffIdchange} placeholder={"AK-000" + (this.state.count + 7)}/>
+                  <Input onChange ={this.handleStaffIdchange} placeholder={this.state.staffid}/>
                 </InputGroup>
-              </FormGroup>
+              </FormGroup> */}
 
               <FormGroup>
                 <InputGroup>
@@ -601,13 +603,13 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
                       Edit
                     </Button>
                   </StyledTableCell>
                   
-                  <StyledTableCell align="left" onClick={this.handleDelete, jrows.StaffID[idx]}>
-                    <Button color="secondary">
+                  <StyledTableCell align="left">
+                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
                       Remove
                     </Button>
                   </StyledTableCell>
@@ -630,13 +632,13 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row">
-                    <Button color="secondary" onClick={this.handleItemChanged.bind(this, 2)}>
+                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
                       Edit
                     </Button>
                   </StyledTableCell>
 
                   <StyledTableCell align="left">
-                    <Button color="secondary">
+                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
                       Remove
                     </Button>
                   </StyledTableCell>

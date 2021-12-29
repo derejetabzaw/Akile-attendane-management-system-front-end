@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Modal, Button, Form , Accordion, Card, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import usersData from "./UsersData";
 import DatePicker from "react-datepicker";
@@ -7,6 +7,7 @@ import es from 'date-fns/locale/es';
 import "./MapViewerComp.css";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios'
 
 import {
   Map,
@@ -31,6 +32,7 @@ import Paper from "@material-ui/core/Paper";
 import Users from "./Users";
 import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
 import { optionsSupported } from "dom-helpers/cjs/addEventListener";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 // import { concat } from "core-js/core/array";
 // import Form from "antd/lib/form/Form";
 
@@ -121,18 +123,45 @@ var namerows = [];
 var staffnames = ["Berekert Haile","Nardos Ephrem",
 "Mulualem Tesfaye","Ismael","Asnakech Tesfaye","Gebiru",
 "Atsede","Zenebe","Hirut Fanta","Abayneh"];
+const otherEmps = [];
+
+var database_siteName=[];
+var database_location=[];
+var database_latitude=[];
+var database_longitude=[];
+var database_sitemanager=[];
+var database_paintarea=[];
+var site_id;
+
 var sites = [];
+const url = 'http://localhost:9000/api/v1/sites/'
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
   const [showModal, setShow] = useState(false);
   const [showModal2, setShow2] = useState(false);
   const [fullscreen, setFullscreen] = useState(true);
-
+  const [site,setSites] = useState([])
+  const [sitemanager,setSiteManager] = useState([])
   const [startDate,setStartDate] = useState(new Date());
   const [endDate,setEndDate] = useState(new Date());
+  const [openUpdateModal,setOpenUpdateModal] = useState(false);
+  const [allEmployees,setallEmployees] = useState([]);
+  
+  
+  // const getUsers = ()=>{
+  //   axios.get(url).then((response)=>{
+  //     const user_info = response.data;
+  //     const {users} = user_info
+  //     console.log(user_info)
+  //     setStaffNames(users)
+  //   })
+  // }
 
-
-
+  //   useEffect(async ()=>{
+  
+  //   getUsers();
+   
+  // },[]);
 
 //   var akile_marker= L.Icon.extend({
 //     options: {
@@ -215,13 +244,13 @@ export default function User() {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Name = value
-    console.log("names",Name)
+   
   };
   const handleLocationChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Location_Name = value
-    console.log("Location_Name",Location_Name)
+    
   };
   
   const handleManagerChange = (event) => {
@@ -236,6 +265,47 @@ export default function User() {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Paint_Area = value
   };
+
+    const handleLongtudeChange = (event) =>{
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    longitude = value
+  }
+    const handleLatitudeChange = (event) =>{
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    latitude = value
+  }
+
+    const handleSiteSubmit = ()=>{
+      var name = Name;
+      var Latitude = latitude;
+      var Longitude = longitude;
+      var sitemanager = Sitemanager
+      var area = area; //this needs to be checked!!!!
+      var loc = Location;
+
+
+
+      const Site = {
+        _id:"",
+        sitename:name,
+        location:Location_Name,
+        latitude:Latitude,
+        longitude:Longitude,
+        sitemanager:sitemanager,
+        paintarea:Paint_Area
+      }
+      console.log(Site);
+        axios
+    .post('http://localhost:9000/api/v1/sites/addsite', Site)
+    .then(() => console.log('Site Created',Site))
+    .catch(err => {
+      console.error("The Error:",err);
+    });
+      addsiteinformation()
+  }
+
 
   const assignmodule = (event) => {
     // disable assign Button
@@ -335,23 +405,115 @@ export default function User() {
     console.log(`onDeleted: removed ${numDeleted} layers`, e);
   };
 
+  const getSites = ()=>{
+    axios.get(url).then((response)=>{
+      const sites_info = response.data;
+      const {sites} = sites_info
+      setSites(sites)
+      var counter =0;
+      if(sites.length !== 0){
+        var length = site.length;
+        sites.forEach(element => {
+          database_siteName[counter]=(element.sitename);
+          database_location[counter]=(element.location);
+          database_longitude[counter]=(element.latitude);
+          database_latitude[counter]=(element.longitude);
+          database_sitemanager[counter]=(element.sitemanager);
+          database_paintarea[counter]=(element.paintarea);
+
+          counter++;
+          
+
+
+
+
+        });
+
+        
+      }
+      
+
+    }).catch((err)=>{
+        console.log(err,'Api error')
+    })
+  }
+const getSiteManagers = ()=>{
+const users = axios.get('http://localhost:9000/api/v1/users/').then((response)=>{
+  const user_info = response.data;
+  const {users} = user_info;
+  const sitemanagers =users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
+  const otherEmps =users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
+  console.log('All emps',otherEmps);
+  console.log("management",sitemanagers)
+  setSiteManager(sitemanagers);
+}).catch((err)=>{
+  console.log(err);
+})
+}
+
+
+
+//delete-sites/
+const removeSite =  (id)=>{
+  var site_id = id;
+  axios.delete('http://localhost:9000/api/v1/sites/delete-sites/'+id);
+  setSites(site.filter(sid => sid.id !== site_id));
+  console.log("operation successfull");
+}
+const handleCloseUpdatemodal = () =>{
+  setOpenUpdateModal(false);
+}
+//update-sites /update-sites/:id
+const updateSites = ()=>{
+       var name = Name;
+      var Latitude = latitude;
+      var Longitude = longitude;
+      var sitemanager = Sitemanager
+      var area = area; //this needs to be checked!!!!
+      var loc = Location;
+
+
+
+      const Site = {
+        sitename:name,
+        location:Location_Name,
+        latitude:Latitude,
+        longitude:Longitude,
+        sitemanager:sitemanager,
+        paintarea:Paint_Area
+      }
+  axios.put('http://localhost:9000/api/v1/sites/update-sites/'+site_id,Site);
+  handleCloseUpdatemodal();
   
+}
+
+ 
+
+useEffect(()=>{
+  getSites();
+  
+},[site])
+
+useEffect(()=>{
+  getSiteManagers();
+  
+},[])
 
 
+
+const handleOpenUpdateModal = (id) =>{
+  setOpenUpdateModal(true);
+}
   
 
 
   return (
+    
     <>
+    
       <Tabs defaultActiveKey="2">
         <TabPane tab="Sites" key="1">
-          <Button
-            color="primary"
-            onClick={closeModal}
-            style={{ float: "right", marginBottom: "2%" }}
-          >
-          Remove{""} 
-          </Button>
+         
           <Button
             color="primary"
             onClick={addSiteModal}
@@ -380,20 +542,118 @@ export default function User() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {namerows.map((krow,idx) => (
+              {site.map((krow,idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
-                  <StyledTableCell component="th" scope="row">{Information[idx].site_name}</StyledTableCell>
-                  <StyledTableCell>{Information[idx].location}</StyledTableCell>
-                  <StyledTableCell>{latitude[idx]}</StyledTableCell>
-                  <StyledTableCell>{longitude[idx]}</StyledTableCell>
-                  <StyledTableCell>{Information[idx].manager}</StyledTableCell>
-                  <StyledTableCell>{Information[idx].paint_area}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krow.sitename}</StyledTableCell>
+                  <StyledTableCell>{krow.location}</StyledTableCell>
+                  <StyledTableCell>{krow.latitude}</StyledTableCell>
+                  <StyledTableCell>{krow.longitude}</StyledTableCell>
+                  <StyledTableCell>{krow.sitemanager}</StyledTableCell>
+                  <StyledTableCell>{krow.paintarea}</StyledTableCell>
                   {/* <StyledTableCell>{Information.starts}</StyledTableCell>
                   <StyledTableCell>{Information.ends}</StyledTableCell> */}
                   {/* <StyledTableCell>{row.sanding_material}</StyledTableCell>
                   <StyledTableCell>{row.painting_area}</StyledTableCell>
                   <StyledTableCell align="right">{row.contact_person}</StyledTableCell> */}
+                   <StyledTableCell component="th" scope="row" >
+                    <Button color="secondary" onClick={()=>{setOpenUpdateModal(true)
+                            site_id = krow._id;
+                            
+                    }}>
+                    
+                      Edit
+                    </Button>
+                       <Modal show = {openUpdateModal} onHide={closeModal}>
+                       <Modal.Title>update site</Modal.Title>
+                       <Modal.Body>
+                         <Form>
+                            <Form.Group>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
+
+                    <Input onChange={handleSiteChange}  placeholder="Name of Site" />
+                  </InputGroup>
+                  <br/>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Location</InputGroupAddon>
+
+                    <Input onChange={handleLocationChange}  placeholder="Location of Site" />
+
+                    <Button
+                    color="primary"
+                    onClick={mapopener}
+                    // style={{ float: "right", marginBottom: "2%" }}
+                    >
+                    Pin on Map{" "}
+                    </Button>
+                
+
+                  </InputGroup>
+                  <br/>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
+                    <Input placeholder = {Location.lat} onChange={handleLatitudeChange} />
+                    <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
+                    <Input placeholder = {Location.lng}  onChange={handleLongtudeChange}/>
+                  </InputGroup>
+                </Form.Group>
+                <br/>
+                 <Form.Group>
+                  {/* <Label for="exampleEmail">Position</Label> */}
+                  <InputGroup>
+                    {/* <Label for="exampleEmail">Age</Label> */}
+
+                    <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
+                    <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
+                      <option value="">----Select Name----</option>
+                      <option value="Nahom Amare">Nahome Amare</option>
+                      <option value="Zeynu Nesru">Zeynu Nesru</option>
+                      <option value="Getachew Anteneh">Getachew Anteneh</option>
+                    </Input>
+                  </InputGroup>
+                  </Form.Group>
+                  <br/>
+                  <Form.Group>
+                  <InputGroup>
+                  <InputGroupAddon addonType="prepend">Paint Area</InputGroupAddon>
+                    <Input onChange={handlePaintChange} placeholder="Area in meter-square" />
+                  </InputGroup>
+                </Form.Group>
+                <br/>
+                   <Button
+                    onClick={handleCloseUpdatemodal}
+                    color="primary"
+                    style={{ float: "right", marginBottom: "2%" }}
+                    >
+                    Cancel{" "}
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={addsiteinformation}
+                    onClick={updateSites}
+                    style={{ float: "right", marginBottom: "2%" , marginRight: "1%"}}
+                    
+                    
+                    >
+                      
+                    update{" "}
+                  </Button>
+
+                         </Form>
+                       </Modal.Body>
+                       
+
+                    </Modal>
+                  </StyledTableCell>
+                  
+                  <StyledTableCell align="left">
+                    <Button color="secondary" onClick={()=>{removeSite(krow._id)}}>
+                      Remove
+                    </Button>
+                  </StyledTableCell>
                 </StyledTableRow>
+
+                
               ))}
             </TableBody>
           </Table>
@@ -438,9 +698,9 @@ export default function User() {
                   <br/>
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
-                    <Input placeholder = {Location.lat}  />
+                    <Input placeholder = {Location.lat} onChange={handleLatitudeChange} />
                     <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
-                    <Input placeholder = {Location.lng} />
+                    <Input placeholder = {Location.lng}  onChange={handleLongtudeChange}/>
                   </InputGroup>
                 </Form.Group>
                 <br/>
@@ -452,9 +712,12 @@ export default function User() {
                     <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="">----Select Name----</option>
-                      <option value="Nahom Amare">Nahome Amare</option>
-                      <option value="Zeynu Nesru">Zeynu Nesru</option>
-                      <option value="Getachew Anteneh">Getachew Anteneh</option>
+                      {sitemanager.map((manager)=>(
+                        <option value={manager.name} key={manager.id}>{manager.name}</option>
+                      ))}
+                      
+                      
+ 
                     </Input>
                   </InputGroup>
                   </Form.Group>
@@ -680,7 +943,8 @@ export default function User() {
                           </Button>                  
                       
                       </Modal.Body>
-                  </Modal>                  
+                  </Modal>            
+           
 
 
 
@@ -705,12 +969,13 @@ export default function User() {
                   <Button
                     color="primary"
                     onClick={addsiteinformation}
+                    onClick={handleSiteSubmit}
                     style={{ float: "right", marginBottom: "2%" , marginRight: "1%"}}
                     
                     
                     >
                       
-                    Add{" "}
+                    save{" "}
                   </Button>
                   
 
@@ -773,15 +1038,15 @@ export default function User() {
                 <StyledTableCell>Assignment</StyledTableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+                        <TableBody>
               {staffnames.map((krow,idy) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
-                  <StyledTableCell component="th" scope="row">{staffnames[idy]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
                   <StyledTableCell>  
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="">Choose Site</option>
-                      {sites.map((site,idz) => (    
-                      <option value={MakeItem(site)}>{sites[idz]}</option>
+                      {site.map((site,idz) => (    
+                      <option value={MakeItem(site)}>{site.sitename}</option>
                       ))}
                     </Input>
                     <Button
@@ -806,7 +1071,6 @@ export default function User() {
             </TableBody>
           </Table>
         </TableContainer>
-
         </TabPane>
         <TabPane tab="Information" key="4"></TabPane>
       </Tabs>
