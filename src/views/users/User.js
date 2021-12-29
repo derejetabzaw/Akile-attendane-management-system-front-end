@@ -131,7 +131,9 @@ var database_latitude=[];
 var database_longitude=[];
 var database_sitemanager=[];
 var database_paintarea=[];
-var site_id;
+var  site_id;
+var userID;
+var siteChoice;
 
 var sites = [];
 const url = 'http://localhost:9000/api/v1/sites/'
@@ -146,6 +148,7 @@ export default function User() {
   const [endDate,setEndDate] = useState(new Date());
   const [openUpdateModal,setOpenUpdateModal] = useState(false);
   const [allEmployees,setallEmployees] = useState([]);
+
   
   
   // const getUsers = ()=>{
@@ -443,7 +446,7 @@ const users = axios.get('http://localhost:9000/api/v1/users/').then((response)=>
   const {users} = user_info;
   const sitemanagers =users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
   const otherEmps =users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
-  console.log('All emps',otherEmps);
+  setallEmployees(otherEmps);
   console.log("management",sitemanagers)
   setSiteManager(sitemanagers);
 }).catch((err)=>{
@@ -485,6 +488,15 @@ const updateSites = ()=>{
   axios.put('http://localhost:9000/api/v1/sites/update-sites/'+site_id,Site);
   handleCloseUpdatemodal();
   
+}
+function assignSites(){
+  const Site = {
+    workingSite:siteChoice
+
+  }
+    axios.put('http://localhost:9000/api/v1/users/assign-sites/'+userID,Site);
+   
+
 }
 
  
@@ -1039,14 +1051,14 @@ const handleOpenUpdateModal = (id) =>{
               </TableRow>
             </TableHead>
                         <TableBody>
-              {staffnames.map((krow,idy) => (
+              {allEmployees.map((krow,idy) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
                   <StyledTableCell>  
-                    <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
+                    <Input onChange={(e)=>{ siteChoice = e.target.value;}} type="select" name="backdrop" id="backdrop">
                       <option value="">Choose Site</option>
                       {site.map((site,idz) => (    
-                      <option value={MakeItem(site)}>{site.sitename}</option>
+                      <option value={site.sitename}>{site.sitename}</option>
                       ))}
                     </Input>
                     <Button
@@ -1058,11 +1070,12 @@ const handleOpenUpdateModal = (id) =>{
                   </Button>
                   <Button
                     color="primary"
-                    onClick={addsiteinformation}
+                    onClick={()=>{userID=krow._id}}
                     style={{ float: "right", marginTop: "2%" , marginRight: "2%" }}
                     >
                     Assign
                   </Button>
+              
                     
                   </StyledTableCell>  
 
