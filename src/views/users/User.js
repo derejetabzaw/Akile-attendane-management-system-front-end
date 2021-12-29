@@ -148,7 +148,7 @@ export default function User() {
   const [endDate,setEndDate] = useState(new Date());
   const [openUpdateModal,setOpenUpdateModal] = useState(false);
   const [allEmployees,setallEmployees] = useState([]);
-  const[assignConfermation,setAssignConfermation] = useState(false)
+
   
   
   // const getUsers = ()=>{
@@ -495,7 +495,7 @@ function assignSites(){
 
   }
     axios.put('http://localhost:9000/api/v1/users/assign-sites/'+userID,Site);
-    setAssignConfermation(false)
+   
 
 }
 
@@ -1070,16 +1070,12 @@ const handleOpenUpdateModal = (id) =>{
                   </Button>
                   <Button
                     color="primary"
-                    onClick={()=>{setAssignConfermation(true);userID=krow._id}}
+                    onClick={()=>{userID=krow._id}}
                     style={{ float: "right", marginTop: "2%" , marginRight: "2%" }}
                     >
                     Assign
                   </Button>
-                  <Modal show={assignConfermation} onHide = {closeModal}>
-                        <h3>Are You sure You want to assign this Employee</h3>
-                        <Button  style={{ float: "right", marginTop: "2%" , marginRight: "2%" }}>Yes</Button>
-                        <Button onClick={()=>{setAssignConfermation(false)}} style={{ float: "right", marginTop: "2%" , marginRight: "2%" }}>No</Button>
-                  </Modal>
+              
                     
                   </StyledTableCell>  
 
