@@ -240,7 +240,7 @@ export default class Dashboard extends Component {
       console.error("The Error:",err);
     });
     
-    // this.getmongodb();
+    this.refreshPage()
     
     this.setState(event => {
       return { 
@@ -248,6 +248,7 @@ export default class Dashboard extends Component {
         showModal: !this.state.showModal,
         count: event.count + 1}
     });
+    
   }
   //update-User
   handleUpdate = (id) => {
@@ -285,11 +286,7 @@ export default class Dashboard extends Component {
       alert.error("User Not Updated\n", err );
     });
     
-    this.setState(event => {
-      return {
-        showModal: !this.state.showModal,
-        count: event.count}
-    });
+    this.refreshPage()
   }
   //delete-users/
   handleRemoveUser =  (id)=>{
@@ -300,11 +297,7 @@ export default class Dashboard extends Component {
         alert.error("Couldn't Delete User", err)
     });
 
-    // this.setState(event => {
-    //   return { 
-    //     temp: this.componentDidMount,
-    //     count: event.count - 1}
-    // });
+    this.refreshPage()
   }
 
 
@@ -343,7 +336,8 @@ export default class Dashboard extends Component {
   cancelItem_onClick = () => {
     this.setState({
       showModal: false,
-      showModal2: false
+      showModal2: false,
+      temp: this.refreshPage()
     });
   };
 
@@ -428,10 +422,12 @@ export default class Dashboard extends Component {
       });
   }
 
-  
+  refreshPage() {
+    window.location.reload();
+  }  
 
 
-  
+
   componentWillMount(){
     this.getmongodb();
   }
@@ -486,8 +482,8 @@ export default class Dashboard extends Component {
           onClick={this.toggleModal}
           style={{ float: "right", marginBottom: "2%" }}
         >
-          Add{" "}
-        </Button>
+          Add
+        </Button>{" "}
 
         
 
