@@ -47,6 +47,7 @@ export default class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showModal2: false,
       showModal: false,
       name: '',
       count: 0,
@@ -231,12 +232,15 @@ export default class Dashboard extends Component {
 
     axios
     .post('http://localhost:9000/api/v1/users/signup', user)
-    .then(() => console.log('User Created',user))
+    .then(() => {
+      alert("User Created")
+      console.log('User Created',user)})
     .catch(err => {
+      alert("User Not Created");
       console.error("The Error:",err);
     });
     
-    // this.getmongodb();
+    this.refreshPage()
     
     this.setState(event => {
       return { 
@@ -244,33 +248,58 @@ export default class Dashboard extends Component {
         showModal: !this.state.showModal,
         count: event.count + 1}
     });
-  }
-
-  handleDelete = ()=>{
-    var staffids = this.state.staffids;
-
-    staffids.push(this.state.staffid);
-
-    console.log("Random Numbers: ");
     
+  }
+  //update-User
+  handleUpdate = (id) => {
+    var positions = this.state.positions;
+    var deviceids = this.state.deviceids;
+    var salarys = this.state.salarys;
+    var telephones = this.state.telephones;
+    var emails = this.state.emails;
+    var passwords = this.state.passwords;
+       
+    positions.push(this.state.position);
+    deviceids.push(this.state.deviceid);
+    salarys.push(this.state.salary);
+    telephones.push(this.state.new_telephone);
+    emails.push(this.state.email);
+    passwords.push(this.state.password);
+ 
     const user = {
-        staffId: this.state.staffid,
+        _id: "",
+        password: "akilepass",
+        isAdmin: false,
+        workingSite: "Bole",
+        position: this.state.position,
+        deviceId: this.state.deviceid,
+        salary: this.state.salary,
+        telephone:this.state.new_telephone,
+        email:this.state.email,
     };
 
     axios
-    .post('http://localhost:9000/api/v1/users/:id', user)
-    .then(() => console.log('User Deleted',user))
+    .put('http://localhost:9000/api/v1/users/update-user'+id, user)
+    .then(() => {
+      alert("User Updated")})
     .catch(err => {
-      console.error("The Error:",err);
+      alert.error("User Not Updated\n", err );
     });
     
-    this.setState(event => {
-      return { 
-        
-        count: event.count - 1}
+    this.refreshPage()
+  }
+  //delete-users/
+  handleRemoveUser =  (id)=>{
+    axios
+    .delete('http://localhost:9000/api/v1/users/delete-user/'+id)
+    .then(()=> alert("User Successfully Deleted"))
+    .catch(err=>{
+        alert.error("Couldn't Delete User", err)
     });
 
+    this.refreshPage()
   }
+
 
   // getmongodb = () => {
   //   axios.get('http://localhost:9000/api/v1/attendance')
@@ -306,7 +335,9 @@ export default class Dashboard extends Component {
 
   cancelItem_onClick = () => {
     this.setState({
-      showModal: !this.state.showModal,
+      showModal: false,
+      showModal2: false,
+      temp: this.refreshPage()
     });
   };
 
@@ -352,6 +383,14 @@ export default class Dashboard extends Component {
         showModal: !this.state.showModal,
     });
   };
+
+  toggleUpdate = () =>{
+    this.setState({
+      showModal2: !this.state.showModal2
+    })
+  }
+  
+
   componentDidMount = () =>{
     this.getmongodb();
   };
@@ -362,6 +401,7 @@ export default class Dashboard extends Component {
       .then((response) => {
         const users_info = response.data
         this.setState({users:users_info});
+
         if (this.state.users.length !== 0) {
           var user_length = this.state.users.users.length
           for (var j = 0; j < user_length; j++) {
@@ -382,13 +422,16 @@ export default class Dashboard extends Component {
       });
   }
 
+  refreshPage() {
+    window.location.reload();
+  }  
 
-      
 
-  
-componentWillMount(){
-  this.getmongodb();
-}
+
+  componentWillMount(){
+    this.getmongodb();
+  }
+
   render() {  
 
     var namerows = this.state.items;
@@ -439,8 +482,8 @@ componentWillMount(){
           onClick={this.toggleModal}
           style={{ float: "right", marginBottom: "2%" }}
         >
-          Add{" "}
-        </Button>
+          Add
+        </Button>{" "}
 
         
 
@@ -451,7 +494,7 @@ componentWillMount(){
           style={{ width: "50%" }}
           toggle={this.toggleModal}
         >
-          <ModalHeader toggle={this.toggleModal}>Add Employee</ModalHeader>
+          <ModalHeader>Add Employee</ModalHeader>
           <ModalBody>
             <Form> 
               <FormGroup>
@@ -498,14 +541,6 @@ componentWillMount(){
                   <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
                 </InputGroup>
               </FormGroup>
-              {/* <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">StaffID</InputGroupAddon>
-                  <Input onChange ={this.handleStaffIdchange} placeholder={"AK-000" + (this.state.count + 7)}/>
-                  <Input onChange ={this.handleStaffIdchange} placeholder={this.state.staffid}/>
-                </InputGroup>
-              </FormGroup> */}
-
               <FormGroup>
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">
@@ -585,10 +620,11 @@ componentWillMount(){
             </TableHead>
             <TableBody>     
 
-              {/* //Add the below comment after fetching from database
+              {/*
                   //Add Authentication 
                   // Create a handle for the Remove button to remove user on that row 
                     and also from the database after the right authentications from admins
+                  //FetchId from table when clicking that row's edit button
               */}
                             
               {database_namerows.map((krow,idx) => ( 
@@ -603,15 +639,15 @@ componentWillMount(){
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
+                    <Button color="secondary" onClick={this.toggleUpdate}>
                       Edit
-                    </Button>
+                    </Button>{" "}
                   </StyledTableCell>
                   
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => alert("StaffID:" + jrows.StaffID[idx])}>
+                    <Button color="secondary" onClick={() => {this.handleRemoveUser(jrows.StaffID[idx])}}>
                       Remove
-                    </Button>
+                    </Button>{" "}
                   </StyledTableCell>
 
                 </StyledTableRow>
@@ -624,30 +660,98 @@ componentWillMount(){
                   <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
-
                   <StyledTableCell component="th" scope="row">{krows.StaffID[idx]}</StyledTableCell>
-
                   <StyledTableCell component="th" scope="row">{krows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row">
-                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
+                  <Button color="secondary" onClick={this.toggleUpdate}>
                       Edit
-                    </Button>
+                    </Button>{" "}
                   </StyledTableCell>
 
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => alert("StaffID:" + krows.StaffID[idx])}>
+                  <Button color="secondary" onClick={() => {this.handleRemoveUser(krows.StaffID[idx])}}>
                       Remove
-                    </Button>
+                    </Button>{" "}
                   </StyledTableCell>
 
 
                 </StyledTableRow>
 
               ))}
-                
+                <Modal
+                      isOpen={this.state.showModal2}
+                      modalTransition={{ timeout: 200 }}
+                      backdropTransition={{ timeout: 100 }}
+                      style={{ width: "50%" }}
+                      toggle={this.toggleUpdate}
+                    >
+                      <ModalHeader>Update Employee</ModalHeader>
+                      <ModalBody>
+                        <Form> 
+                          <FormGroup>
+                            <InputGroup>
+                              <InputGroupAddon addonType="prepend">
+                                Position
+                              </InputGroupAddon>
+                              <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position}>
+                                <option value=" ">Select Position</option>
+                                <option value="Site Manager">Site Manager</option>
+                                <option value="Project Manager">Project Manager</option>
+                                <option value="PMP">Professional Machine Painter - PMP</option>
+                                <option value="Painter">Painter</option>
+                              </Input>
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <InputGroupAddon addonType="prepend">
+                                Device Id
+                              </InputGroupAddon>
+                              <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <InputGroupAddon addonType="prepend">
+                                Basic Salary
+                              </InputGroupAddon>
+                              <Input onChange ={this.handleSalarychange} type="number" placeholder="Salary" />
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <InputGroupAddon addonType="prepend">
+                                Telephone
+                              </InputGroupAddon>
+                              <Input
+                                onChange ={this.handleTelephonechange}
+                                placeholder="Phone Number of Employee"
+                                min={10}
+                                max={13}
+                                type="number"
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
+                              <Input onChange ={this.handleEmailchange} placeholder="Email of Employee" />
+                            </InputGroup>
+                          </FormGroup>
+                        </Form>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="primary" onClick={()=>alert("UPDATED")}>
+                          Update Employee
+                        </Button>{" "}
+                        <Button color="secondary" onClick={this.cancelItem_onClick}>
+                          Cancel
+                        </Button>{" "}
+                      </ModalFooter>
+                    </Modal>
                 
 
             </TableBody>

@@ -123,6 +123,7 @@ var namerows = [];
 var staffnames = ["Berekert Haile","Nardos Ephrem",
 "Mulualem Tesfaye","Ismael","Asnakech Tesfaye","Gebiru",
 "Atsede","Zenebe","Hirut Fanta","Abayneh"];
+const otherEmps = [];
 
 var database_siteName=[];
 var database_location=[];
@@ -130,7 +131,9 @@ var database_latitude=[];
 var database_longitude=[];
 var database_sitemanager=[];
 var database_paintarea=[];
-
+var  site_id;
+var userID;
+var siteChoice;
 
 var sites = [];
 const url = 'http://localhost:9000/api/v1/sites/'
@@ -143,6 +146,10 @@ export default function User() {
   const [sitemanager,setSiteManager] = useState([])
   const [startDate,setStartDate] = useState(new Date());
   const [endDate,setEndDate] = useState(new Date());
+  const [openUpdateModal,setOpenUpdateModal] = useState(false);
+  const [allEmployees,setallEmployees] = useState([]);
+
+  
   
   // const getUsers = ()=>{
   //   axios.get(url).then((response)=>{
@@ -438,17 +445,58 @@ const users = axios.get('http://localhost:9000/api/v1/users/').then((response)=>
   const user_info = response.data;
   const {users} = user_info;
   const sitemanagers =users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
+  const otherEmps =users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
+  setallEmployees(otherEmps);
+  console.log("management",sitemanagers)
   setSiteManager(sitemanagers);
 }).catch((err)=>{
   console.log(err);
 })
 }
+
+
+
 //delete-sites/
 const removeSite =  (id)=>{
   var site_id = id;
   axios.delete('http://localhost:9000/api/v1/sites/delete-sites/'+id);
   setSites(site.filter(sid => sid.id !== site_id));
   console.log("operation successfull");
+}
+const handleCloseUpdatemodal = () =>{
+  setOpenUpdateModal(false);
+}
+//update-sites /update-sites/:id
+const updateSites = ()=>{
+       var name = Name;
+      var Latitude = latitude;
+      var Longitude = longitude;
+      var sitemanager = Sitemanager
+      var area = area; //this needs to be checked!!!!
+      var loc = Location;
+
+
+
+      const Site = {
+        sitename:name,
+        location:Location_Name,
+        latitude:Latitude,
+        longitude:Longitude,
+        sitemanager:sitemanager,
+        paintarea:Paint_Area
+      }
+  axios.put('http://localhost:9000/api/v1/sites/update-sites/'+site_id,Site);
+  handleCloseUpdatemodal();
+  
+}
+function assignSites(){
+  const Site = {
+    workingSite:siteChoice
+
+  }
+    axios.put('http://localhost:9000/api/v1/users/assign-sites/'+userID,Site);
+   
+
 }
 
  
@@ -457,12 +505,17 @@ useEffect(()=>{
   getSites();
   
 },[site])
+
 useEffect(()=>{
   getSiteManagers();
   
 },[])
 
 
+
+const handleOpenUpdateModal = (id) =>{
+  setOpenUpdateModal(true);
+}
   
 
 
@@ -515,9 +568,94 @@ useEffect(()=>{
                   <StyledTableCell>{row.painting_area}</StyledTableCell>
                   <StyledTableCell align="right">{row.contact_person}</StyledTableCell> */}
                    <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" >
+                    <Button color="secondary" onClick={()=>{setOpenUpdateModal(true)
+                            site_id = krow._id;
+                            
+                    }}>
+                    
                       Edit
                     </Button>
+                       <Modal show = {openUpdateModal} onHide={closeModal}>
+                       <Modal.Title>update site</Modal.Title>
+                       <Modal.Body>
+                         <Form>
+                            <Form.Group>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
+
+                    <Input onChange={handleSiteChange}  placeholder="Name of Site" />
+                  </InputGroup>
+                  <br/>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Location</InputGroupAddon>
+
+                    <Input onChange={handleLocationChange}  placeholder="Location of Site" />
+
+                    <Button
+                    color="primary"
+                    onClick={mapopener}
+                    // style={{ float: "right", marginBottom: "2%" }}
+                    >
+                    Pin on Map{" "}
+                    </Button>
+                
+
+                  </InputGroup>
+                  <br/>
+                  <InputGroup>
+                    <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
+                    <Input placeholder = {Location.lat} onChange={handleLatitudeChange} />
+                    <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
+                    <Input placeholder = {Location.lng}  onChange={handleLongtudeChange}/>
+                  </InputGroup>
+                </Form.Group>
+                <br/>
+                 <Form.Group>
+                  {/* <Label for="exampleEmail">Position</Label> */}
+                  <InputGroup>
+                    {/* <Label for="exampleEmail">Age</Label> */}
+
+                    <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
+                    <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
+                      <option value="">----Select Name----</option>
+                      <option value="Nahom Amare">Nahome Amare</option>
+                      <option value="Zeynu Nesru">Zeynu Nesru</option>
+                      <option value="Getachew Anteneh">Getachew Anteneh</option>
+                    </Input>
+                  </InputGroup>
+                  </Form.Group>
+                  <br/>
+                  <Form.Group>
+                  <InputGroup>
+                  <InputGroupAddon addonType="prepend">Paint Area</InputGroupAddon>
+                    <Input onChange={handlePaintChange} placeholder="Area in meter-square" />
+                  </InputGroup>
+                </Form.Group>
+                <br/>
+                   <Button
+                    onClick={handleCloseUpdatemodal}
+                    color="primary"
+                    style={{ float: "right", marginBottom: "2%" }}
+                    >
+                    Cancel{" "}
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={addsiteinformation}
+                    onClick={updateSites}
+                    style={{ float: "right", marginBottom: "2%" , marginRight: "1%"}}
+                    
+                    
+                    >
+                      
+                    update{" "}
+                  </Button>
+
+                         </Form>
+                       </Modal.Body>
+                       
+
+                    </Modal>
                   </StyledTableCell>
                   
                   <StyledTableCell align="left">
@@ -586,9 +724,12 @@ useEffect(()=>{
                     <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="">----Select Name----</option>
-                      <option value="Nahom Amare">Nahome Amare</option>
-                      <option value="Zeynu Nesru">Zeynu Nesru</option>
-                      <option value="Getachew Anteneh">Getachew Anteneh</option>
+                      {sitemanager.map((manager)=>(
+                        <option value={manager.name} key={manager.id}>{manager.name}</option>
+                      ))}
+                      
+                      
+ 
                     </Input>
                   </InputGroup>
                   </Form.Group>
@@ -814,7 +955,8 @@ useEffect(()=>{
                           </Button>                  
                       
                       </Modal.Body>
-                  </Modal>                  
+                  </Modal>            
+           
 
 
 
@@ -909,14 +1051,14 @@ useEffect(()=>{
               </TableRow>
             </TableHead>
                         <TableBody>
-              {sitemanager.map((krow,idy) => (
+              {allEmployees.map((krow,idy) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
                   <StyledTableCell>  
-                    <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
+                    <Input onChange={(e)=>{ siteChoice = e.target.value;}} type="select" name="backdrop" id="backdrop">
                       <option value="">Choose Site</option>
                       {site.map((site,idz) => (    
-                      <option value={MakeItem(site)}>{site.sitename}</option>
+                      <option value={site.sitename}>{site.sitename}</option>
                       ))}
                     </Input>
                     <Button
@@ -928,11 +1070,12 @@ useEffect(()=>{
                   </Button>
                   <Button
                     color="primary"
-                    onClick={addsiteinformation}
+                    onClick={()=>{userID=krow._id}}
                     style={{ float: "right", marginTop: "2%" , marginRight: "2%" }}
                     >
                     Assign
                   </Button>
+              
                     
                   </StyledTableCell>  
 
