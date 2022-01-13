@@ -121,10 +121,12 @@ export default class Dashboard extends Component {
       const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       const d = new Date();
       let day = weekday[d.getDay()];
-      var date = new Date().getDate();
-      var month = new Date().getMonth() + 1;
+      var date = ("0" + new Date().getDate()).slice(-2)
+      var month = ("0" + (new Date().getMonth() + 1)).slice(-2)
+
       var year = new Date().getFullYear();
-      return day + ',' + ' '+  date + '-' + month + '-' + year;
+      // return day + ',' + ' '+  date + '-' + month + '-' + year;
+      return year + '-'  + month + '-' + date;
 
     }
 
@@ -132,15 +134,19 @@ export default class Dashboard extends Component {
 
     
     var today = getCurrentDate();
-    // console.log("attendance:",this.state.attendance.attendances)
-    // console.log("user:",this.state.users.users)
+    
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
       var attendance_length = this.state.attendance.attendances.length
       var user_length = this.state.users.users.length
       const id = this.state.attendance.attendances.at(-1)._id
+      console.log("today:",today)
+      console.log("fromattendace",this.state.attendance.attendances.at(-1).date)
+      console.log(today==this.state.attendance.attendances.at(-1).date)
+
       for (var j = 0; j < user_length; j++) {
         for (var i = 0; i < attendance_length; i++) {
           if (today==this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id){
+            console.log(this.state.attendance.attendances.at(i).checkInTime)
             this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
             this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
             this.state.dates.push(this.state.attendance.attendances.at(-1).date);
@@ -152,7 +158,7 @@ export default class Dashboard extends Component {
               this.state.total.push("")
             }
             else{
-              this.state.total.push(this.state.users.users.at(j).workedHours)
+              this.state.total.push(this.state.attendance.attendances.at(i).workedHours)
             }
             
         }
@@ -165,7 +171,6 @@ export default class Dashboard extends Component {
 
     var namerows = this.state.names;
     var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates,this.state.total);
-    
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,

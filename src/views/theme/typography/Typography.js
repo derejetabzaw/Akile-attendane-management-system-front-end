@@ -7,12 +7,21 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import axios from 'axios';
+
+const base_url = 'http://localhost:9000/api/v1' ;
+
 
 class Typography extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
+      names: [],
+      positions: [],
+      basic_salaries: [],
+      attendance: [],
+      users: [],
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -55,6 +64,29 @@ class Typography extends React.Component {
       showModal: !this.state.showModal,
     });
   };
+
+  componentDidMount = () =>{
+    this.getmongodb();
+  };
+
+  getmongodb = () => {
+    axios.get(base_url + '/attendance/')
+      .then((response) => {
+        const attendance_info = response.data
+        this.setState({attendance:attendance_info});
+      })
+      .catch(() => {
+        console.log("Error");
+      });
+      axios.get(base_url + '/users/')
+      .then((response) => {
+        const users_info = response.data
+        this.setState({users:users_info});
+      })
+      .catch(() => {
+        console.log("Error");
+      });
+  }
   render() {
     const rows = [
       this.createData(
@@ -212,7 +244,29 @@ class Typography extends React.Component {
         "40732.63"
       ),
     ];
+    
+    
+    
 
+    if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
+      var attendance_length = this.state.attendance.attendances.length
+      var user_length = this.state.users.users.length
+      const id = this.state.attendance.attendances.at(-1)._id
+
+
+      for (var j = 0; j < user_length; j++) {
+          this.state.names.push(this.state.users.users.at(j).name);
+          this.state.positions.push(this.state.users.users.at(j).position);
+          this.state.basic_salaries.push(this.state.users.users.at(j).salary);
+        }
+      
+  
+
+  }
+
+
+  var namerows = this.state.names;
+  var krows = this.createData(this.state.names,this.state.positions,this.state.basic_salaries,"","","","","","","","","","");
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -254,27 +308,23 @@ class Typography extends React.Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
-                    <StyledTableRow key={row.name}>
-                      <StyledTableCell component="th" scope="row">
-                        {row.name}
-                      </StyledTableCell>
-                      <StyledTableCell>{row.Id}</StyledTableCell>
-                      <StyledTableCell>{row.Position}</StyledTableCell>
-                      <StyledTableCell>{row.BSalary}</StyledTableCell>
-                      <StyledTableCell>{row.WorkDay}</StyledTableCell>
-                      <StyledTableCell>{row.DSalary}</StyledTableCell>
-                      <StyledTableCell>
-                        {row.TransportAllowance}
-                      </StyledTableCell>
-                      <StyledTableCell>{row.timeNight}</StyledTableCell>
-                      <StyledTableCell>{row.timeWeekend}</StyledTableCell>
-                      <StyledTableCell>{row.Comission}</StyledTableCell>
-                      <StyledTableCell>{row.TSalary}</StyledTableCell>
-                      <StyledTableCell>{row.SalaryAdvance}</StyledTableCell>
-                      <StyledTableCell align="right">
-                        {row.NETSalary}
-                      </StyledTableCell>
+                  {namerows.map((krow,idx) => (
+                    
+                    <StyledTableRow krow={krow} key={krow.rowcount}>
+                      <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.Id[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.Position[idx]}</StyledTableCell>
+                      <StyledTableCell>{30}</StyledTableCell>
+                      <StyledTableCell>{krows.BSalary[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.WorkDay[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.DSalary[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.TransportAllowance[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.timeNight[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.timeWeekend[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.Comission[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.TSalary[idx]}</StyledTableCell>
+                      <StyledTableCell>{krows.SalaryAdvance[idx]}</StyledTableCell>
+                      <StyledTableCell align="right">{krows.NETSalary[idx]}</StyledTableCell>
                       {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
               <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
                     </StyledTableRow>
