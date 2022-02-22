@@ -1,4 +1,5 @@
 import React from "react";
+import {Form,Button} from 'react-bootstrap';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -249,9 +250,9 @@ class Typography extends React.Component {
     
 
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
-      var attendance_length = this.state.attendance.attendances.length
+      // var attendance_length = this.state.attendance.attendances.length
       var user_length = this.state.users.users.length
-      const id = this.state.attendance.attendances.at(-1)._id
+      // const id = this.state.attendance.attendances.at(-1)._id
 
 
       for (var j = 0; j < user_length; j++) {
@@ -297,7 +298,7 @@ class Typography extends React.Component {
                     <StyledTableCell>Position</StyledTableCell>
                     <StyledTableCell>Basic Salary</StyledTableCell>
                     <StyledTableCell>Work Day</StyledTableCell>
-                    <StyledTableCell>Dayliy Salary</StyledTableCell>
+                    <StyledTableCell>Daily Salary</StyledTableCell>
                     <StyledTableCell>Transport Allowance</StyledTableCell>
                     <StyledTableCell>OT1(Night)</StyledTableCell>
                     <StyledTableCell>OT2(Weekend)</StyledTableCell>
@@ -316,15 +317,16 @@ class Typography extends React.Component {
                       <StyledTableCell>{krows.Position[idx]}</StyledTableCell>
                       <StyledTableCell>{30}</StyledTableCell>
                       <StyledTableCell>{krows.BSalary[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.WorkDay[idx]}</StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" /></StyledTableCell>
                       <StyledTableCell>{krows.DSalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.TransportAllowance[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.timeNight[idx]}</StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" /></StyledTableCell>
                       <StyledTableCell>{krows.timeWeekend[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.Comission[idx]}</StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" /></StyledTableCell>
                       <StyledTableCell>{krows.TSalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.SalaryAdvance[idx]}</StyledTableCell>
                       <StyledTableCell align="right">{krows.NETSalary[idx]}</StyledTableCell>
+                      <StyledTableCell align="right"><Button variant="primary">calculate</Button></StyledTableCell>
                       {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
               <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
                     </StyledTableRow>
