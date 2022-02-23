@@ -229,8 +229,8 @@ export default function User() {
   const pinlocation = (location) => {
     console.log("Location:",location)
     Location = location
-    latitude = latitude.concat(location.lat)
-    longitude = longitude.concat(location.lng)
+    latitude = location.lat.toString();
+    longitude = location.lng.toString();
     return location 
     // setShow(false);
 
@@ -294,8 +294,8 @@ export default function User() {
         _id:"",
         sitename:name,
         location:Location_Name,
-        latitude:Latitude,
-        longitude:Longitude,
+        latitude:Latitude.toString(),
+        longitude:Longitude.toString(),
         sitemanager:sitemanager,
         paintarea:Paint_Area
       }
