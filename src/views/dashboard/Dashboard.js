@@ -287,6 +287,12 @@ export default class Dashboard extends Component {
     });
     
     this.refreshPage()
+
+    this.setState(event => {
+      return { 
+        showModal2: !this.state.showModal2,
+        }
+    });
   }
   //delete-users/
   handleRemoveUser =  (id)=>{
