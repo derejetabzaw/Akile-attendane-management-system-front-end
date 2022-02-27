@@ -1,28 +1,28 @@
-import React, { Component,useState, useEffect } from "react";
+import React, { Component } from "react";
 
-import Slider from "react-slick";
-import { Card, Row, Col, Carousel } from "antd";
+//import Slider from "react-slick";
+// import { Card } from "antd";
 // import "./landing.css";
 import axios from 'axios';
-import ReactDOM from "react-dom";
+//import ReactDOM from "react-dom";
 
 
-import {
-  Button,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-} from "reactstrap";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+// import {
+//   Button,
+//   InputGroup,
+//   InputGroupAddon,
+//   InputGroupText,
+//   Modal,
+//   ModalHeader,
+//   ModalBody,
+//   ModalFooter,
+//   Form,
+//   FormGroup,
+//   Label,
+//   Input,
+//   FormText,
+// } from "reactstrap";
+import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -31,7 +31,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-const { Meta } = Card;
+// const { Meta } = Card;
 // const [state, setState] = useState({data: []});
 
 const base_url = 'http://localhost:9000/api/v1' ;
@@ -48,7 +48,7 @@ export default class Dashboard extends Component {
       clockins: [],
       clockouts: [],
       locations: [],
-      // deviceids: [],
+      numofcheckins: [],
       dates: [],
       total: [],
     };
@@ -56,10 +56,8 @@ export default class Dashboard extends Component {
     this.toggleModal = this.toggleModal.bind(this);
   }
 
-
-
-  createData = (name, Id, CIN, COUT, Location, date, time) => {
-    return { name, Id, CIN, COUT, Location, date, time };
+  createData = (name, Id, CIN, COUT, Location, date, time, numofcheckins) => {
+    return { name, Id, CIN, COUT, Location, date, time, numofcheckins };
   };
 
   toggleModal = () => {
@@ -91,32 +89,8 @@ export default class Dashboard extends Component {
       });
   }
 
-
-
-  // This will help to check when new information[Checking in/Checking Out] is added to the database
-
-  // displaymongodbpost = (posts) => {
-  //   if (posts.length==0) return console.log("posts has not been updated");
-  //   console.log("Before Change Posts:" , posts.attendances)
-  //   if (!posts.length) return null; 
-  //   return console.log("Incoming Data")
-  // }; 
-
-
   render() {
     
-    const rows = [
-      this.createData(
-        "Beamlak Teshome",
-        "AK-12156",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ),
-    ];
-
     const getCurrentDate = () =>{
       const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
       const d = new Date();
@@ -147,17 +121,18 @@ export default class Dashboard extends Component {
         for (var i = 0; i < attendance_length; i++) {
           if (today==this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id){
             console.log(this.state.attendance.attendances.at(i).checkInTime)
-            this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
-            this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
-            this.state.dates.push(this.state.attendance.attendances.at(-1).date);
-            this.state.names.push(this.state.users.users.at(j).name);
-            this.state.staffids.push(this.state.users.users.at(j).staffId);
-            this.state.locations.push(this.state.users.users.at(j).workingSite);
-            console.log(this.state.attendance.attendances.at(i).checkOutTime === '')
+            
             if (this.state.attendance.attendances.at(i).checkOutTime === '') {
-              this.state.total.push("")
+              
             }
             else{
+              this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
+              this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
+              this.state.dates.push(this.state.attendance.attendances.at(-1).date);
+              this.state.names.push(this.state.users.users.at(j).name);
+              this.state.staffids.push(this.state.users.users.at(j).staffId);
+              this.state.locations.push(this.state.users.users.at(j).workingSite);
+              this.state.numofcheckins.push(this.state.attendance.attendances.at(i).numofcheckins);
               this.state.total.push(this.state.attendance.attendances.at(i).workedHours)
             }
             
@@ -167,10 +142,8 @@ export default class Dashboard extends Component {
 
   }
 
-
-
     var namerows = this.state.names;
-    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates,this.state.total);
+    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates,this.state.total, this.state.numofcheckins);
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -192,7 +165,6 @@ export default class Dashboard extends Component {
 
     return (
       <>
-        {/* <Button color="primary" onClick={this.toggleModal} style={{float:"right", marginBottom: '2%'}}>Add </Button> */}
         <div style={{ marginTop: "2%" }}></div>
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
@@ -202,9 +174,7 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Staff Name</StyledTableCell>
                 <StyledTableCell>Number of CheckIns</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell align="right">
-                  Total Daily Work Hour
-                </StyledTableCell>
+                <StyledTableCell>Total Daily Work Hour</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -213,8 +183,7 @@ export default class Dashboard extends Component {
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
-                  {/* <StyledTableCell component="th" scope="row">{krows.IDs[idx]}</StyledTableCell> */}
-                <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
+                <StyledTableCell component="th" scope="row">{krows.numofcheckins[idx]}</StyledTableCell>
                   
                   <StyledTableCell component="th" scope="row">{krows.date[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.time[idx]}</StyledTableCell>
