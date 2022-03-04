@@ -23,6 +23,7 @@ class Typography extends React.Component {
       basic_salaries: [],
       attendance: [],
       users: [],
+      Netsalary:[],
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -41,7 +42,7 @@ class Typography extends React.Component {
     Comission,
     TSalary,
     SalaryAdvance,
-    NETSalary
+    Netsalary
   ) => {
     return {
       name,
@@ -56,10 +57,10 @@ class Typography extends React.Component {
       Comission,
       TSalary,
       SalaryAdvance,
-      NETSalary,
+      Netsalary,
     };
   };
-
+  
   toggleModal = () => {
     this.setState({
       showModal: !this.state.showModal,
@@ -69,7 +70,7 @@ class Typography extends React.Component {
   componentDidMount = () =>{
     this.getmongodb();
   };
-
+   
   getmongodb = () => {
     axios.get(base_url + '/attendance/')
       .then((response) => {
@@ -255,11 +256,15 @@ class Typography extends React.Component {
       // const id = this.state.attendance.attendances.at(-1)._id
 
 
-      for (var j = 0; j < user_length; j++) {
+        for (var j = 0; j < user_length; j++) {
           this.state.names.push(this.state.users.users.at(j).name);
           this.state.positions.push(this.state.users.users.at(j).position);
           this.state.basic_salaries.push(this.state.users.users.at(j).salary);
+
+          
         }
+  
+
       
   
 
@@ -284,14 +289,40 @@ class Typography extends React.Component {
         },
       },
     }))(TableRow);
-    return (
-      <>
-        <div className="card">
-          <div className="card-header">Payroll</div>
-          <div className="card-body">
+    let allowance = 0;
+    let commission = 0;
+    let salaryAdvance = 0;
+  
+  const getTPAllowance = (e)=>{
+     allowance = e.target.value
+     
+  }
+  const getCommission = (e)=>{
+       commission = e.target.value
+      
+  }
+  const getSalaryAdvance = (e)=>{
+     salaryAdvance = e.target.value
+    
+  }
+  const calculateNetPay = (basic_salaries,commission,allowance,salaryAdvance) =>{
+
+     let nsal=parseFloat(basic_salaries)+ parseFloat(commission)+ parseFloat(allowance)+ parseFloat(salaryAdvance);
+     let addnsal=[...this.state.Netsalary,nsal]
+     this.setState({Netsalary:addnsal})
+     
+    
+  }
+  const Displaytable = React.memo(props => {
+  return(
+    
+          <div className="card">
+            <span hidden>{props.state}</span>
+           <div className="card-header">Payroll</div>
+           <div className="card-body">
             <p>Monthly Payroll </p>
-            <TableContainer component={Paper}>
-              <Table aria-label="customized table">
+            <TableContainer component={Paper} style={{width:'100%'}}>
+              <Table aria-label="customized table" >
                 <TableHead>
                   <TableRow>
                     <StyledTableCell>Name of Employee</StyledTableCell>
@@ -315,18 +346,18 @@ class Typography extends React.Component {
                       <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.Id[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.Position[idx]}</StyledTableCell>
-                      <StyledTableCell>{30}</StyledTableCell>
+                      <StyledTableCell>30</StyledTableCell>
                       <StyledTableCell>{krows.BSalary[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" /></StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" onChange={getTPAllowance}/></StyledTableCell>
                       <StyledTableCell>{krows.DSalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.TransportAllowance[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" /></StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" onChange={getCommission} /></StyledTableCell>
                       <StyledTableCell>{krows.timeWeekend[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" /></StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" onChange={getSalaryAdvance}/></StyledTableCell>
                       <StyledTableCell>{krows.TSalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.SalaryAdvance[idx]}</StyledTableCell>
-                      <StyledTableCell align="right">{krows.NETSalary[idx]}</StyledTableCell>
-                      <StyledTableCell align="right"><Button variant="primary">calculate</Button></StyledTableCell>
+                      <StyledTableCell align="right">{this.state.Netsalary[idx]}</StyledTableCell>
+                      <StyledTableCell align="right"><Button variant="primary" onClick={()=>{calculateNetPay(this.state.basic_salaries[idx],commission,allowance,salaryAdvance)}}>calculate</Button></StyledTableCell>
                       {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
               <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
                     </StyledTableRow>
@@ -336,8 +367,16 @@ class Typography extends React.Component {
             </TableContainer>
           </div>
         </div>
+  )   
+  })
+  
+    return (
+      <>
+      <Displaytable state = "false"/>
       </>
+
     );
+  
   }
 }
 
