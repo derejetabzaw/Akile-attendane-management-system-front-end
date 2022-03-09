@@ -25,6 +25,7 @@ class Typography extends React.Component {
       users: [],
       Netsalary:[],
     };
+    
 
     this.toggleModal = this.toggleModal.bind(this);
   }
@@ -68,9 +69,10 @@ class Typography extends React.Component {
   };
 
   componentDidMount = () =>{
-    this.getmongodb();
+   this.getmongodb();
+   this.getLocalStorage();
   };
-   
+
   getmongodb = () => {
     axios.get(base_url + '/attendance/')
       .then((response) => {
@@ -88,6 +90,16 @@ class Typography extends React.Component {
       .catch(() => {
         console.log("Error");
       });
+  }
+  getLocalStorage()
+  {
+    let nsalaryArray = JSON.parse(localStorage.getItem("netSalary"))
+    console.log(nsalaryArray);
+if(nsalaryArray.length !== 0){
+    this.setState({Netsalary:nsalaryArray})
+}
+    console.log(this.state.Netsalary)
+    
   }
   render() {
     const rows = [
@@ -272,7 +284,7 @@ class Typography extends React.Component {
 
 
   var namerows = this.state.names;
-  var krows = this.createData(this.state.names,this.state.positions,this.state.basic_salaries,"","","","","","","","","","");
+  var krows = this.createData(this.state.names,this.state.positions,this.state.basic_salaries,"","","","","","","","","",this.state.Netsalary);
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -305,18 +317,19 @@ class Typography extends React.Component {
      salaryAdvance = e.target.value
     
   }
-  const calculateNetPay = (basic_salaries,commission,allowance,salaryAdvance) =>{
+  const calculateNetPay = (name,basic_salaries,commission,allowance,salaryAdvance) =>{
 
      let nsal=parseFloat(basic_salaries)+ parseFloat(commission)+ parseFloat(allowance)+ parseFloat(salaryAdvance);
-     let addnsal=[...this.state.Netsalary,nsal]
-     this.setState({Netsalary:addnsal})
-     
-    
+     let index = this.state.names.indexOf(name);
+     this.state.Netsalary[index] = nsal;
+     console.log(this.state.Netsalary);
+     localStorage.setItem("netSalary",JSON.stringify(this.state.Netsalary));//consider this for changes on the database, add a column for netsalary
+     window.location.reload();  
   }
   const Displaytable = React.memo(props => {
   return(
     
-          <div className="card">
+          <div className="card" id="disp_table_1">
             <span hidden>{props.state}</span>
            <div className="card-header">Payroll</div>
            <div className="card-body">
@@ -357,7 +370,7 @@ class Typography extends React.Component {
                       <StyledTableCell>{krows.TSalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.SalaryAdvance[idx]}</StyledTableCell>
                       <StyledTableCell align="right">{this.state.Netsalary[idx]}</StyledTableCell>
-                      <StyledTableCell align="right"><Button variant="primary" onClick={()=>{calculateNetPay(this.state.basic_salaries[idx],commission,allowance,salaryAdvance)}}>calculate</Button></StyledTableCell>
+                      <StyledTableCell align="right"><Button variant="primary" onClick={()=>{calculateNetPay(krows.name[idx],this.state.basic_salaries[idx],commission,allowance,salaryAdvance)}}>calculate</Button></StyledTableCell>
                       {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
               <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
                     </StyledTableRow>
