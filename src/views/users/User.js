@@ -115,7 +115,7 @@ var Ends = [];
 var Sanding_Material = [];
 var Painting_Material = [];
 var Conctact_Person = [];
-var Information = [];
+// var Information = [];
 var latitude = [];
 var longitude = [];
 var count = 0;
@@ -328,7 +328,7 @@ export default function User() {
     namerows = namerows.concat(Name);
     sites = sites.concat(Name);
 
-    Information = Information.concat(createData(Name,Location_Name,longitude,latitude,Sitemanager,Paint_Area));
+    // Information = Information.concat(createData(Name,Location_Name,longitude,latitude,Sitemanager,Paint_Area));
     
     closeModal()
 
@@ -1085,7 +1085,7 @@ const handleOpenUpdateModal = (id) =>{
           </Table>
         </TableContainer>
         </TabPane>
-        <TabPane tab="Information" key="4"></TabPane>
+        {/* <TabPane tab="Information" key="4"></TabPane> */}
       </Tabs>
     </>
   );
