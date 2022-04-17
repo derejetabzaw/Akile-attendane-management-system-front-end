@@ -475,7 +475,7 @@ const updateSites = ()=>{
       var area = area; //this needs to be checked!!!!
       var loc = Location;
 
-
+      console.log(site_id)
 
       const Site = {
         sitename:name,

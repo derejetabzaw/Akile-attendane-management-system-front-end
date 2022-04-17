@@ -251,7 +251,9 @@ export default class Dashboard extends Component {
     
   }
   //update-User
-  handleUpdate = (id) => {
+  handleUpdate = () => {
+   const  staffId = JSON.stringify(localStorage.getItem('StaffID'))
+    console.log(staffId)
     var positions = this.state.positions;
     var deviceids = this.state.deviceids;
     var salarys = this.state.salarys;
@@ -265,28 +267,22 @@ export default class Dashboard extends Component {
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
     passwords.push(this.state.password);
- 
+    console.log("Updating")
     const user = {
-        _id: "",
         password: "akilepass",
-        isAdmin: false,
-        workingSite: "Bole",
-        position: this.state.position,
-        deviceId: this.state.deviceid,
-        salary: this.state.salary,
-        telephone:this.state.new_telephone,
         email:this.state.email,
+        deviceId: this.state.deviceid,
+        isAdmin: false,
+        position: this.state.position,
+        workingSite: "Bole",
+        salary: this.state.salary,
+        telephone:this.state.new_telephone
+       
     };
-
-    axios
-    .put('http://localhost:9000/api/v1/users/update-user'+id, user)
-    .then(() => {
-      alert("User Updated")})
-    .catch(err => {
-      alert.error("User Not Updated\n", err );
-    });
+    console.log(user);
+    axios.put('http://localhost:9000/api/v1/users/update-users/'+staffId,user)
     
-    this.refreshPage()
+    // this.refreshPage()
 
     this.setState(event => {
       return { 
@@ -304,6 +300,12 @@ export default class Dashboard extends Component {
     });
 
     this.refreshPage()
+  }
+  handleUpdateUser=()=>
+  {
+    let id = localStorage.getItem("id");
+    console.log(id);
+     axios.put(`http://localhost:9000/api/v1/users/delete-user/update-users/:id`)
   }
 
 
@@ -437,7 +439,11 @@ export default class Dashboard extends Component {
   componentWillMount(){
     this.getmongodb();
   }
-
+  Testrender(id){
+   return <div>
+      <h1>place holder</h1>
+   </div>
+  }
   render() {  
 
     var namerows = this.state.items;
@@ -645,7 +651,11 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" onClick={this.toggleUpdate}>
+                    <Button color="secondary" onClick={()=>{
+                      console.log(jrows)
+                      localStorage.setItem("StaffID",jrows.StaffID[idx])
+                      this.toggleUpdate()
+                      }}>
                       Edit
                     </Button>{" "}
                   </StyledTableCell>
@@ -671,18 +681,14 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
 
-                  <StyledTableCell component="th" scope="row">
-                  <Button color="secondary" onClick={this.toggleUpdate}>
-                      Edit
-                    </Button>{" "}
-                  </StyledTableCell>
-
+                  
                   <StyledTableCell align="left">
                   <Button color="secondary" onClick={() => {this.handleRemoveUser(krows.StaffID[idx])}}>
                       Remove
                     </Button>{" "}
                   </StyledTableCell>
 
+ 
 
                 </StyledTableRow>
 
@@ -750,7 +756,7 @@ export default class Dashboard extends Component {
                         </Form>
                       </ModalBody>
                       <ModalFooter>
-                        <Button color="primary" onClick={()=>alert("UPDATED")}>
+                        <Button color="primary" onClick={()=>this.handleUpdate()}>
                           Update Employee
                         </Button>{" "}
                         <Button color="secondary" onClick={this.cancelItem_onClick}>
