@@ -66,6 +66,7 @@ export default class Dashboard extends Component {
       passwords: [],
       gender: 'Male',
       position: '',
+      database_id: [],
       database_name: [],
       database_position: [],
       database_gender: [],
@@ -81,6 +82,7 @@ export default class Dashboard extends Component {
     };
 
     this.toggleModal = this.toggleModal.bind(this);
+    this.toggleUpdate = this.toggleUpdate.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
     
@@ -207,7 +209,6 @@ export default class Dashboard extends Component {
     emails.push(this.state.email);
     passwords.push(this.state.password);
 
-    console.log("genders:",genders)
      
 
     const user = {
@@ -255,6 +256,7 @@ export default class Dashboard extends Component {
    const  staffId = JSON.stringify(localStorage.getItem('StaffID'))
     console.log(staffId)
     var positions = this.state.positions;
+
     var deviceids = this.state.deviceids;
     var salarys = this.state.salarys;
     var telephones = this.state.telephones;
@@ -284,11 +286,11 @@ export default class Dashboard extends Component {
     
     // this.refreshPage()
 
-    this.setState(event => {
-      return { 
-        showModal2: !this.state.showModal2,
-        }
-    });
+    // this.setState(event => {
+    //   return { 
+    //     showModal2: !this.state.showModal2,
+    //     }
+    // });
   }
   //delete-users/
   handleRemoveUser =  (id)=>{
@@ -393,10 +395,12 @@ export default class Dashboard extends Component {
   };
 
   toggleUpdate = () =>{
+
     this.setState({
       showModal2: !this.state.showModal2
     })
-  }
+    
+  };
   
 
   componentDidMount = () =>{
@@ -413,6 +417,7 @@ export default class Dashboard extends Component {
         if (this.state.users.length !== 0) {
           var user_length = this.state.users.users.length
           for (var j = 0; j < user_length; j++) {
+              this.state.database_id.push(this.state.users.users.at(j)._id);
               this.state.database_name.push(this.state.users.users.at(j).name);
               this.state.database_position.push(this.state.users.users.at(j).position);
               this.state.database_gender.push(this.state.users.users.at(j).gender);
@@ -420,8 +425,7 @@ export default class Dashboard extends Component {
               this.state.database_staffid.push(this.state.users.users.at(j).staffId);
               this.state.database_salary.push(this.state.users.users.at(j).salary);
               this.state.database_telephone.push(this.state.users.users.at(j).telephone);
-              this.state.database_email.push(this.state.users.users.at(j).email);
-              
+              this.state.database_email.push(this.state.users.users.at(j).email);            
           }
         }
       })
@@ -445,7 +449,6 @@ export default class Dashboard extends Component {
    </div>
   }
   render() {  
-
     var namerows = this.state.items;
     var database_namerows = this.state.database_name;    
     var krows = this.createData(
@@ -698,12 +701,14 @@ export default class Dashboard extends Component {
                       modalTransition={{ timeout: 200 }}
                       backdropTransition={{ timeout: 100 }}
                       style={{ width: "50%" }}
-                      toggle={this.toggleUpdate}
+                      // toggle={this.toggleUpdate}
                     >
                       <ModalHeader>Update Employee</ModalHeader>
                       <ModalBody>
                         <Form> 
                           <FormGroup>
+                            <InputGroup>
+                            </InputGroup>
                             <InputGroup>
                               <InputGroupAddon addonType="prepend">
                                 Position
@@ -718,6 +723,7 @@ export default class Dashboard extends Component {
                             </InputGroup>
                           </FormGroup>
                           <FormGroup>
+
                             <InputGroup>
                               <InputGroupAddon addonType="prepend">
                                 Device Id

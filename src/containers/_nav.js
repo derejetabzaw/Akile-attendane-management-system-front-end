@@ -50,6 +50,12 @@ export default [
         icon: "cil-calendar-today",
         to: "/buttons/brand-buttons",
       },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Check I/O",
+        icon: "cil-calendar-today",
+        // to: "/buttons/brand-buttons",
+      },
     ],
   },
   {
@@ -70,11 +76,11 @@ export default [
     to: "/users/User",
     icon: "cil-paper-plane",
   },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Inventory",
-    to: "/inventory",
-    icon: "cil-notes",
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Inventory",
+  //   to: "/inventory",
+  //   icon: "cil-notes",
+  // },
 
 ];
