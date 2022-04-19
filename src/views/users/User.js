@@ -571,6 +571,7 @@ const handleOpenUpdateModal = (id) =>{
                     <Button color="secondary" onClick={()=>{setOpenUpdateModal(true)
                             site_id = krow._id;
                             
+                            
                     }}>
                     
                       Edit

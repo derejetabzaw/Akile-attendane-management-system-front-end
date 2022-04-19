@@ -77,6 +77,7 @@ export default class Dashboard extends Component {
       database_email: [],
       intial_load : 0,
       vals: Math.floor(1000 + Math.random() * 9000),
+      id:""
       
       // posts: []
     };
@@ -253,7 +254,7 @@ export default class Dashboard extends Component {
   }
   //update-User
   handleUpdate = () => {
-   const  staffId = JSON.stringify(localStorage.getItem('StaffID'))
+   const  staffId = this.state.id;
     console.log(staffId)
     var positions = this.state.positions;
 
@@ -264,7 +265,7 @@ export default class Dashboard extends Component {
     var passwords = this.state.passwords;
        
     positions.push(this.state.position);
-    deviceids.push(this.state.deviceid);
+    deviceids.push(this.state.deviceids);
     salarys.push(this.state.salary);
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
@@ -469,7 +470,9 @@ export default class Dashboard extends Component {
       this.state.database_staffid,
       this.state.database_salary,
       this.state.database_telephone, 
-      this.state.database_email);
+      this.state.database_email,
+      this.state.database_id
+      );
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -644,6 +647,7 @@ export default class Dashboard extends Component {
                             
               {database_namerows.map((krow,idx) => ( 
                 <StyledTableRow krow={krow} key={krow.rowcount}>
+                  
                   <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
@@ -655,8 +659,8 @@ export default class Dashboard extends Component {
 
                   <StyledTableCell component="th" scope="row" >
                     <Button color="secondary" onClick={()=>{
-                      console.log(jrows)
-                      localStorage.setItem("StaffID",jrows.StaffID[idx])
+                      console.log(this.state.database_id[idx])
+                      this.state.id = this.state.database_id[idx]
                       this.toggleUpdate()
                       }}>
                       Edit
