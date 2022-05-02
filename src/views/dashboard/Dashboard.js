@@ -77,7 +77,13 @@ export default class Dashboard extends Component {
       database_email: [],
       intial_load : 0,
       vals: Math.floor(1000 + Math.random() * 9000),
-      id:""
+      id:"",
+      place_holder_salary:"",
+      place_holder_email:"",
+      place_holder_telephone:"",
+      place_holder_device:"",
+      place_holder_position:""
+       
       
       // posts: []
     };
@@ -86,7 +92,7 @@ export default class Dashboard extends Component {
     this.toggleUpdate = this.toggleUpdate.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
-    
+ 
 
   beforeUploadFile = (file) => {
     this.setState({ uploadFile: [file] });
@@ -180,7 +186,11 @@ export default class Dashboard extends Component {
     });
   }
   
-  
+  setPlaceHolder(obj){
+    this.state.items = obj
+    console.log(this.state.items)
+    // localStorage.setItem("update-data",JSON.stringify(obj))
+  }
   
 
 
@@ -282,10 +292,10 @@ export default class Dashboard extends Component {
         telephone:this.state.new_telephone
        
     };
-    console.log(user);
+    
     axios.put('http://localhost:9000/api/v1/users/update-users/'+staffId,user)
     
-    // this.refreshPage()
+    this.refreshPage()
 
     // this.setState(event => {
     //   return { 
@@ -659,8 +669,21 @@ export default class Dashboard extends Component {
 
                   <StyledTableCell component="th" scope="row" >
                     <Button color="secondary" onClick={()=>{
-                      console.log(this.state.database_id[idx])
+                      
                       this.state.id = this.state.database_id[idx]
+                      // let placeholders = {
+                      //   salary:jrows.Salary[idx],
+                      //   device: jrows.DeviceID[idx],
+                      //   email: jrows.Email[idx],
+                      //   telephone: jrows.Telephone[idx]
+                      // }
+                      //  this.setPlaceHolder(placeholders)
+                      this.state.place_holder_salary=jrows.Salary[idx]
+                      this.state.place_holder_email = jrows.Email[idx]
+                      this.state.place_holder_device = jrows.DeviceID[idx]
+                      this.state.place_holder_telephone = jrows.Telephone[idx]
+                      this.state.place_holder_position = jrows.Position[idx]
+                      
                       this.toggleUpdate()
                       }}>
                       Edit
@@ -717,7 +740,7 @@ export default class Dashboard extends Component {
                               <InputGroupAddon addonType="prepend">
                                 Position
                               </InputGroupAddon>
-                              <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position}>
+                              <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position} placeholder={this.state.place_holder_position}>
                                 <option value=" ">Select Position</option>
                                 <option value="Site Manager">Site Manager</option>
                                 <option value="Project Manager">Project Manager</option>
@@ -732,7 +755,7 @@ export default class Dashboard extends Component {
                               <InputGroupAddon addonType="prepend">
                                 Device Id
                               </InputGroupAddon>
-                              <Input onChange={this.handleDeviceIdchange} placeholder="DeviceId of Employee" />
+                              <Input onChange={this.handleDeviceIdchange} placeholder={this.state.place_holder_device} id="device"/>
                             </InputGroup>
                           </FormGroup>
                           <FormGroup>
@@ -740,7 +763,7 @@ export default class Dashboard extends Component {
                               <InputGroupAddon addonType="prepend">
                                 Basic Salary
                               </InputGroupAddon>
-                              <Input onChange ={this.handleSalarychange} type="number" placeholder="Salary" />
+                              <Input onChange ={this.handleSalarychange} type="number" placeholder={this.state.place_holder_salary} id="salary"/>
                             </InputGroup>
                           </FormGroup>
                           <FormGroup>
@@ -750,17 +773,18 @@ export default class Dashboard extends Component {
                               </InputGroupAddon>
                               <Input
                                 onChange ={this.handleTelephonechange}
-                                placeholder="Phone Number of Employee"
+                                placeholder={this.state.place_holder_telephone}
                                 min={10}
                                 max={13}
                                 type="number"
+                                id="telephone"
                               />
                             </InputGroup>
                           </FormGroup>
                           <FormGroup>
                             <InputGroup>
                               <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
-                              <Input onChange ={this.handleEmailchange} placeholder="Email of Employee" />
+                              <Input onChange ={this.handleEmailchange} placeholder={this.state.place_holder_email} id="email"/>
                             </InputGroup>
                           </FormGroup>
                         </Form>

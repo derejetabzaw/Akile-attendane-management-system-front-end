@@ -301,7 +301,7 @@ export default function User() {
       }
       console.log(Site);
         axios
-    .post('http://localhost:9000/api/v1/sites/addsite', Site)
+    .post('http://localhost:9000/api/v1/sites/addsite',Site)
     .then(() => console.log('Site Created',Site))
     .catch(err => {
       console.error("The Error:",err);
