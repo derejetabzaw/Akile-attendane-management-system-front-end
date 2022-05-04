@@ -54,7 +54,7 @@ export default [
         _tag: "CSidebarNavItem",
         name: "Check I/O",
         icon: "cil-calendar-today",
-        // to: "/buttons/brand-buttons",
+        to: "/buttons/button-dropdowns"
       },
     ],
   },

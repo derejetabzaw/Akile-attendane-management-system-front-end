@@ -112,17 +112,18 @@ export default class Dashboard extends Component {
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
       var attendance_length = this.state.attendance.attendances.length
       var user_length = this.state.users.users.length
-      const id = this.state.attendance.attendances.at(-1)._id
-      console.log("today:",today)
-      console.log("fromattendace",this.state.attendance.attendances.at(-1).date)
-      console.log(today==this.state.attendance.attendances.at(-1).date)
+      // const id = this.state.attendance.attendances.at(-1)._id
+      // console.log("today:",today)
+      // console.log("fromattendace",this.state.attendance.attendances.at(-1).date)
+      // console.log(today==this.state.attendance.attendances.at(-1).date)
 
       for (var j = 0; j < user_length; j++) {
         for (var i = 0; i < attendance_length; i++) {
-          if (today==this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id){
-            console.log(this.state.attendance.attendances.at(i).checkInTime)
+          if (today===this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id && this.state.attendance.attendances.at(i).numberOfCheckIn === 3 ){
+            //console.log(this.state.attendance.attendances.at(i).checkInTime)
+            //console.log("CHECKS", this.state.attendance.attendances.at(i).numberOfCheckIn)
             
-            if (this.state.attendance.attendances.at(i).checkOutTime === '') {
+            if (this.state.attendance.attendances.at(i).checkOutTime === '' ) {
               
             }
             else{
@@ -132,10 +133,9 @@ export default class Dashboard extends Component {
               this.state.names.push(this.state.users.users.at(j).name);
               this.state.staffids.push(this.state.users.users.at(j).staffId);
               this.state.locations.push(this.state.users.users.at(j).workingSite);
-              this.state.numofcheckins.push(this.state.attendance.attendances.at(i).numofcheckins);
+              this.state.numofcheckins.push(this.state.attendance.attendances.at(i).numberOfCheckIn);
               this.state.total.push(this.state.attendance.attendances.at(i).workedHours)
             }
-            
         }
       }
     }
@@ -162,7 +162,6 @@ export default class Dashboard extends Component {
     }))(TableRow);
 
     
-
     return (
       <>
         <div style={{ marginTop: "2%" }}></div>
@@ -183,13 +182,10 @@ export default class Dashboard extends Component {
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
-                <StyledTableCell component="th" scope="row">{krows.numofcheckins[idx]}</StyledTableCell>
-                  
+                  <StyledTableCell component="th" scope="row">{krows.numofcheckins[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.date[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.time[idx]}</StyledTableCell>
-
                 </StyledTableRow>
-
               ))}
             </TableBody>
           </Table>

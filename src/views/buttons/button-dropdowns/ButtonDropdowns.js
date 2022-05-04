@@ -1,428 +1,152 @@
-import React from 'react'
-import {
-  CButton,
-  CForm,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CDropdown,
-  CDropdownDivider,
-  CDropdownHeader,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-  CRow,
-  CFormGroup,
-  CLabel,
-  CInput,
-  CInputCheckbox
-} from '@coreui/react'
+import React, { Component } from "react";
+import axios from 'axios';
+import { withStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
-const ButtonDropdowns = () => {
-  return (
-    <CRow>
-      <CCol xs="12">
-        <CCard>
-          <CCardHeader>
-            Dropdowns
-            <div className="card-header-actions">
-              <a href="https://coreui.github.io/components/button-dropdown/" rel="noreferrer noopener" target="_blank" className="card-header-action">
-                <small className="text-muted">docs</small>
-              </a>
-            </div>
-          </CCardHeader>
-          <CCardBody>
 
-            <CDropdown className="m-1">
-              <CDropdownToggle>
-                Dropdown button
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+const base_url = 'http://localhost:9000/api/v1' ;
 
-            <hr/>
+export default class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      attendance: [],
+      users: [],
+      names: [],
+      staffids: [],
+      clockins: [],
+      clockouts: [],
+      dates: [],
+    };
 
-            <CDropdown className="m-1 btn-group">
-              <CDropdownToggle color="primary">
-                Primary
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1 btn-group">
-              <CDropdownToggle color="secondary">
-                Secondary
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1 btn-group">
-              <CDropdownToggle color="success">
-                Success
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1 btn-group">
-              <CDropdownToggle color="info">
-                Info
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1 btn-group">
-              <CDropdownToggle color="warning">
-                Warning
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1 btn-group">
-              <CDropdownToggle color="danger">
-                Danger
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+    this.toggleModal = this.toggleModal.bind(this);
+  }
 
-            <hr/>
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="primary">
-                Primary
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="secondary">
-                Secondary
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="success">
-                Success
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="info">
-                Info
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="warning">
-                Warning
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="danger">
-                Danger
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+  createData = (name, Id, CIN, COUT, date) => {
+    return { name, Id, CIN, COUT, date };
+  };
 
-            <hr/>
+  toggleModal = () => {
+    this.setState({
+      showModal: !this.state.showModal,
+    });
+  };
 
-            <CDropdown className="m-1" size="lg">
-              <CDropdownToggle color="secondary">
-                Large button
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            {' '}
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="secondary" size="lg">
-                Large split button
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+  componentDidMount = () =>{
+    this.getmongodb();
+  };
 
-            <hr/>
+  getmongodb = () => {
+    axios.get(base_url + '/attendance/')
+      .then((response) => {
+        const attendance_info = response.data
+        this.setState({attendance:attendance_info});
+      })
+      .catch(() => {
+        console.log("Error");
+      });
+      axios.get(base_url + '/users/')
+      .then((response) => {
+        const users_info = response.data
+        this.setState({users:users_info});
+      })
+      .catch(() => {
+        console.log("Error");
+      });
+  }
 
-            <CDropdown className="m-1">
-              <CDropdownToggle color="secondary" size="sm">
-                Small button
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            {' '}
-            <CDropdown className="m-1">
-              <CDropdownToggle color="secondary" size="sm" split>
-                Small split button
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+  render() {
+    
+    const getCurrentDate = () =>{
+      var date = ("0" + new Date().getDate()).slice(-2)
+      var month = ("0" + (new Date().getMonth() + 1)).slice(-2)
+      var year = new Date().getFullYear();
+      
+      return year + '-'  + month + '-' + date;
+    }
 
-            <hr/>
+    var today = getCurrentDate();
+    
+    if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
+      var attendance_length = this.state.attendance.attendances.length
+      var user_length = this.state.users.users.length
+      
+      for (var j = 0; j < user_length; j++) {
+        for (var i = 0; i < attendance_length; i++) {
+          if (today===this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id){
+            
+            if (this.state.attendance.attendances.at(i).checkOutTime === '') {
+              
+            }
+            else{
+              this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
+              this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
+              this.state.dates.push(this.state.attendance.attendances.at(-1).date);
+              this.state.names.push(this.state.users.users.at(j).name);
+              this.state.staffids.push(this.state.users.users.at(j).staffId);
+            }
+        }
+      }
+    }
 
-            <CDropdown className="m-1">
-              <CDropdownToggle color="secondary">
-                Dropup button
-              </CDropdownToggle>
-              <CDropdownMenu placement="top">
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className="m-1">
-              <CDropdownToggle split color="secondary">
-                Split dropup
-              </CDropdownToggle>
-              <CDropdownMenu placement="top">
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+  }
 
-          </CCardBody>
-        </CCard>
-        <CCard>
-          <CCardHeader>
-            Menus
-          </CCardHeader>
-          <CCardBody>
+    var namerows = this.state.names;
+    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts, this.state.dates);
+    const StyledTableCell = withStyles((theme) => ({
+      head: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+      },
+      body: {
+        fontSize: 14,
+      },
+    }))(TableCell);
+    const StyledTableRow = withStyles((theme) => ({
+      root: {
+        "&:nth-of-type(odd)": {
+          backgroundColor: theme.palette.action.hover,
+        },
+      },
+    }))(TableRow);
 
-            <CDropdown className="m-1 d-inline-block">
-              <CDropdownToggle color="secondary">
-                Direction Up
-              </CDropdownToggle>
-              <CDropdownMenu placement="top">
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <CDropdown className="m-1 d-inline-block">
-              <CDropdownToggle color="secondary">
-                Direction Left
-              </CDropdownToggle>
-              <CDropdownMenu placement="left">
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <CDropdown className="m-1 d-inline-block">
-              <CDropdownToggle color="secondary">
-                Direction Right
-              </CDropdownToggle>
-              <CDropdownMenu placement="right">
-                <CDropdownHeader>Header</CDropdownHeader>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <CDropdown className="m-1 d-inline-block">
-              <CDropdownToggle color="secondary">
-                Default Down
-              </CDropdownToggle>
-              <CDropdownMenu
-                placement="bottom"
-                modifiers={[{name: 'flip', enabled: false }]}
-              >
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <hr />
-
-            <CDropdown className="m-1">
-              <CDropdownToggle color="secondary">
-                This dropdown{'\''}s menu is right-aligned
-              </CDropdownToggle>
-              <CDropdownMenu placement="right">
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem disabled>Action Disabled</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <hr />
-
-            <CDropdown className="m-1">
-              <CDropdownToggle color="secondary">
-                Dropdown with header
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem header>Header</CDropdownItem>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <hr />
-
-            <CDropdown className="m-1">
-              <CDropdownToggle color="secondary">
-                Dropdown with divider
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownDivider />
-                <CDropdownItem>Another Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <hr />
-
-            <CDropdown className="m-1">
-              <CDropdownToggle color="secondary">
-                Dropdown with disabled item
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem disabled>Disabled Action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-            <hr />
-
-            <CDropdown className="m-1">
-              <CDropdownToggle color="info">
-                Dropdown with form
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CForm className="px-4 py-3" >
-                  <CFormGroup>
-                    <CLabel htmlFor="exampleDropdownFormEmail1">Email address</CLabel>
-                    <CInput className="form-control" id="exampleDropdownFormEmail1" type="email" placeholder="email@example.com" autoComplete="email"/>
-                  </CFormGroup>
-                  <CFormGroup>
-                    <CLabel htmlFor="exampleDropdownFormPassword1">Password</CLabel>
-                    <CInput className="form-control" id="exampleDropdownFormPassword1" type="password" placeholder="Password" autoComplete="current-password"/>
-                  </CFormGroup>
-                  <CFormGroup variant="custom-checkbox" className="form-group">
-                    <CInputCheckbox custom id="exampleDropdownFormCheckbox1" />
-                    <CLabel variant="custom-checkbox" htmlFor="exampleDropdownFormCheckbox1">Remember me</CLabel>
-                  </CFormGroup>
-                  <CFormGroup className="mt-2">
-                    <CButton color="primary" type="submit">Sign in</CButton>
-                  </CFormGroup>
-                </CForm>
-                <CDropdownDivider/>
-                <CDropdownItem to="/register" >Register</CDropdownItem>
-                <CDropdownItem>Forgot password?</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
-  )
+    return (
+      <>
+        <div style={{ marginTop: "2%" }}></div>
+        <TableContainer component={Paper}>
+          <Table aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Staff Name</StyledTableCell>
+                <StyledTableCell>Staff ID</StyledTableCell>
+                <StyledTableCell>Clock-In</StyledTableCell>
+                <StyledTableCell>Clock-Out</StyledTableCell>
+                <StyledTableCell>Date</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              
+              {namerows.map((krow,idx) => ( 
+                <StyledTableRow krow={krow} key={krow.rowcount}>
+                  <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.CIN[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.COUT[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.date[idx]}</StyledTableCell>
+                  </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </>
+    );
+  }  
 }
 
-export default ButtonDropdowns
