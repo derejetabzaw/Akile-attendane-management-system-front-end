@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from "react";
-import { Modal, Button, Form , Accordion, Card, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Form, Accordion, Card, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import usersData from "./UsersData";
 import DatePicker from "react-datepicker";
-import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
 import es from 'date-fns/locale/es';
 import "./MapViewerComp.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -57,15 +57,15 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 const rows = [
-    "Constraction",
-    "0212",
-    "7:30",
-    "4:50",
-    "Addis Ababa",
-    "x6t25H3",
-    "03/05/20",
-    "4:30"
-  ]
+  "Constraction",
+  "0212",
+  "7:30",
+  "4:50",
+  "Addis Ababa",
+  "x6t25H3",
+  "03/05/20",
+  "4:30"
+]
 
 
 
@@ -120,18 +120,18 @@ var latitude = [];
 var longitude = [];
 var count = 0;
 var namerows = [];
-var staffnames = ["Berekert Haile","Nardos Ephrem",
-"Mulualem Tesfaye","Ismael","Asnakech Tesfaye","Gebiru",
-"Atsede","Zenebe","Hirut Fanta","Abayneh"];
+var staffnames = ["Berekert Haile", "Nardos Ephrem",
+  "Mulualem Tesfaye", "Ismael", "Asnakech Tesfaye", "Gebiru",
+  "Atsede", "Zenebe", "Hirut Fanta", "Abayneh"];
 const otherEmps = [];
 
-var database_siteName=[];
-var database_location=[];
-var database_latitude=[];
-var database_longitude=[];
-var database_sitemanager=[];
-var database_paintarea=[];
-var  site_id;
+var database_siteName = [];
+var database_location = [];
+var database_latitude = [];
+var database_longitude = [];
+var database_sitemanager = [];
+var database_paintarea = [];
+var site_id;
 var userID;
 var siteChoice;
 
@@ -142,15 +142,15 @@ export default function User() {
   const [showModal, setShow] = useState(false);
   const [showModal2, setShow2] = useState(false);
   const [fullscreen, setFullscreen] = useState(true);
-  const [site,setSites] = useState([])
-  const [sitemanager,setSiteManager] = useState([])
-  const [startDate,setStartDate] = useState(new Date());
-  const [endDate,setEndDate] = useState(new Date());
-  const [openUpdateModal,setOpenUpdateModal] = useState(false);
-  const [allEmployees,setallEmployees] = useState([]);
+  const [site, setSites] = useState([])
+  const [sitemanager, setSiteManager] = useState([])
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [allEmployees, setallEmployees] = useState([]);
 
-  
-  
+
+
   // const getUsers = ()=>{
   //   axios.get(url).then((response)=>{
   //     const user_info = response.data;
@@ -161,49 +161,49 @@ export default function User() {
   // }
 
   //   useEffect(async ()=>{
-  
+
   //   getUsers();
-   
+
   // },[]);
 
-//   var akile_marker= L.Icon.extend({
-//     options: {
-//         shadowUrl: null,
-//         iconAnchor: new L.Point(12, 12),
-//         iconSize: new L.Point(24, 24),
-//         iconUrl: require("./src/akil.jpg")
-//     }
-// });
+  //   var akile_marker= L.Icon.extend({
+  //     options: {
+  //         shadowUrl: null,
+  //         iconAnchor: new L.Point(12, 12),
+  //         iconSize: new L.Point(24, 24),
+  //         iconUrl: require("./src/akil.jpg")
+  //     }
+  // });
 
 
 
-// function drawControl(layer) {
-//   return L.Control.Draw({
-//     // iconUrl: require("../../assets/icons/logo.jpg"),
-//     draw : {
-//       position : 'topleft',
-//       polygon : {
-//         shapeOptions: {
-//           color: 'red'
-//         }
-//       },
-//       marker: {
-//         icon: new akile_marker() //Here assign your custom marker
-//       },
-//       polyline : false,
-//       rectangle : {
-//         shapeOptions: {
-//           color: 'blue'
-//         }
-//       },
-//       circle : false
-//     },
-//     edit: {
-//       featureGroup: layer, //REQUIRED!!
-//       remove: true
-//     }
-//   });
-// }
+  // function drawControl(layer) {
+  //   return L.Control.Draw({
+  //     // iconUrl: require("../../assets/icons/logo.jpg"),
+  //     draw : {
+  //       position : 'topleft',
+  //       polygon : {
+  //         shapeOptions: {
+  //           color: 'red'
+  //         }
+  //       },
+  //       marker: {
+  //         icon: new akile_marker() //Here assign your custom marker
+  //       },
+  //       polyline : false,
+  //       rectangle : {
+  //         shapeOptions: {
+  //           color: 'blue'
+  //         }
+  //       },
+  //       circle : false
+  //     },
+  //     edit: {
+  //       featureGroup: layer, //REQUIRED!!
+  //       remove: true
+  //     }
+  //   });
+  // }
 
 
 
@@ -227,19 +227,19 @@ export default function User() {
   };
 
   const pinlocation = (location) => {
-    console.log("Location:",location)
+    console.log("Location:", location)
     Location = location
     latitude = location.lat.toString();
     longitude = location.lng.toString();
-    return location 
+    return location
     // setShow(false);
 
   };
-  
+
   const closemap = (event) => {
 
     setShow2(false);
-    
+
 
   };
 
@@ -247,15 +247,15 @@ export default function User() {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Name = value
-   
+
   };
   const handleLocationChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Location_Name = value
-    
+
   };
-  
+
   const handleManagerChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -269,44 +269,44 @@ export default function User() {
     Paint_Area = value
   };
 
-    const handleLongtudeChange = (event) =>{
+  const handleLongtudeChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     longitude = value
   }
-    const handleLatitudeChange = (event) =>{
+  const handleLatitudeChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     latitude = value
   }
 
-    const handleSiteSubmit = ()=>{
-      var name = Name;
-      var Latitude = latitude;
-      var Longitude = longitude;
-      var sitemanager = Sitemanager
-      var area = area; //this needs to be checked!!!!
-      var loc = Location;
+  const handleSiteSubmit = () => {
+    var name = Name;
+    var Latitude = latitude;
+    var Longitude = longitude;
+    var sitemanager = Sitemanager
+    var area = area; //this needs to be checked!!!!
+    var loc = Location;
 
 
 
-      const Site = {
-        _id:"",
-        sitename:name,
-        location:Location_Name,
-        latitude:Latitude.toString(),
-        longitude:Longitude.toString(),
-        sitemanager:sitemanager,
-        paintarea:Paint_Area
-      }
-      console.log(Site);
-        axios
-    .post('http://localhost:9000/api/v1/sites/addsite',Site)
-    .then(() => console.log('Site Created',Site))
-    .catch(err => {
-      console.error("The Error:",err);
-    });
-      addsiteinformation()
+    const Site = {
+      _id: "",
+      sitename: name,
+      location: Location_Name,
+      latitude: Latitude.toString(),
+      longitude: Longitude.toString(),
+      sitemanager: sitemanager,
+      paintarea: Paint_Area
+    }
+    console.log(Site);
+    axios
+      .post('http://localhost:9000/api/v1/sites/addsite', Site)
+      .then(() => console.log('Site Created', Site))
+      .catch(err => {
+        console.error("The Error:", err);
+      });
+    addsiteinformation()
   }
 
 
@@ -324,20 +324,20 @@ export default function User() {
 
 
   const addsiteinformation = (event) => {
-    count  = count + 1;
+    count = count + 1;
     namerows = namerows.concat(Name);
     sites = sites.concat(Name);
 
     // Information = Information.concat(createData(Name,Location_Name,longitude,latitude,Sitemanager,Paint_Area));
-    
+
     closeModal()
 
   };
 
-  const MakeItem  = (X) => {
+  const MakeItem = (X) => {
     return <option>{X}</option>;
   };
-  
+
 
 
 
@@ -359,17 +359,17 @@ export default function User() {
       paint_area,
     };
   };
-  
 
 
-  
+
+
 
   const addSiteModal = () => setShow(true);
   const closeModal = () => setShow(false);
   const closeModal2 = () => setShow(false);
   const _onCreate = (e) => {
 
-    
+
 
     console.log(e, "onCreate");
 
@@ -380,8 +380,8 @@ export default function User() {
     if (layerType === "marker") {
       const { _leaflet_id } = layer;
       const { _latlng } = layer;
-      
-      
+
+
 
       setMapLayer((layer) => [...layer, { id: _leaflet_id, latlng: _latlng }]);
       pinlocation(_latlng)
@@ -408,279 +408,283 @@ export default function User() {
     console.log(`onDeleted: removed ${numDeleted} layers`, e);
   };
 
-  const getSites = ()=>{
-    axios.get(url).then((response)=>{
+  const getSites = () => {
+    axios.get(url).then((response) => {
       const sites_info = response.data;
-      const {sites} = sites_info
+      const { sites } = sites_info
       setSites(sites)
-      var counter =0;
-      if(sites.length !== 0){
+      var counter = 0;
+      if (sites.length !== 0) {
         var length = site.length;
         sites.forEach(element => {
-          database_siteName[counter]=(element.sitename);
-          database_location[counter]=(element.location);
-          database_longitude[counter]=(element.latitude);
-          database_latitude[counter]=(element.longitude);
-          database_sitemanager[counter]=(element.sitemanager);
-          database_paintarea[counter]=(element.paintarea);
+          database_siteName[counter] = (element.sitename);
+          database_location[counter] = (element.location);
+          database_longitude[counter] = (element.latitude);
+          database_latitude[counter] = (element.longitude);
+          database_sitemanager[counter] = (element.sitemanager);
+          database_paintarea[counter] = (element.paintarea);
 
           counter++;
-          
+
 
 
 
 
         });
 
-        
-      }
-      
 
-    }).catch((err)=>{
-        console.log(err,'Api error')
+      }
+
+
+    }).catch((err) => {
+      console.log(err, 'Api error')
     })
   }
-const getSiteManagers = ()=>{
-const users = axios.get('http://localhost:9000/api/v1/users/').then((response)=>{
-  const user_info = response.data;
-  const {users} = user_info;
-  const sitemanagers =users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
-  const otherEmps =users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
-  setallEmployees(otherEmps);
-  console.log("management",sitemanagers)
-  setSiteManager(sitemanagers);
-}).catch((err)=>{
-  console.log(err);
-})
-}
+  const getSiteManagers = () => {
+    const users = axios.get('http://localhost:9000/api/v1/users/').then((response) => {
+      const user_info = response.data;
+      const { users } = user_info;
+      const sitemanagers = users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
+      const otherEmps = users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
+      setallEmployees(otherEmps);
+      console.log("management", sitemanagers)
+      setSiteManager(sitemanagers);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
 
 
-//delete-sites/
-const removeSite =  (id)=>{
-  var site_id = id;
-  axios.delete('http://localhost:9000/api/v1/sites/delete-sites/'+id);
-  setSites(site.filter(sid => sid.id !== site_id));
-  console.log("operation successfull");
-}
-const handleCloseUpdatemodal = () =>{
-  setOpenUpdateModal(false);
-}
-//update-sites /update-sites/:id
-const updateSites = ()=>{
-       var name = Name;
-      var Latitude = latitude;
-      var Longitude = longitude;
-      var sitemanager = Sitemanager
-      var area = area; //this needs to be checked!!!!
-      var loc = Location;
+  //delete-sites/
+  const removeSite = (id) => {
+    var site_id = id;
+    axios.delete('http://localhost:9000/api/v1/sites/delete-sites/' + id);
+    setSites(site.filter(sid => sid.id !== site_id));
+    console.log("operation successfull");
+  }
+  const handleCloseUpdatemodal = () => {
+    setOpenUpdateModal(false);
+  }
+  //update-sites /update-sites/:id
+  const updateSites = () => {
+    var name = Name;
+    var Latitude = latitude;
+    var Longitude = longitude;
+    var sitemanager = Sitemanager
+    var area = area; //this needs to be checked!!!!
+    var loc = Location;
 
-      console.log(site_id)
+    console.log(site_id)
 
-      const Site = {
-        sitename:name,
-        location:Location_Name,
-        latitude:Latitude,
-        longitude:Longitude,
-        sitemanager:sitemanager,
-        paintarea:Paint_Area
-      }
-  axios.put('http://localhost:9000/api/v1/sites/update-sites/'+site_id,Site);
-  handleCloseUpdatemodal();
-  
-}
-function assignSites(){
-  const Site = {
-    workingSite:siteChoice
+    const Site = {
+      sitename: name,
+      location: Location_Name,
+      latitude: Latitude,
+      longitude: Longitude,
+      sitemanager: sitemanager,
+      paintarea: Paint_Area
+    }
+    axios.put('http://localhost:9000/api/v1/sites/update-sites/' + site_id, Site);
+    handleCloseUpdatemodal();
 
   }
-    axios.put('http://localhost:9000/api/v1/users/assign-sites/'+userID,Site);
-   
+  function assignSites() {
+    const Site = {
+      workingSite: siteChoice
 
-}
+    }
+    axios.put('http://localhost:9000/api/v1/users/assign-sites/' + userID, Site);
 
- 
 
-useEffect(()=>{
-  getSites();
-  
-},[site])
-
-useEffect(()=>{
-  getSiteManagers();
-  
-},[])
+  }
 
 
 
-const handleOpenUpdateModal = (id) =>{
-  setOpenUpdateModal(true);
-}
-  
+  useEffect(() => {
+    getSites();
+
+  }, [site])
+
+  useEffect(() => {
+    getSiteManagers();
+
+  }, [])
+
+
+
+  const handleOpenUpdateModal = (id) => {
+    setOpenUpdateModal(true);
+  }
+
 
 
   return (
-    
+
     <>
-    
+
       <Tabs defaultActiveKey="2">
         <TabPane tab="Sites" key="1">
-         
+
           <Button
             color="primary"
             onClick={addSiteModal}
             style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
           >
-          Add{""}
+            Add{""}
           </Button>
 
           <TableContainer component={Paper}>
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Site Name</StyledTableCell>
-                <StyledTableCell>Location</StyledTableCell>
-                <StyledTableCell>Latitude</StyledTableCell>
-                <StyledTableCell>Longitude</StyledTableCell>
-                <StyledTableCell>Site Manager</StyledTableCell>
-                <StyledTableCell>Paint Area</StyledTableCell>
-                {/* <StyledTableCell>Starts</StyledTableCell>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Site Name</StyledTableCell>
+                  <StyledTableCell>Location</StyledTableCell>
+                  <StyledTableCell>Latitude</StyledTableCell>
+                  <StyledTableCell>Longitude</StyledTableCell>
+                  <StyledTableCell>Site Manager</StyledTableCell>
+                  <StyledTableCell>Paint Area</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  {/* <StyledTableCell>Starts</StyledTableCell>
                 <StyledTableCell>Ends</StyledTableCell>
                 <StyledTableCell>Sanding Material</StyledTableCell>
                 <StyledTableCell>Painting Material</StyledTableCell>
                 <StyledTableCell align="right">
                   Contact Person
                 </StyledTableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {site.map((krow,idx) => (
-                <StyledTableRow krow={krow} key={krow.rowcount}>
-                  <StyledTableCell component="th" scope="row">{krow.sitename}</StyledTableCell>
-                  <StyledTableCell>{krow.location}</StyledTableCell>
-                  <StyledTableCell>{krow.latitude}</StyledTableCell>
-                  <StyledTableCell>{krow.longitude}</StyledTableCell>
-                  <StyledTableCell>{krow.sitemanager}</StyledTableCell>
-                  <StyledTableCell>{krow.paintarea}</StyledTableCell>
-                  {/* <StyledTableCell>{Information.starts}</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {site.map((krow, idx) => (
+                  <StyledTableRow krow={krow} key={krow.rowcount}>
+                    <StyledTableCell component="th" scope="row">{krow.sitename}</StyledTableCell>
+                    <StyledTableCell>{krow.location}</StyledTableCell>
+                    <StyledTableCell>{krow.latitude}</StyledTableCell>
+                    <StyledTableCell>{krow.longitude}</StyledTableCell>
+                    <StyledTableCell>{krow.sitemanager}</StyledTableCell>
+                    <StyledTableCell>{krow.paintarea}</StyledTableCell>
+                    {/* <StyledTableCell>{Information.starts}</StyledTableCell>
                   <StyledTableCell>{Information.ends}</StyledTableCell> */}
-                  {/* <StyledTableCell>{row.sanding_material}</StyledTableCell>
+                    {/* <StyledTableCell>{row.sanding_material}</StyledTableCell>
                   <StyledTableCell>{row.painting_area}</StyledTableCell>
                   <StyledTableCell align="right">{row.contact_person}</StyledTableCell> */}
-                   <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" onClick={()=>{setOpenUpdateModal(true)
-                            site_id = krow._id;
-                            
-                            
-                    }}>
-                    
-                      Edit
-                    </Button>
-                       <Modal show = {openUpdateModal} onHide={closeModal}>
-                       <Modal.Title>update site</Modal.Title>
-                       <Modal.Body>
-                         <Form>
+                    <StyledTableCell component="th" scope="row" >
+                      <button class="btn btn-secondary" onClick={() => {
+                        setOpenUpdateModal(true)
+                        site_id = krow._id;
+                      }}>
+                        Edit
+                      </button>
+                      <Modal show={openUpdateModal} onHide={closeModal}>
+                        <Modal.Header>
+                          <h5 class="modal-title">
+                            Update Site
+                          </h5>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <Form>
                             <Form.Group>
-                  <InputGroup>
-                    <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
+                              <InputGroup>
+                                <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
 
-                    <Input onChange={handleSiteChange}  placeholder="Name of Site" />
-                  </InputGroup>
-                  <br/>
-                  <InputGroup>
-                    <InputGroupAddon addonType="prepend">Location</InputGroupAddon>
+                                <Input onChange={handleSiteChange} placeholder="Name of Site" />
+                              </InputGroup>
+                              <br />
+                              <InputGroup>
+                                <InputGroupAddon addonType="prepend">Location</InputGroupAddon>
 
-                    <Input onChange={handleLocationChange}  placeholder="Location of Site" />
+                                <Input onChange={handleLocationChange} placeholder="Location of Site" />
 
-                    <Button
-                    color="primary"
-                    onClick={mapopener}
-                    // style={{ float: "right", marginBottom: "2%" }}
-                    >
-                    Pin on Map{" "}
-                    </Button>
-                
-
-                  </InputGroup>
-                  <br/>
-                  <InputGroup>
-                    <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
-                    <Input placeholder = {Location.lat} onChange={handleLatitudeChange} />
-                    <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
-                    <Input placeholder = {Location.lng}  onChange={handleLongtudeChange}/>
-                  </InputGroup>
-                </Form.Group>
-                <br/>
-                 <Form.Group>
-                  {/* <Label for="exampleEmail">Position</Label> */}
-                  <InputGroup>
-                    {/* <Label for="exampleEmail">Age</Label> */}
-
-                    <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
-                    <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
-                      <option value="">----Select Name----</option>
-                      <option value="Nahom Amare">Nahome Amare</option>
-                      <option value="Zeynu Nesru">Zeynu Nesru</option>
-                      <option value="Getachew Anteneh">Getachew Anteneh</option>
-                    </Input>
-                  </InputGroup>
-                  </Form.Group>
-                  <br/>
-                  <Form.Group>
-                  <InputGroup>
-                  <InputGroupAddon addonType="prepend">Paint Area</InputGroupAddon>
-                    <Input onChange={handlePaintChange} placeholder="Area in meter-square" />
-                  </InputGroup>
-                </Form.Group>
-                <br/>
-                   <Button
-                    onClick={handleCloseUpdatemodal}
-                    color="primary"
-                    style={{ float: "right", marginBottom: "2%" }}
-                    >
-                    Cancel{" "}
-                  </Button>
-                  <Button
-                    color="primary"
-                    onClick={addsiteinformation}
-                    onClick={updateSites}
-                    style={{ float: "right", marginBottom: "2%" , marginRight: "1%"}}
-                    
-                    
-                    >
-                      
-                    update{" "}
-                  </Button>
-
-                         </Form>
-                       </Modal.Body>
-                       
-
-                    </Modal>
-                  </StyledTableCell>
-                  
-                  <StyledTableCell align="left">
-                    <Button color="secondary" onClick={()=>{removeSite(krow._id)}}>
-                      Remove
-                    </Button>
-                  </StyledTableCell>
-                </StyledTableRow>
-
-                
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                                <Button
+                                  color="primary"
+                                  onClick={mapopener}
+                                // style={{ float: "right", marginBottom: "2%" }}
+                                >
+                                  Pin on Map{" "}
+                                </Button>
 
 
+                              </InputGroup>
+                              <br />
+                              <InputGroup>
+                                <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
+                                <Input placeholder={Location.lat} onChange={handleLatitudeChange} />
+                                <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
+                                <Input placeholder={Location.lng} onChange={handleLongtudeChange} />
+                              </InputGroup>
+                            </Form.Group>
+                            <br />
+                            <Form.Group>
+                              {/* <Label for="exampleEmail">Position</Label> */}
+                              <InputGroup>
+                                {/* <Label for="exampleEmail">Age</Label> */}
+
+                                <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
+                                <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
+                                  <option value="">----Select Name----</option>
+                                  <option value="Nahom Amare">Nahome Amare</option>
+                                  <option value="Zeynu Nesru">Zeynu Nesru</option>
+                                  <option value="Getachew Anteneh">Getachew Anteneh</option>
+                                </Input>
+                              </InputGroup>
+                            </Form.Group>
+                            <br />
+                            <Form.Group>
+                              <InputGroup>
+                                <InputGroupAddon addonType="prepend">Paint Area</InputGroupAddon>
+                                <Input onChange={handlePaintChange} placeholder="Area in meter-square" />
+                              </InputGroup>
+                            </Form.Group>
+                            <br />
+                            <button
+                              onClick={handleCloseUpdatemodal}
+                              class="btn btn-secondary"
+                              style={{ float: "right", marginBottom: "2%" }}
+                            >
+                              Cancel{" "}
+                            </button>
+                            <Button
+                              color="primary"
+                              onClick={addsiteinformation}
+                              onClick={updateSites}
+                              style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
+
+
+                            >
+
+                              Update{" "}
+                            </Button>
+
+                          </Form>
+                        </Modal.Body>
+
+
+                      </Modal>
+                    </StyledTableCell>
+
+                    <StyledTableCell align="left">
+                      <button class="btn btn-secondary" onClick={() => { removeSite(krow._id) }}>
+                        Remove
+                      </button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+
+
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
 
 
-          <Modal show={showModal} onHide = {closeModal}
+
+
+          <Modal show={showModal} onHide={closeModal}
           // style={{width: "750px" , margin: "auto"}}
           >
-            
-            
+
+
             <Modal.Header >
               <Modal.Title> Add Sites</Modal.Title>
             </Modal.Header>
@@ -690,33 +694,33 @@ const handleOpenUpdateModal = (id) =>{
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
 
-                    <Input onChange={handleSiteChange}  placeholder="Name of Site" />
+                    <Input onChange={handleSiteChange} placeholder="Name of Site" />
                   </InputGroup>
-                  <br/>
+                  <br />
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Location</InputGroupAddon>
 
-                    <Input onChange={handleLocationChange}  placeholder="Location of Site" />
+                    <Input onChange={handleLocationChange} placeholder="Location of Site" />
 
                     <Button
-                    color="primary"
-                    onClick={mapopener}
+                      color="primary"
+                      onClick={mapopener}
                     // style={{ float: "right", marginBottom: "2%" }}
                     >
-                    Pin on Map{" "}
+                      Pin on Map{" "}
                     </Button>
-                
+
 
                   </InputGroup>
-                  <br/>
+                  <br />
                   <InputGroup>
                     <InputGroupAddon addonType="prepend">Latitude</InputGroupAddon>
-                    <Input placeholder = {Location.lat} onChange={handleLatitudeChange} />
+                    <Input placeholder={Location.lat} onChange={handleLatitudeChange} />
                     <InputGroupAddon addonType="prepend">Longitude</InputGroupAddon>
-                    <Input placeholder = {Location.lng}  onChange={handleLongtudeChange}/>
+                    <Input placeholder={Location.lng} onChange={handleLongtudeChange} />
                   </InputGroup>
                 </Form.Group>
-                <br/>
+                <br />
                 <Form.Group>
                   {/* <Label for="exampleEmail">Position</Label> */}
                   <InputGroup>
@@ -725,26 +729,26 @@ const handleOpenUpdateModal = (id) =>{
                     <InputGroupAddon addonType="prepend">Site Manager</InputGroupAddon>
                     <Input onChange={handleManagerChange} type="select" name="backdrop" id="backdrop">
                       <option value="">----Select Name----</option>
-                      {sitemanager.map((manager)=>(
+                      {sitemanager.map((manager) => (
                         <option value={manager.name} key={manager.id}>{manager.name}</option>
                       ))}
-                      
-                      
- 
+
+
+
                     </Input>
                   </InputGroup>
-                  </Form.Group>
-                  <br/>
-                  <Form.Group>
+                </Form.Group>
+                <br />
+                <Form.Group>
                   <InputGroup>
-                  <InputGroupAddon addonType="prepend">Paint Area</InputGroupAddon>
+                    <InputGroupAddon addonType="prepend">Paint Area</InputGroupAddon>
                     <Input onChange={handlePaintChange} placeholder="Area in meter-square" />
                   </InputGroup>
                 </Form.Group>
-                <br/>
+                <br />
 
 
-                  {/* <Form.Group>
+                {/* <Form.Group>
                     <Accordion>
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>Paint</Accordion.Header>
@@ -903,65 +907,65 @@ const handleOpenUpdateModal = (id) =>{
                       </Accordion.Item>
                     </Accordion>
                   </Form.Group> */}
-                  <Modal show={showModal2} fullscreen={fullscreen} onHide = {closeModal2}>
-                    <Modal.Header >
-                      <Modal.Title> Pin on Map</Modal.Title>
-                    </Modal.Header>
-                      <Modal.Body >
-                          <Map
-                            center={[8.980603, 38.757759]}
-                            zoom={12}
-                            scrollWheelZoom={true}
-                            className="mapContainer"
-                          >
-                          <TileLayer
-                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          />
-                            <Marker position={[8.980603, 38.757759]} icon={GetIcon(30)}>
-                              <Popup>
-                                <p>Akile Main-Office</p>
-                                  <FeatureGroup>
-                                    <EditControl
-                                      position="topleft"
-                                      onEdited={_onEditPath}
-                                      onCreated={_onCreate}
-                                      onDeleted={_onDeleted}
-                                      draw={{
-                                        rectangle: false,
-                                        circle: false,
-                                        polyline: false,
-                                        polygone: false,
-                                      }}
-                                  />
-                                  <Circle center={[51.51, -0.06]} radius={200} />
-                                  </FeatureGroup>
-                              </Popup>
-                            </Marker>
-                          </Map>
-                          <pre>{JSON.stringify(mapLayers, 0, 2)}</pre>  
-                          <Button
-                            color="primary"
-                            style={{ float: "right", marginBottom: "2%" }}
-                            onClick={backmodule}
-                            >
-                            Back{" "}
-                          </Button>
-                          <Button
-                            color="primary"
-                            style={{ float: "right", marginBottom: "2%", marginRight: "1%"}}
-                            onClick={closemap} 
-                            >
-                            Pin{" "}
-                          </Button>                  
-                      
-                      </Modal.Body>
-                  </Modal>            
-           
+                <Modal show={showModal2} fullscreen={fullscreen} onHide={closeModal2}>
+                  <Modal.Header >
+                    <Modal.Title> Pin on Map</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body >
+                    <Map
+                      center={[8.980603, 38.757759]}
+                      zoom={12}
+                      scrollWheelZoom={true}
+                      className="mapContainer"
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={[8.980603, 38.757759]} icon={GetIcon(30)}>
+                        <Popup>
+                          <p>Akile Main-Office</p>
+                          <FeatureGroup>
+                            <EditControl
+                              position="topleft"
+                              onEdited={_onEditPath}
+                              onCreated={_onCreate}
+                              onDeleted={_onDeleted}
+                              draw={{
+                                rectangle: false,
+                                circle: false,
+                                polyline: false,
+                                polygone: false,
+                              }}
+                            />
+                            <Circle center={[51.51, -0.06]} radius={200} />
+                          </FeatureGroup>
+                        </Popup>
+                      </Marker>
+                    </Map>
+                    <pre>{JSON.stringify(mapLayers, 0, 2)}</pre>
+                    <button
+                      class="btn btn-secondary"
+                      style={{ float: "right", marginBottom: "2%" }}
+                      onClick={backmodule}
+                    >
+                      Back{" "}
+                    </button>
+                    <Button
+                      color="primary"
+                      style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
+                      onClick={closemap}
+                    >
+                      Pin{" "}
+                    </Button>
+
+                  </Modal.Body>
+                </Modal>
 
 
 
-{/* 
+
+                {/* 
                   <Form.Group>
                   <InputGroup>
                   <InputGroupAddon addonType="prepend">Sanding Material:</InputGroupAddon>
@@ -972,35 +976,33 @@ const handleOpenUpdateModal = (id) =>{
                   <InputGroupAddon addonType="prepend">Painting Material:</InputGroupAddon>
                   </InputGroup>
                   </Form.Group> */}
-                  <Button
-                    onClick={closeModal}
-                    color="primary"
-                    style={{ float: "right", marginBottom: "2%" }}
-                    >
-                    Cancel{" "}
-                  </Button>
-                  <Button
-                    color="primary"
-                    onClick={addsiteinformation}
-                    onClick={handleSiteSubmit}
-                    style={{ float: "right", marginBottom: "2%" , marginRight: "1%"}}
-                    
-                    
-                    >
-                      
-                    save{" "}
-                  </Button>
-                  
+
+                <button
+                  class="btn btn-secondary"
+                  onClick={closeModal}
+                  style={{ float: "right", marginBottom: "2%" }}>
+                  Cancel
+                </button>
+
+                <Button
+                  color="primary"
+                  onClick={addsiteinformation}
+                  onClick={handleSiteSubmit}
+                  style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
+                >
+                  Save{" "}
+                </Button>
 
 
 
-                  
-                
+
+
+
               </Form>
 
-            
-              
-              </Modal.Body>
+
+
+            </Modal.Body>
           </Modal>
         </TabPane>
         {/* <TabPane tab="Map" key="2">
@@ -1043,48 +1045,48 @@ const handleOpenUpdateModal = (id) =>{
           {/* <div style={{ width: "100%" }}>
             <Users mapData={mapLayers} />
           </div> */}
-        <TableContainer component={Paper}>
-          <Table aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Employee Name</StyledTableCell>
-                <StyledTableCell>Assignment</StyledTableCell>
-              </TableRow>
-            </TableHead>
-                        <TableBody>
-              {allEmployees.map((krow,idy) => (
-                <StyledTableRow krow={krow} key={krow.rowcount}>
-                  <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
-                  <StyledTableCell>  
-                    <Input onChange={(e)=>{ siteChoice = e.target.value;}} type="select" name="backdrop" id="backdrop">
-                      <option value="">Choose Site</option>
-                      {site.map((site,idz) => (    
-                      <option value={site.sitename}>{site.sitename}</option>
-                      ))}
-                    </Input>
-                    <Button
-                    color="primary"
-                    onClick={addsiteinformation}
-                    style={{ float: "right", marginTop: "2%" }}
-                    >
-                    Change
-                  </Button>
-                  <Button
-                    color="primary"
-                    onClick={()=>{userID=krow._id}}
-                    style={{ float: "right", marginTop: "2%" , marginRight: "2%" }}
-                    >
-                    Assign
-                  </Button>
-              
-                    
-                  </StyledTableCell>  
+          <TableContainer component={Paper}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Employee Name</StyledTableCell>
+                  <StyledTableCell>Assignment</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allEmployees.map((krow, idy) => (
+                  <StyledTableRow krow={krow} key={krow.rowcount}>
+                    <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
+                    <StyledTableCell>
+                      <Input onChange={(e) => { siteChoice = e.target.value; }} type="select" name="backdrop" id="backdrop">
+                        <option value="">Choose Site</option>
+                        {site.map((site, idz) => (
+                          <option value={site.sitename}>{site.sitename}</option>
+                        ))}
+                      </Input>
+                      <button
+                        class="btn btn-secondary"
+                        onClick={addsiteinformation}
+                        style={{ float: "right", marginTop: "2%" }}
+                      >
+                        Change
+                      </button>
+                      <button
+                        class="btn btn-primary"
+                        onClick={() => { userID = krow._id }}
+                        style={{ float: "right", marginTop: "2%", marginRight: "2%" }}
+                      >
+                        Assign
+                      </button>
 
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+
+                    </StyledTableCell>
+
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </TabPane>
         {/* <TabPane tab="Information" key="4"></TabPane> */}
       </Tabs>

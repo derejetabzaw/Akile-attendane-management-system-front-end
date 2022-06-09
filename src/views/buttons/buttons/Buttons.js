@@ -1,4 +1,4 @@
-import React, { Component,useState, useEffect } from "react";
+import React, { Component, useState, useEffect } from "react";
 
 import Slider from "react-slick";
 import { Card, Row, Col, Carousel } from "antd";
@@ -34,7 +34,7 @@ import Paper from "@material-ui/core/Paper";
 const { Meta } = Card;
 // const [state, setState] = useState({data: []});
 
-const base_url = 'http://localhost:9000/api/v1' ;
+const base_url = 'http://localhost:9000/api/v1';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -68,7 +68,7 @@ export default class Dashboard extends Component {
     });
   };
 
-  componentDidMount = () =>{
+  componentDidMount = () => {
     this.getmongodb();
   };
 
@@ -76,15 +76,15 @@ export default class Dashboard extends Component {
     axios.get(base_url + '/attendance/')
       .then((response) => {
         const attendance_info = response.data
-        this.setState({attendance:attendance_info});
+        this.setState({ attendance: attendance_info });
       })
       .catch(() => {
         console.log("Error");
       });
-      axios.get(base_url + '/users/')
+    axios.get(base_url + '/users/')
       .then((response) => {
         const users_info = response.data
-        this.setState({users:users_info});
+        this.setState({ users: users_info });
       })
       .catch(() => {
         console.log("Error");
@@ -104,7 +104,7 @@ export default class Dashboard extends Component {
 
 
   render() {
-    
+
     const rows = [
       this.createData(
         "Beamlak Teshome",
@@ -117,8 +117,8 @@ export default class Dashboard extends Component {
       ),
     ];
 
-    const getCurrentDate = () =>{
-      const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const getCurrentDate = () => {
+      const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const d = new Date();
       let day = weekday[d.getDay()];
       var date = ("0" + new Date().getDate()).slice(-2)
@@ -126,15 +126,15 @@ export default class Dashboard extends Component {
 
       var year = new Date().getFullYear();
       // return day + ',' + ' '+  date + '-' + month + '-' + year;
-      return year + '-'  + month + '-' + date;
+      return year + '-' + month + '-' + date;
 
     }
 
 
 
-    
+
     var today = getCurrentDate();
-    
+
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
       var attendance_length = this.state.attendance.attendances.length
       var user_length = this.state.users.users.length
@@ -145,31 +145,36 @@ export default class Dashboard extends Component {
 
       for (var j = 0; j < user_length; j++) {
         for (var i = 0; i < attendance_length; i++) {
-          if (today===this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id){
+          if (today === this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id) {
             // console.log(this.state.attendance.attendances.at(i).checkInTime)
             // console.log(this.state.attendance.attendances.at(i).checkOutTime === '')
-            
+
+            //  if (this.state.attendance.attendances.at(i).checkOutTime === '') {
+            //   this.state.total.push("")
+            // }
+            // else{
+            this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
+            this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
+            this.state.dates.push(this.state.attendance.attendances.at(-1).date);
+            this.state.names.push(this.state.users.users.at(j).name);
+            this.state.staffids.push(this.state.users.users.at(j).staffId);
+            this.state.locations.push(this.state.users.users.at(j).workingSite);
+            //console.log(this.state.attendance.attendances.at(i).checkOutTime === '')
             if (this.state.attendance.attendances.at(i).checkOutTime === '') {
-              //this.state.total.push("")
+              this.state.total.push("")
             }
-            else{
-              this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
-              this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
-              this.state.dates.push(this.state.attendance.attendances.at(-1).date);
-              this.state.names.push(this.state.users.users.at(j).name);
-              this.state.staffids.push(this.state.users.users.at(j).staffId);
-              this.state.locations.push(this.state.users.users.at(j).workingSite);
+            else {
               this.state.total.push(this.state.attendance.attendances.at(i).workedHours)
             }
-            
+
+          }
         }
       }
+
     }
 
-  }
-
     var namerows = this.state.names;
-    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates,this.state.total);
+    var krows = this.createData(this.state.names, this.state.staffids, this.state.clockins, this.state.clockouts, this.state.locations, this.state.dates, this.state.total);
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -197,8 +202,8 @@ export default class Dashboard extends Component {
               <TableRow>
                 <StyledTableCell>Staff Name</StyledTableCell>
                 <StyledTableCell>Staff ID</StyledTableCell>
-                <StyledTableCell>Clock-In</StyledTableCell>
-                <StyledTableCell>Clock-Out</StyledTableCell>
+                {/* <StyledTableCell>Clock-In</StyledTableCell>
+                <StyledTableCell>Clock-Out</StyledTableCell> */}
                 <StyledTableCell>Location</StyledTableCell>
                 {/* <StyledTableCell>Device ID</StyledTableCell> */}
                 <StyledTableCell>Date</StyledTableCell>
@@ -217,13 +222,13 @@ export default class Dashboard extends Component {
                   <StyledTableCell>{row.CIN}</StyledTableCell>
                   <StyledTableCell>{row.COUT}</StyledTableCell>
                   <StyledTableCell>{row.Location}</StyledTableCell> */}
-                  {/* <StyledTableCell>{row.DId}</StyledTableCell> */}
-                  {/* <StyledTableCell>{row.date}</StyledTableCell>
+              {/* <StyledTableCell>{row.DId}</StyledTableCell> */}
+              {/* <StyledTableCell>{row.date}</StyledTableCell>
                   <StyledTableCell align="right">{row.time}</StyledTableCell>
                 </StyledTableRow>
               ))} */}
 
-              {namerows.map((krow,idx) => ( 
+              {namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
@@ -239,6 +244,6 @@ export default class Dashboard extends Component {
         </TableContainer>
       </>
     );
-  }  
+  }
 }
 

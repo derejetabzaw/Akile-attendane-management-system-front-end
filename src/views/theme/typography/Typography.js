@@ -1,5 +1,5 @@
 import React from "react";
-import {Form,Button} from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,7 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import axios from 'axios';
 
-const base_url = 'http://localhost:9000/api/v1' ;
+const base_url = 'http://localhost:9000/api/v1';
 
 
 class Typography extends React.Component {
@@ -23,9 +23,9 @@ class Typography extends React.Component {
       basic_salaries: [],
       attendance: [],
       users: [],
-      Netsalary:[],
+      Netsalary: [],
     };
-    
+
 
     this.toggleModal = this.toggleModal.bind(this);
   }
@@ -61,46 +61,45 @@ class Typography extends React.Component {
       Netsalary,
     };
   };
-  
+
   toggleModal = () => {
     this.setState({
       showModal: !this.state.showModal,
     });
   };
 
-  componentDidMount = () =>{
-   this.getmongodb();
-   this.getLocalStorage();
+  componentDidMount = () => {
+    this.getmongodb();
+    this.getLocalStorage();
   };
 
   getmongodb = () => {
     axios.get(base_url + '/attendance/')
       .then((response) => {
         const attendance_info = response.data
-        this.setState({attendance:attendance_info});
+        this.setState({ attendance: attendance_info });
       })
       .catch(() => {
         console.log("Error");
       });
-      axios.get(base_url + '/users/')
+    axios.get(base_url + '/users/')
       .then((response) => {
         const users_info = response.data
-        this.setState({users:users_info});
+        this.setState({ users: users_info });
       })
       .catch(() => {
         console.log("Error");
       });
   }
-  getLocalStorage()
-  {
+  getLocalStorage() {
     let nsalaryArray = JSON.parse(localStorage.getItem("netSalary"))
     console.log(nsalaryArray);
-if(nsalaryArray.length !== 0){
-    this.setState({Netsalary:nsalaryArray})
-}
+    if (nsalaryArray.length !== 0) {
+      this.setState({ Netsalary: nsalaryArray })
+    }
     console.log(this.state.Netsalary)
-    
   }
+
   render() {
     const rows = [
       this.createData(
@@ -258,9 +257,9 @@ if(nsalaryArray.length !== 0){
         "40732.63"
       ),
     ];
-    
-    
-    
+
+
+
 
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
       // var attendance_length = this.state.attendance.attendances.length
@@ -268,23 +267,23 @@ if(nsalaryArray.length !== 0){
       // const id = this.state.attendance.attendances.at(-1)._id
 
 
-        for (var j = 0; j < user_length; j++) {
-          this.state.names.push(this.state.users.users.at(j).name);
-          this.state.positions.push(this.state.users.users.at(j).position);
-          this.state.basic_salaries.push(this.state.users.users.at(j).salary);
-
-          
-        }
-  
-
-      
-  
-
-  }
+      for (var j = 0; j < user_length; j++) {
+        this.state.names.push(this.state.users.users.at(j).name);
+        this.state.positions.push(this.state.users.users.at(j).position);
+        this.state.basic_salaries.push(this.state.users.users.at(j).salary);
 
 
-  var namerows = this.state.names;
-  var krows = this.createData(this.state.names,this.state.positions,this.state.basic_salaries,"","","","","","","","","",this.state.Netsalary);
+      }
+
+
+
+
+
+    }
+
+
+    var namerows = this.state.names;
+    var krows = this.createData(this.state.names, this.state.positions, this.state.basic_salaries, "", "", "", "", "", "", "", "", "", this.state.Netsalary);
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -304,37 +303,37 @@ if(nsalaryArray.length !== 0){
     let allowance = 0;
     let commission = 0;
     let salaryAdvance = 0;
-  
-  const getTPAllowance = (e)=>{
-     allowance = e.target.value
-     
-  }
-  const getCommission = (e)=>{
-       commission = e.target.value
-      
-  }
-  const getSalaryAdvance = (e)=>{
-     salaryAdvance = e.target.value
-    
-  }
-  const calculateNetPay = (name,basic_salaries,commission,allowance,salaryAdvance) =>{
 
-     let nsal=parseFloat(basic_salaries)+ parseFloat(commission)+ parseFloat(allowance)+ parseFloat(salaryAdvance);
-     let index = this.state.names.indexOf(name);
-     this.state.Netsalary[index] = nsal;
-     console.log(this.state.Netsalary);
-     localStorage.setItem("netSalary",JSON.stringify(this.state.Netsalary));//consider this for changes on the database, add a column for netsalary
-     window.location.reload();  
-  }
-  const Displaytable = React.memo(props => {
-  return(
-    
-          <div className="card" id="disp_table_1">
-            <span hidden>{props.state}</span>
-           <div className="card-header">Payroll</div>
-           <div className="card-body">
+    const getTPAllowance = (e) => {
+      allowance = e.target.value
+
+    }
+    const getCommission = (e) => {
+      commission = e.target.value
+
+    }
+    const getSalaryAdvance = (e) => {
+      salaryAdvance = e.target.value
+
+    }
+    const calculateNetPay = (name, basic_salaries, commission, allowance, salaryAdvance) => {
+
+      let nsal = parseFloat(basic_salaries) + parseFloat(commission) + parseFloat(allowance) + parseFloat(salaryAdvance);
+      let index = this.state.names.indexOf(name);
+      this.state.Netsalary[index] = nsal;
+      console.log(this.state.Netsalary);
+      localStorage.setItem("netSalary", JSON.stringify(this.state.Netsalary));//consider this for changes on the database, add a column for netsalary
+      window.location.reload();
+    }
+    const Displaytable = React.memo(props => {
+      return (
+
+        <div className="card" id="disp_table_1">
+          <span hidden>{props.state}</span>
+          <div className="card-header">Payroll</div>
+          <div className="card-body">
             <p>Monthly Payroll </p>
-            <TableContainer component={Paper} style={{width:'100%'}}>
+            <TableContainer component={Paper} style={{ width: '100%' }}>
               <Table aria-label="customized table" >
                 <TableHead>
                   <TableRow>
@@ -350,27 +349,30 @@ if(nsalaryArray.length !== 0){
                     <StyledTableCell>Total Salary</StyledTableCell>
                     <StyledTableCell>Salary Advance</StyledTableCell>
                     <StyledTableCell align="right">NET Salary</StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {namerows.map((krow,idx) => (
-                    
+                  {namerows.map((krow, idx) => (
+
                     <StyledTableRow krow={krow} key={krow.rowcount}>
                       <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.Id[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.Position[idx]}</StyledTableCell>
                       <StyledTableCell>30</StyledTableCell>
                       <StyledTableCell>{krows.BSalary[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" onChange={getTPAllowance}/></StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" onChange={getTPAllowance} /></StyledTableCell>
                       <StyledTableCell>{krows.DSalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.TransportAllowance[idx]}</StyledTableCell>
                       <StyledTableCell><Form.Control type="text" onChange={getCommission} /></StyledTableCell>
                       <StyledTableCell>{krows.timeWeekend[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" onChange={getSalaryAdvance}/></StyledTableCell>
+                      <StyledTableCell><Form.Control type="text" onChange={getSalaryAdvance} /></StyledTableCell>
+                      <StyledTableCell align="right">{this.state.Netsalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.TSalary[idx]}</StyledTableCell>
                       <StyledTableCell>{krows.SalaryAdvance[idx]}</StyledTableCell>
-                      <StyledTableCell align="right">{this.state.Netsalary[idx]}</StyledTableCell>
-                      <StyledTableCell align="right"><Button variant="primary" onClick={()=>{calculateNetPay(krows.name[idx],this.state.basic_salaries[idx],commission,allowance,salaryAdvance)}}>calculate</Button></StyledTableCell>
+                      <StyledTableCell align="right"><Button variant="primary" onClick={() => { calculateNetPay(krows.name[idx], this.state.basic_salaries[idx], commission, allowance, salaryAdvance) }}>calculate</Button></StyledTableCell>
                       {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
               <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
                     </StyledTableRow>
@@ -380,16 +382,16 @@ if(nsalaryArray.length !== 0){
             </TableContainer>
           </div>
         </div>
-  )   
-  })
-  
+      )
+    })
+
     return (
       <>
-      <Displaytable state = "false"/>
+        <Displaytable state="false" />
       </>
 
     );
-  
+
   }
 }
 
