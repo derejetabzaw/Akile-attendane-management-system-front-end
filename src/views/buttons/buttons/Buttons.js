@@ -200,10 +200,10 @@ export default class Dashboard extends Component {
           <Table aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Staff Name</StyledTableCell>
                 <StyledTableCell>Staff ID</StyledTableCell>
-                {/* <StyledTableCell>Clock-In</StyledTableCell>
-                <StyledTableCell>Clock-Out</StyledTableCell> */}
+                <StyledTableCell>Staff Name</StyledTableCell>
+                <StyledTableCell>Clock-In</StyledTableCell>
+                <StyledTableCell>Clock-Out</StyledTableCell>
                 <StyledTableCell>Location</StyledTableCell>
                 {/* <StyledTableCell>Device ID</StyledTableCell> */}
                 <StyledTableCell>Date</StyledTableCell>
@@ -230,8 +230,8 @@ export default class Dashboard extends Component {
 
               {namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
-                  <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.CIN[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.COUT[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Location[idx]}</StyledTableCell>

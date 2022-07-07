@@ -50,12 +50,12 @@ export default [
         icon: "cil-calendar-today",
         to: "/buttons/brand-buttons",
       },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Check I/O",
-        icon: "cil-calendar-today",
-        to: "/buttons/button-dropdowns"
-      },
+      // {
+      //   _tag: "CSidebarNavItem",
+      //   name: "Check I/O",
+      //   icon: "cil-calendar-today",
+      //   to: "/buttons/button-dropdowns"
+      // },
     ],
   },
   {
