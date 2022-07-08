@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import "bootstrap/dist/css/bootstrap.min.css";
- 
+import { AuthProvider } from './context/AuthProvider';
 
 import { icons } from './assets/icons'
 
@@ -17,8 +17,10 @@ React.icons = icons
 
 ReactDOM.render(
   <Provider store={store}>
-    <App/>
-  </Provider>, 
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </Provider>,
   document.getElementById('root')
 );
 
