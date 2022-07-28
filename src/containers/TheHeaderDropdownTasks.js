@@ -9,7 +9,7 @@ import {
   CProgress
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 const TheHeaderDropdownTasks = () => {
   // const itemsCount = 5
@@ -31,16 +31,18 @@ const TheHeaderDropdownTasks = () => {
         >
           {/* <strong>You have {itemsCount} pending tasks</strong> */}
         </CDropdownItem>
-        
-        <Link to="/">
-                       
-       
-        <CDropdownItem className="text-center border-top">
-        {/* <CButton color="primary" className="px-4">  */}
-        <strong>Sign Out</strong>
-        {/* </CButton> */}
-         </CDropdownItem>
-                      </Link>
+
+
+        {/* <CDropdownItem className="text-center border-top"> */}
+        <div class="d-flex justify-content-center">
+          <Link to="/">
+            <button
+              className="px-4 btn btn-danger">
+              Sign Out
+            </button>
+          </Link>
+        </div>
+        {/* </CDropdownItem> */}
       </CDropdownMenu>
     </CDropdown>
   )

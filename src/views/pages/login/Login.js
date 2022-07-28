@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useContext } from 'react';
 import React from 'react';
 import img from './akil.jpg';
-import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -16,9 +16,9 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react';
 import AuthContext from '../../../context/AuthProvider';
-import axios from 'axios';
+import axios from '../../../api/axios';
 
-const base_url = 'http://localhost:9000/api/v1';
+const LOGIN_URL = '/authSignin';
 
 const Login = () => {
   const { setAuth } = useContext(AuthContext);
@@ -42,31 +42,37 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const userCredential = {
+      staffId: user.toUpperCase(),
+      password: pwd,
+    }
+
     try {
       const response = await
         axios
-          .post(base_url + '/auth/login',
-            JSON.stringify({ staffId: user, password: pwd }),
+          .post(LOGIN_URL,
+            userCredential,
             {
               headers: { 'Content-Type': 'application/json' },
-              withCredentials: true
             });
-      console.log(JSON.stringify(response?.data));
+
+      console.log(response?.data?.accessToken);
 
       const accessToken = response?.data?.accessToken;
+
       setAuth({ user, pwd, accessToken })
       setUser('');
       setPwd('');
       setSuccess(true);
     } catch (err) {
       if (!err?.response) {
-        setErrMsg('No Server Response');
+        setErrMsg('No Server Response!');
       } else if (err.response?.status === 400) {
-        setErrMsg('Missing StaffId or Password');
+        setErrMsg('Missing StaffId or Password!');
       } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized');
+        setErrMsg('Incorrect Staff-Id or Password!');
       } else {
-        setErrMsg('Login Failed');
+        setErrMsg('Login Failed!');
       }
       errRef.current.focus();
     }
@@ -76,14 +82,8 @@ const Login = () => {
     <>
       {
         success ? (
-          // Change the true part to redirect to dashboard
-          <section>
-            <h1>You are logged in!</h1>
-            <br />
-            <p>
-              <a href="#">Go to Home</a>
-            </p>
-          </section>
+          // Redirects to dashboard when success
+          <Redirect to="/dashboard" />
         ) : (
           <div className="c-app c-default-layout flex-row align-items-center">
             <CContainer>
@@ -125,6 +125,7 @@ const Login = () => {
                               placeholder="StaffId"
                               onChange={(e) => setUser(e.target.value)}
                               value={user}
+
                               required />
                           </CInputGroup>
                           <CInputGroup className="mb-4">
@@ -144,13 +145,11 @@ const Login = () => {
                           </CInputGroup>
                           <CRow>
                             <CCol xs="6">
-                              {/* <Link to="/dashboard"> */}
                               <button
                                 color="primary"
                                 className="px-4 btn btn-primary">
                                 LOGIN
                               </button>
-                              {/* </Link> */}
                             </CCol>
                             <CCol xs="6" className="text-right">
                               <CButton
