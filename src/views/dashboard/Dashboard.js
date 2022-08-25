@@ -10,19 +10,19 @@ import {
   Button,
   InputGroup,
   InputGroupAddon,
-  InputGroupText,
+  // InputGroupText,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
   Form,
   FormGroup,
-  Label,
+  // Label,
   Input,
-  FormText,
+  // FormText,
 } from "reactstrap";
-import nextId from "react-id-generator";
-import PasswordWithGenerator from "react-password-with-generator";
+// import nextId from "react-id-generator";
+// import PasswordWithGenerator from "react-password-with-generator";
 import "react-password-with-generator/style.css";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -39,7 +39,7 @@ const { Meta } = Card;
 // const id1 = nextId("AK");
 // console.log(id1)
 
-const base_url = 'http://localhost:9000/api/v1' ;
+const base_url = 'http://localhost:9000/api/v1';
 
 
 
@@ -53,13 +53,13 @@ export default class Dashboard extends Component {
       count: 0,
       users: [],
       items: [],
-      positions:[],
-      genders:[],
+      positions: [],
+      genders: [],
       deviceids: [],
-      staffids:[],
-      salarys:[],
-      telephones:[],
-      emails:[],
+      staffids: [],
+      salarys: [],
+      telephones: [],
+      emails: [],
       uploadFile: [],
       src: null,
       krows: [],
@@ -75,16 +75,14 @@ export default class Dashboard extends Component {
       database_salary: [],
       database_telephone: [],
       database_email: [],
-      intial_load : 0,
+      intial_load: 0,
       vals: Math.floor(1000 + Math.random() * 9000),
-      id:"",
-      place_holder_salary:"",
-      place_holder_email:"",
-      place_holder_telephone:"",
-      place_holder_device:"",
-      place_holder_position:""
-       
-      
+      id: "",
+      place_holder_salary: "",
+      place_holder_email: "",
+      place_holder_telephone: "",
+      place_holder_device: "",
+      place_holder_position: ""
       // posts: []
     };
 
@@ -92,13 +90,12 @@ export default class Dashboard extends Component {
     this.toggleUpdate = this.toggleUpdate.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
- 
 
   beforeUploadFile = (file) => {
     this.setState({ uploadFile: [file] });
     return false;
   };
-  
+
   handleNameChange = (event) => {
     const target = event.target;
     const name = target.name
@@ -109,54 +106,49 @@ export default class Dashboard extends Component {
 
   }
 
-
-
   handlePositionchange = (event) => {
 
     this.setState({
       position: event.target.value
     });
-
   }
+
   handleGenderchange = (event) => {
     this.setState({
       gender: event.target.value
-
     });
-
   }
+
   handleDeviceIdchange = (event) => {
     const target = event.target;
     const name = target.name
     const deviceid = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
       deviceid: event.target.value
-
     });
-
   }
+
   handlePassword = (event) => {
     const target = event.target;
     const name = target.name
     const password = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
       password: event.target.value
-
     });
-
   }
   // Commented out handleStaffIdchange because the text field is removed and also the autogeneration 
   // is done in the handleNameSubmit
 
   // handleStaffIdchange = (event) => {
-    // const target = event.target;
-    // const name = target.name
-    // const staffid = target.type === 'checkbox' ? target.checked : target.value;
-    
+  // const target = event.target;
+  // const name = target.name
+  // const staffid = target.type === 'checkbox' ? target.checked : target.value;
+
   //   this.setState({
   //     staffid: "AK-" + this.state.vals
   //   });
   // }
+
   handleSalarychange = (event) => {
     const target = event.target;
     const name = target.name
@@ -165,6 +157,7 @@ export default class Dashboard extends Component {
       salary: event.target.value
     });
   }
+
   handleTelephonechange = (event) => {
     const target = event.target;
     const name = target.name
@@ -172,9 +165,9 @@ export default class Dashboard extends Component {
     this.setState({
       // [name]:value
       new_telephone: event.target.value
-
     });
   }
+
   handleEmailchange = (event) => {
     const target = event.target;
     const name = target.name
@@ -182,21 +175,16 @@ export default class Dashboard extends Component {
     this.setState({
       // [name]:value
       email: event.target.value
-
     });
   }
-  
-  setPlaceHolder(obj){
+
+  setPlaceHolder(obj) {
     this.state.items = obj
     console.log(this.state.items)
     // localStorage.setItem("update-data",JSON.stringify(obj))
   }
-  
 
 
-
-
-  
   handleNameSubmit = () => {
 
     var items = this.state.items;
@@ -208,7 +196,6 @@ export default class Dashboard extends Component {
     var telephones = this.state.telephones;
     var emails = this.state.emails;
     var passwords = this.state.passwords;
-       
 
     items.push(this.state.names);
     positions.push(this.state.position);
@@ -220,51 +207,50 @@ export default class Dashboard extends Component {
     emails.push(this.state.email);
     passwords.push(this.state.password);
 
-     
 
     const user = {
-        _id: "",
-        name: this.state.names,
-        //staffId: this.state.staffid,
-        staffId: "AK-" + this.state.vals,
-        
-        password: "akilepass",
-        position: this.state.position,
-        isAdmin: false,
-        email:this.state.email,
-        gender: this.state.gender,
-        imageUrl: "",
-        workingSite: "Piassa",
-        salary: this.state.salary,
-        telephone:this.state.new_telephone,
-        deviceId: this.state.deviceid
+      _id: "",
+      name: this.state.names,
+      //staffId: this.state.staffid,
+      staffId: "AK-" + this.state.vals,
+      password: this.state.password,
+      position: this.state.position,
+      isAdmin: false,
+      email: this.state.email,
+      gender: this.state.gender,
+      imageUrl: "",
+      workingSite: "Piassa",
+      salary: this.state.salary,
+      telephone: this.state.new_telephone,
+      deviceId: this.state.deviceid
 
     };
 
-
     axios
-    .post('http://localhost:9000/api/v1/users/signup', user)
-    .then(() => {
-      alert("User Created")
-      console.log('User Created',user)})
-    .catch(err => {
-      alert("User Not Created");
-      console.error("The Error:",err);
-    });
-    
+      .post(base_url + '/users/signup', user)
+      .then(() => {
+        alert("User Created")
+        console.log('User Created', user)
+      })
+      .catch(err => {
+        alert("User Not Created");
+        console.error("The Error:", err);
+      });
+
     this.refreshPage()
-    
+
     this.setState(event => {
-      return { 
+      return {
         items: items,
         showModal: !this.state.showModal,
-        count: event.count + 1}
+        count: event.count + 1
+      }
     });
-    
+
   }
   //update-User
   handleUpdate = () => {
-   const  staffId = this.state.id;
+    const staffId = this.state.id;
     console.log(staffId)
     var positions = this.state.positions;
 
@@ -273,7 +259,7 @@ export default class Dashboard extends Component {
     var telephones = this.state.telephones;
     var emails = this.state.emails;
     var passwords = this.state.passwords;
-       
+
     positions.push(this.state.position);
     deviceids.push(this.state.deviceids);
     salarys.push(this.state.salary);
@@ -282,19 +268,19 @@ export default class Dashboard extends Component {
     passwords.push(this.state.password);
     console.log("Updating")
     const user = {
-        password: "akilepass",
-        email:this.state.email,
-        deviceId: this.state.deviceid,
-        isAdmin: false,
-        position: this.state.position,
-        workingSite: "Bole",
-        salary: this.state.salary,
-        telephone:this.state.new_telephone
-       
+      password: this.state.password,
+      email: this.state.email,
+      deviceId: this.state.deviceid,
+      isAdmin: false,
+      position: this.state.position,
+      workingSite: "Bole",
+      salary: this.state.salary,
+      telephone: this.state.new_telephone
+
     };
-    
-    axios.put('http://localhost:9000/api/v1/users/update-users/'+staffId,user)
-    
+
+    axios.put('http://localhost:9000/api/v1/users/update-users/' + staffId, user)
+
     this.refreshPage()
 
     // this.setState(event => {
@@ -304,21 +290,20 @@ export default class Dashboard extends Component {
     // });
   }
   //delete-users/
-  handleRemoveUser =  (id)=>{
+  handleRemoveUser = (id) => {
     axios
-    .delete('http://localhost:9000/api/v1/users/delete-user/'+id)
-    .then(()=> alert("User Successfully Deleted"))
-    .catch(err=>{
+      .delete('http://localhost:9000/api/v1/users/delete-user/' + id)
+      .then(() => alert("User Successfully Deleted"))
+      .catch(err => {
         alert.error("Couldn't Delete User", err)
-    });
+      });
 
     this.refreshPage()
   }
-  handleUpdateUser=()=>
-  {
+  handleUpdateUser = () => {
     let id = localStorage.getItem("id");
     console.log(id);
-     axios.put(`http://localhost:9000/api/v1/users/delete-user/update-users/:id`)
+    axios.put(`http://localhost:9000/api/v1/users/delete-user/update-users/:id`)
   }
 
 
@@ -338,20 +323,17 @@ export default class Dashboard extends Component {
     var items = this.state.items;
 
     // items[i] = event.target.value;
-  
+
 
     this.setState({
       items: items
     });
   }
-  
-
 
   onRemove = (file) => {
     this.setState({
       uploadFile: [],
     });
-
   };
 
   cancelItem_onClick = () => {
@@ -371,6 +353,7 @@ export default class Dashboard extends Component {
     //   reader.readAsDataURL(file.file);
     // }
   };
+
   createData = (
     name,
     Position,
@@ -400,43 +383,40 @@ export default class Dashboard extends Component {
   };
 
   toggleModalAdd = () => {
-       this.setState({
-        showModal: !this.state.showModal,
+    this.setState({
+      showModal: !this.state.showModal,
     });
   };
 
-  toggleUpdate = () =>{
+  toggleUpdate = () => {
 
     this.setState({
       showModal2: !this.state.showModal2
     })
-    
   };
-  
 
-  componentDidMount = () =>{
+  componentDidMount = () => {
     this.getmongodb();
   };
-    
 
   getmongodb = () => {
-      axios.get(base_url + '/users/')
+    axios.get(base_url + '/users/')
       .then((response) => {
         const users_info = response.data
-        this.setState({users:users_info});
+        this.setState({ users: users_info });
 
         if (this.state.users.length !== 0) {
           var user_length = this.state.users.users.length
           for (var j = 0; j < user_length; j++) {
-              this.state.database_id.push(this.state.users.users.at(j)._id);
-              this.state.database_name.push(this.state.users.users.at(j).name);
-              this.state.database_position.push(this.state.users.users.at(j).position);
-              this.state.database_gender.push(this.state.users.users.at(j).gender);
-              this.state.database_deviceid.push(this.state.users.users.at(j).deviceId);
-              this.state.database_staffid.push(this.state.users.users.at(j).staffId);
-              this.state.database_salary.push(this.state.users.users.at(j).salary);
-              this.state.database_telephone.push(this.state.users.users.at(j).telephone);
-              this.state.database_email.push(this.state.users.users.at(j).email);            
+            this.state.database_id.push(this.state.users.users.at(j)._id);
+            this.state.database_name.push(this.state.users.users.at(j).name);
+            this.state.database_position.push(this.state.users.users.at(j).position);
+            this.state.database_gender.push(this.state.users.users.at(j).gender);
+            this.state.database_deviceid.push(this.state.users.users.at(j).deviceId);
+            this.state.database_staffid.push(this.state.users.users.at(j).staffId);
+            this.state.database_salary.push(this.state.users.users.at(j).salary);
+            this.state.database_telephone.push(this.state.users.users.at(j).telephone);
+            this.state.database_email.push(this.state.users.users.at(j).email);
           }
         }
       })
@@ -447,29 +427,29 @@ export default class Dashboard extends Component {
 
   refreshPage() {
     window.location.reload();
-  }  
+  }
 
-
-
-  componentWillMount(){
+  componentWillMount() {
     this.getmongodb();
   }
-  Testrender(id){
-   return <div>
+
+  Testrender(id) {
+    return <div>
       <h1>place holder</h1>
-   </div>
+    </div>
   }
-  render() {  
+
+  render() {
     var namerows = this.state.items;
-    var database_namerows = this.state.database_name;    
+    var database_namerows = this.state.database_name;
     var krows = this.createData(
-      this.state.items ,
+      this.state.items,
       this.state.positions,
       this.state.genders,
       this.state.deviceids,
       this.state.staffids,
       this.state.salarys,
-      this.state.telephones , 
+      this.state.telephones,
       this.state.emails);
 
     var jrows = this.createData(
@@ -479,10 +459,10 @@ export default class Dashboard extends Component {
       this.state.database_deviceid,
       this.state.database_staffid,
       this.state.database_salary,
-      this.state.database_telephone, 
+      this.state.database_telephone,
       this.state.database_email,
       this.state.database_id
-      );
+    );
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -501,7 +481,6 @@ export default class Dashboard extends Component {
       },
     }))(TableRow);
 
-
     // console.log("id1 is", id1);
     return (
       <>
@@ -513,7 +492,7 @@ export default class Dashboard extends Component {
           Add
         </Button>{" "}
 
-        
+
 
         <Modal
           isOpen={this.state.showModal}
@@ -524,7 +503,7 @@ export default class Dashboard extends Component {
         >
           <ModalHeader>Add Employee</ModalHeader>
           <ModalBody>
-            <Form> 
+            <Form>
               <FormGroup>
                 {/* <Label for="exampleEmail">Name</Label> */}
                 <InputGroup>
@@ -541,7 +520,7 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Position
                   </InputGroupAddon>
-                  <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position}>
+                  <Input onChange={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position}>
                     <option value=" ">Select Position</option>
                     <option value="Site Manager">Site Manager</option>
                     <option value="Project Manager">Project Manager</option>
@@ -554,7 +533,7 @@ export default class Dashboard extends Component {
                 {/* <Label for="exampleEmail">Sex</Label> */}
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Gender</InputGroupAddon>
-                  <Input onChange ={this.handleGenderchange} type="select" name="backdrop" id="backdrop" value={this.state.gender}>
+                  <Input onChange={this.handleGenderchange} type="select" name="backdrop" id="backdrop" value={this.state.gender}>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </Input>
@@ -574,7 +553,7 @@ export default class Dashboard extends Component {
                   <InputGroupAddon addonType="prepend">
                     Basic Salary
                   </InputGroupAddon>
-                  <Input onChange ={this.handleSalarychange} type="number" placeholder="Salary" />
+                  <Input onChange={this.handleSalarychange} type="number" placeholder="Salary" />
                 </InputGroup>
               </FormGroup>
 
@@ -588,7 +567,7 @@ export default class Dashboard extends Component {
                     Telephone
                   </InputGroupAddon>
                   <Input
-                    onChange ={this.handleTelephonechange}
+                    onChange={this.handleTelephonechange}
                     placeholder="Phone Number of Employee"
                     min={10}
                     max={13}
@@ -600,9 +579,23 @@ export default class Dashboard extends Component {
 
               <FormGroup>
                 <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    Password
+                  </InputGroupAddon>
+                  <Input
+                    onChange={this.handlePassword}
+                    placeholder="Password of the Employee"
+                    type="password"
+                    required
+                  />
+                </InputGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <InputGroup>
                   <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
 
-                  <Input onChange ={this.handleEmailchange} placeholder="Email of Employee" />
+                  <Input onChange={this.handleEmailchange} placeholder="Email of Employee" />
                 </InputGroup>
               </FormGroup>
               <Upload
@@ -625,8 +618,8 @@ export default class Dashboard extends Component {
             </Button>{" "}
           </ModalFooter>
         </Modal>
-        
-        
+
+
         <div style={{ marginTop: "2%" }}></div>
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
@@ -646,7 +639,7 @@ export default class Dashboard extends Component {
 
               </TableRow>
             </TableHead>
-            <TableBody>     
+            <TableBody>
 
               {/*
                   //Add Authentication 
@@ -654,10 +647,10 @@ export default class Dashboard extends Component {
                     and also from the database after the right authentications from admins
                   //FetchId from table when clicking that row's edit button
               */}
-                            
-              {database_namerows.map((krow,idx) => ( 
+
+              {database_namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
-                  
+
                   <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
@@ -668,8 +661,8 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
 
                   <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" onClick={()=>{
-                      
+                    <Button color="secondary" onClick={() => {
+
                       this.state.id = this.state.database_id[idx]
                       // let placeholders = {
                       //   salary:jrows.Salary[idx],
@@ -678,29 +671,29 @@ export default class Dashboard extends Component {
                       //   telephone: jrows.Telephone[idx]
                       // }
                       //  this.setPlaceHolder(placeholders)
-                      this.state.place_holder_salary=jrows.Salary[idx]
+                      this.state.place_holder_salary = jrows.Salary[idx]
                       this.state.place_holder_email = jrows.Email[idx]
                       this.state.place_holder_device = jrows.DeviceID[idx]
                       this.state.place_holder_telephone = jrows.Telephone[idx]
                       this.state.place_holder_position = jrows.Position[idx]
-                      
+
                       this.toggleUpdate()
-                      }}>
+                    }}>
                       Edit
                     </Button>{" "}
                   </StyledTableCell>
-                  
+
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => {this.handleRemoveUser(jrows.StaffID[idx])}}>
+                    <Button color="secondary" onClick={() => { this.handleRemoveUser(jrows.StaffID[idx]) }}>
                       Remove
                     </Button>{" "}
                   </StyledTableCell>
 
                 </StyledTableRow>
 
-              ))} 
+              ))}
 
-              {namerows.map((krow,idx) => ( 
+              {namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
@@ -711,98 +704,98 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
 
-                  
+
                   <StyledTableCell align="left">
-                  <Button color="secondary" onClick={() => {this.handleRemoveUser(krows.StaffID[idx])}}>
+                    <Button color="secondary" onClick={() => { this.handleRemoveUser(krows.StaffID[idx]) }}>
                       Remove
                     </Button>{" "}
                   </StyledTableCell>
 
- 
+
 
                 </StyledTableRow>
 
               ))}
-                <Modal
-                      isOpen={this.state.showModal2}
-                      modalTransition={{ timeout: 200 }}
-                      backdropTransition={{ timeout: 100 }}
-                      style={{ width: "50%" }}
-                      // toggle={this.toggleUpdate}
-                    >
-                      <ModalHeader>Update Employee</ModalHeader>
-                      <ModalBody>
-                        <Form> 
-                          <FormGroup>
-                            <InputGroup>
-                            </InputGroup>
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend">
-                                Position
-                              </InputGroupAddon>
-                              <Input onChange ={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position} placeholder={this.state.place_holder_position}>
-                                <option value=" ">Select Position</option>
-                                <option value="Site Manager">Site Manager</option>
-                                <option value="Project Manager">Project Manager</option>
-                                <option value="PMP">Professional Machine Painter - PMP</option>
-                                <option value="Painter">Painter</option>
-                              </Input>
-                            </InputGroup>
-                          </FormGroup>
-                          <FormGroup>
+              <Modal
+                isOpen={this.state.showModal2}
+                modalTransition={{ timeout: 200 }}
+                backdropTransition={{ timeout: 100 }}
+                style={{ width: "50%" }}
+              // toggle={this.toggleUpdate}
+              >
+                <ModalHeader>Update Employee</ModalHeader>
+                <ModalBody>
+                  <Form>
+                    <FormGroup>
+                      <InputGroup>
+                      </InputGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          Position
+                        </InputGroupAddon>
+                        <Input onChange={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position} placeholder={this.state.place_holder_position}>
+                          <option value=" ">Select Position</option>
+                          <option value="Site Manager">Site Manager</option>
+                          <option value="Project Manager">Project Manager</option>
+                          <option value="PMP">Professional Machine Painter - PMP</option>
+                          <option value="Painter">Painter</option>
+                        </Input>
+                      </InputGroup>
+                    </FormGroup>
+                    <FormGroup>
 
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend">
-                                Device Id
-                              </InputGroupAddon>
-                              <Input onChange={this.handleDeviceIdchange} placeholder={this.state.place_holder_device} id="device"/>
-                            </InputGroup>
-                          </FormGroup>
-                          <FormGroup>
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend">
-                                Basic Salary
-                              </InputGroupAddon>
-                              <Input onChange ={this.handleSalarychange} type="number" placeholder={this.state.place_holder_salary} id="salary"/>
-                            </InputGroup>
-                          </FormGroup>
-                          <FormGroup>
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend">
-                                Telephone
-                              </InputGroupAddon>
-                              <Input
-                                onChange ={this.handleTelephonechange}
-                                placeholder={this.state.place_holder_telephone}
-                                min={10}
-                                max={13}
-                                type="number"
-                                id="telephone"
-                              />
-                            </InputGroup>
-                          </FormGroup>
-                          <FormGroup>
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
-                              <Input onChange ={this.handleEmailchange} placeholder={this.state.place_holder_email} id="email"/>
-                            </InputGroup>
-                          </FormGroup>
-                        </Form>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button color="primary" onClick={()=>this.handleUpdate()}>
-                          Update Employee
-                        </Button>{" "}
-                        <Button color="secondary" onClick={this.cancelItem_onClick}>
-                          Cancel
-                        </Button>{" "}
-                      </ModalFooter>
-                    </Modal>
-                
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          Device Id
+                        </InputGroupAddon>
+                        <Input onChange={this.handleDeviceIdchange} placeholder={this.state.place_holder_device} id="device" />
+                      </InputGroup>
+                    </FormGroup>
+                    <FormGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          Basic Salary
+                        </InputGroupAddon>
+                        <Input onChange={this.handleSalarychange} type="number" placeholder={this.state.place_holder_salary} id="salary" />
+                      </InputGroup>
+                    </FormGroup>
+                    <FormGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          Telephone
+                        </InputGroupAddon>
+                        <Input
+                          onChange={this.handleTelephonechange}
+                          placeholder={this.state.place_holder_telephone}
+                          min={10}
+                          max={13}
+                          type="number"
+                          id="telephone"
+                        />
+                      </InputGroup>
+                    </FormGroup>
+                    <FormGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
+                        <Input onChange={this.handleEmailchange} placeholder={this.state.place_holder_email} id="email" />
+                      </InputGroup>
+                    </FormGroup>
+                  </Form>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="primary" onClick={() => this.handleUpdate()}>
+                    Update Employee
+                  </Button>{" "}
+                  <Button color="secondary" onClick={this.cancelItem_onClick}>
+                    Cancel
+                  </Button>{" "}
+                </ModalFooter>
+              </Modal>
+
 
             </TableBody>
           </Table>
-        </TableContainer>      
+        </TableContainer>
       </>
     );
   }

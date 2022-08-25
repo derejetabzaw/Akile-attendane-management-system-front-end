@@ -94,10 +94,10 @@ class Typography extends React.Component {
   getLocalStorage() {
     let nsalaryArray = JSON.parse(localStorage.getItem("netSalary"))
     console.log(nsalaryArray);
-    if (nsalaryArray.length !== 0) {
-      this.setState({ Netsalary: nsalaryArray })
-    }
-    console.log(this.state.Netsalary)
+    // if (nsalaryArray.length !== 0) {
+    //   this.setState({ Netsalary: nsalaryArray })
+    // }
+    // console.log(this.state.Netsalary)
   }
 
   render() {
