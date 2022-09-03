@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Accordion, Card, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-import usersData from "./UsersData";
-import DatePicker from "react-datepicker";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
-import es from 'date-fns/locale/es';
+import { Modal, Button, Form } from "react-bootstrap";
+
 import "./MapViewerComp.css";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,11 +14,10 @@ import {
   FeatureGroup,
   Circle,
 } from "react-leaflet";
-import L, { map } from "leaflet";
+import L from "leaflet";
 import { EditControl } from "./src";
-// import { EditControl } from "react-leaflet-draw";
 import { Tabs } from "antd";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -29,10 +25,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import Users from "./Users";
-import { InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
-import { optionsSupported } from "dom-helpers/cjs/addEventListener";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
+
+import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
 // import { concat } from "core-js/core/array";
 // import Form from "antd/lib/form/Form";
 
@@ -56,6 +50,7 @@ const StyledTableRow = withStyles((theme) => ({
     },
   },
 }))(TableRow);
+
 const rows = [
   "Constraction",
   "0212",
@@ -205,25 +200,12 @@ export default function User() {
   //   });
   // }
 
-
-
-
-
-
-
-
-
-
   const mapopener = () => {
     setShow2(true);
-
-
   };
 
   const backmodule = () => {
     setShow2(false);
-
-
   };
 
   const pinlocation = (location) => {
@@ -233,22 +215,18 @@ export default function User() {
     longitude = location.lng.toString();
     return location
     // setShow(false);
-
   };
 
   const closemap = (event) => {
-
     setShow2(false);
-
-
   };
 
   const handleSiteChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     Name = value
-
   };
+
   const handleLocationChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -288,8 +266,6 @@ export default function User() {
     var area = area; //this needs to be checked!!!!
     var loc = Location;
 
-
-
     const Site = {
       _id: "",
       sitename: name,
@@ -301,11 +277,20 @@ export default function User() {
     }
     console.log(Site);
     axios
-      .post('http://localhost:9000/api/v1/sites/addsite', Site)
-      .then(() => console.log('Site Created', Site))
+      .post('http://localhost:9000/api/v1/sites/addsite', Site,
+        {
+          headers: {
+            'authorization': localStorage.getItem('Bearer')
+          }
+        }
+      )
+      .then(() =>
+        console.log('Site Created', Site))
       .catch(err => {
-        console.error("The Error:", err);
-      });
+        alert('Unauthorized! Please Login again', err.message)
+        localStorage.removeItem('Bearer')
+        window.location.href = '/'
+      })
     addsiteinformation()
   }
 
@@ -339,9 +324,6 @@ export default function User() {
   };
 
 
-
-
-
   const createData = (
     site_name,
     location,
@@ -360,28 +342,18 @@ export default function User() {
     };
   };
 
-
-
-
-
   const addSiteModal = () => setShow(true);
   const closeModal = () => setShow(false);
   const closeModal2 = () => setShow(false);
   const _onCreate = (e) => {
 
-
-
     console.log(e, "onCreate");
 
     const { layerType, layer } = e;
 
-
-
     if (layerType === "marker") {
       const { _leaflet_id } = layer;
       const { _latlng } = layer;
-
-
 
       setMapLayer((layer) => [...layer, { id: _leaflet_id, latlng: _latlng }]);
       pinlocation(_latlng)
@@ -409,57 +381,81 @@ export default function User() {
   };
 
   const getSites = () => {
-    axios.get(url).then((response) => {
-      const sites_info = response.data;
-      const { sites } = sites_info
-      setSites(sites)
-      var counter = 0;
-      if (sites.length !== 0) {
-        var length = site.length;
-        sites.forEach(element => {
-          database_siteName[counter] = (element.sitename);
-          database_location[counter] = (element.location);
-          database_longitude[counter] = (element.latitude);
-          database_latitude[counter] = (element.longitude);
-          database_sitemanager[counter] = (element.sitemanager);
-          database_paintarea[counter] = (element.paintarea);
+    axios
+      .get(url,
+        {
+          headers: {
+            'authorization': localStorage.getItem('Bearer')
+          }
+        }
+      )
+      .then((response) => {
+        const sites_info = response.data;
+        const { sites } = sites_info
+        setSites(sites)
+        var counter = 0;
+        if (sites.length !== 0) {
+          var length = site.length;
+          sites.forEach(element => {
+            database_siteName[counter] = (element.sitename);
+            database_location[counter] = (element.location);
+            database_longitude[counter] = (element.latitude);
+            database_latitude[counter] = (element.longitude);
+            database_sitemanager[counter] = (element.sitemanager);
+            database_paintarea[counter] = (element.paintarea);
 
-          counter++;
-
-
-
-
-
-        });
-
-
-      }
-
-
-    }).catch((err) => {
-      console.log(err, 'Api error')
-    })
+            counter++;
+          });
+        }
+      })
+      .catch(err => {
+        alert('Unauthorized! Please Login again', err.message)
+        localStorage.removeItem('Bearer')
+        window.location.href = '/'
+      })
   }
   const getSiteManagers = () => {
-    const users = axios.get('http://localhost:9000/api/v1/users/').then((response) => {
-      const user_info = response.data;
-      const { users } = user_info;
-      const sitemanagers = users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
-      const otherEmps = users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
-      setallEmployees(otherEmps);
-      console.log("management", sitemanagers)
-      setSiteManager(sitemanagers);
-    }).catch((err) => {
-      console.log(err);
-    })
+    const users = axios
+      .get('http://localhost:9000/api/v1/users/',
+        {
+          headers: {
+            'authorization': localStorage.getItem('Bearer')
+          }
+        }
+      )
+      .then((response) => {
+        const user_info = response.data;
+        const { users } = user_info;
+        const sitemanagers = users.filter(manager => manager.position === 'Site Manager' || manager.position === 'Project Manager');
+        const otherEmps = users.filter(manager => manager.position === 'Painter' || manager.position === 'PMP');
+        setallEmployees(otherEmps);
+        console.log("management", sitemanagers)
+        setSiteManager(sitemanagers);
+      })
+      .catch(err => {
+        alert('Unauthorized! Please Login again', err.message)
+        localStorage.removeItem('Bearer')
+        window.location.href = '/'
+      })
   }
-
-
 
   //delete-sites/
   const removeSite = (id) => {
     var site_id = id;
-    axios.delete('http://localhost:9000/api/v1/sites/delete-sites/' + id);
+    axios
+      .delete('http://localhost:9000/api/v1/sites/delete-sites/' + id,
+        {
+          headers: {
+            'authorization': localStorage.getItem('Bearer')
+          }
+        }
+      )
+      .catch(err => {
+        alert('Unauthorized! Please Login again', err.message)
+        localStorage.removeItem('Bearer')
+        window.location.href = '/'
+      })
+
     setSites(site.filter(sid => sid.id !== site_id));
     console.log("operation successfull");
   }
@@ -485,21 +481,46 @@ export default function User() {
       sitemanager: sitemanager,
       paintarea: Paint_Area
     }
-    axios.put('http://localhost:9000/api/v1/sites/update-sites/' + site_id, Site);
+
+    axios
+      .put('http://localhost:9000/api/v1/sites/update-sites/' + site_id, Site,
+        {
+          headers: {
+            'authorization': localStorage.getItem('Bearer')
+          }
+        }
+      )
+      .catch(err => {
+        alert('Unauthorized! Please Login again', err.message)
+        localStorage.removeItem('Bearer')
+        window.location.href = '/'
+      })
+
     handleCloseUpdatemodal();
 
   }
-  function assignSites() {
-    const Site = {
-      workingSite: siteChoice
+  // function assignSites() {
+  //   const Site = {
+  //     workingSite: siteChoice
+  //   }
 
-    }
-    axios.put('http://localhost:9000/api/v1/users/assign-sites/' + userID, Site);
+  //   axios
+  //     .put(
+  //       'http://localhost:9000/api/v1/users/assign-sites/' + userID, Site,
+  //       {
+  //         headers: {
+  //           'authorization': localStorage.getItem('Bearer')
+  //         }
+  //       }
+  //     )
+  //     .catch(err => {
+  //       alert('Unauthorized! Please Login again', err.message)
+  //       localStorage.removeItem('Bearer')
+  //       window.location.href = '/'
+  //     })
 
 
-  }
-
-
+  // }
 
   useEffect(() => {
     getSites();
@@ -512,11 +533,9 @@ export default function User() {
   }, [])
 
 
-
   const handleOpenUpdateModal = (id) => {
     setOpenUpdateModal(true);
   }
-
 
 
   return (
@@ -642,15 +661,13 @@ export default function User() {
                               class="btn btn-secondary"
                               style={{ float: "right", marginBottom: "2%" }}
                             >
-                              Cancel{" "}
-                            </button>
+                              Cancel
+                            </button>{" "}
                             <Button
                               color="primary"
                               onClick={addsiteinformation}
                               onClick={updateSites}
                               style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
-
-
                             >
 
                               Update{" "}
@@ -676,14 +693,9 @@ export default function User() {
             </Table>
           </TableContainer>
 
-
-
-
-
           <Modal show={showModal} onHide={closeModal}
           // style={{width: "750px" , margin: "auto"}}
           >
-
 
             <Modal.Header >
               <Modal.Title> Add Sites</Modal.Title>
@@ -733,8 +745,6 @@ export default function User() {
                         <option value={manager.name} key={manager.id}>{manager.name}</option>
                       ))}
 
-
-
                     </Input>
                   </InputGroup>
                 </Form.Group>
@@ -747,173 +757,13 @@ export default function User() {
                 </Form.Group>
                 <br />
 
-
-                {/* <Form.Group>
-                    <Accordion>
-                    <Accordion.Item eventKey="0">
-                        <Accordion.Header>Paint</Accordion.Header>
-                        <Accordion.Body>
-                        <div className="radio" >
-                          <label>
-                            <input
-                              type="radio"
-                              value="Manual"
-                              name="Paint"
-                              // checked={this.state.selectedOption === "Manual"}
-                              // onChange={this.onValueChange}
-                            />
-                              Ceiling
-                          </label>
-                          </div>
-                          <div className="radio">
-                            <label>
-                              <input
-                                type="radio"
-                                value="Manual"
-                                name="Paint"
-                                // checked={this.state.selectedOption === "Manual"}
-                                // onChange={this.onValueChange}
-                              />
-                                Wall
-                            </label>
-                          </div>
-                          <div className="radio">
-                            <label>
-                              <input
-                                type="radio"
-                                value="Manual"
-                                name="Paint"
-                                // checked={this.state.selectedOption === "Manual"}
-                                // onChange={this.onValueChange}
-                              />
-                                Beam
-                            </label>
-                          </div>
-                          <div className="radio">
-                            <label>
-                              <input
-                                type="radio"
-                                value="Manual"
-                                name="Paint"
-                                // checked={this.state.selectedOption === "Manual"}
-                                // onChange={this.onValueChange}
-                              />
-                                Column
-                            </label>
-                          </div>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <br/>
-                    <Accordion.Item eventKey="1">
-                        <Accordion.Header>Delivering Time</Accordion.Header>
-                        <Accordion.Body>
-                          <Form.Group>
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend">Starts:</InputGroupAddon>
-                                <p>
-                                <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} /> <br/>
-                                </p>
-                            </InputGroup>
-                            <InputGroup>
-                              <InputGroupAddon addonType="prepend">Ends:</InputGroupAddon>
-                                <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} /> <br/>
-                            </InputGroup>
-                          </Form.Group>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <br/>
-                      <Accordion.Item eventKey="2">
-                        <Accordion.Header>Sanding Material</Accordion.Header>
-                        <Accordion.Body>
-                          <div className="radio">
-                            <label>
-                              <input
-                                type="radio"
-                                value="Manual"
-                                name="Sanding-Options"
-                                // checked={this.state.selectedOption === "Manual"}
-                                // onChange={this.onValueChange}
-                              />
-                                Manual
-                            </label>
-                          </div>
-                          <div className="radio">
-                            <label>
-                              <input
-                                type="radio"
-                                value="Sanding Machine"
-                                name="Sanding-Options"
-                                // checked={this.state.selectedOption === "Sanding Machine"}
-                                // onChange={this.onValueChange}
-                              />
-                                Sanding Machine
-                            </label>
-                          </div>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                      <br/>
-                      <Accordion.Item eventKey="3">
-                        <Accordion.Header>Painting Material</Accordion.Header>
-                        <Accordion.Body>
-                          <div className="radio">
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="Manual"
-                                  name="Painting Materials"
-                                  // checked={this.state.selectedOption === "Manual"}
-                                  // onChange={this.onValueChange}
-                                />
-                                  Spray Machine
-                              </label>
-                            </div>
-                            <div className="radio">
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="Sanding Machine"
-                                  name="Painting Materials"
-                                  // checked={this.state.selectedOption === "Sanding Machine"}
-                                  // onChange={this.onValueChange}
-                                />
-                                  Tool Box
-                              </label>
-                            </div>
-                            <div className="radio">
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="Sanding Machine"
-                                  name="Painting Materials"
-                                  // checked={this.state.selectedOption === "Sanding Machine"}
-                                  // onChange={this.onValueChange}
-                                />
-                                  Jet Roller
-                              </label>
-                            </div>
-                            <div className="radio">
-                              <label>
-                                <input
-                                  type="radio"
-                                  value="Sanding Machine"
-                                  name="Painting Materials"
-                                  // checked={this.state.selectedOption === "Sanding Machine"}
-                                  // onChange={this.onValueChange}
-                                />
-                                  Same Accessories
-                              </label>
-                            </div>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </Accordion>
-                  </Form.Group> */}
                 <Modal show={showModal2} fullscreen={fullscreen} onHide={closeModal2}>
                   <Modal.Header >
                     <Modal.Title> Pin on Map</Modal.Title>
                   </Modal.Header>
                   <Modal.Body >
                     <Map
-                      center={[8.980603, 38.757759]}
+                      center={[8.980336155918469, 38.75667572021485]}
                       zoom={12}
                       scrollWheelZoom={true}
                       className="mapContainer"
@@ -963,20 +813,6 @@ export default function User() {
                 </Modal>
 
 
-
-
-                {/* 
-                  <Form.Group>
-                  <InputGroup>
-                  <InputGroupAddon addonType="prepend">Sanding Material:</InputGroupAddon>
-                  </InputGroup>
-                  </Form.Group>
-                  <Form.Group>
-                  <InputGroup>
-                  <InputGroupAddon addonType="prepend">Painting Material:</InputGroupAddon>
-                  </InputGroup>
-                  </Form.Group> */}
-
                 <button
                   class="btn btn-secondary"
                   onClick={closeModal}
@@ -993,58 +829,13 @@ export default function User() {
                   Save{" "}
                 </Button>
 
-
-
-
-
-
               </Form>
-
-
 
             </Modal.Body>
           </Modal>
         </TabPane>
-        {/* <TabPane tab="Map" key="2">
-          <div style={{ height: "82vh", width: "100%" }}>
-            <Map
-              center={[8.980603, 38.757759]}
-              zoom={12}
-              scrollWheelZoom={false}
-              className="mapContainer"
-            >
-              <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={[8.980603, 38.757759]} icon={GetIcon(30)}>
-                <Popup>
-                  <p>Akile Main-Office</p>
-                  <FeatureGroup>
-                    <EditControl
-                      position="topright"
-                      onEdited={_onEditPath}
-                      onCreated={_onCreate}
-                      onDeleted={_onDeleted}
-                      draw={{
-                        rectangle: false,
-                        circle: false,
-                        polyline: false,
-                        polygone: false,
-                      }}
-                    />
-                    <Circle center={[51.51, -0.06]} radius={200} />
-                  </FeatureGroup>
-                </Popup>
-              </Marker>
-            </Map>
-            <pre>{JSON.stringify(mapLayers, 0, 2)}</pre>
-          </div>
-        </TabPane> */}
+       
         <TabPane tab="Assign Site" key="3">
-          {/* <div style={{ width: "100%" }}>
-            <Users mapData={mapLayers} />
-          </div> */}
           <TableContainer component={Paper}>
             <Table aria-label="customized table">
               <TableHead>
@@ -1078,7 +869,6 @@ export default function User() {
                       >
                         Assign
                       </button>
-
 
                     </StyledTableCell>
 

@@ -81,13 +81,22 @@ export default class Dashboard extends Component {
       .catch(() => {
         console.log("Error");
       });
-    axios.get(base_url + '/users/')
+
+    axios
+      .get(
+        base_url + '/users/',
+        {
+          headers: {
+            'authorization': localStorage.getItem('Bearer')
+          }
+        }
+      )
       .then((response) => {
         const users_info = response.data
         this.setState({ users: users_info });
       })
       .catch(() => {
-        console.log("Error");
+        alert("Error");
       });
   }
 

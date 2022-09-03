@@ -1,8 +1,7 @@
 import { useState } from 'react';
-
 import React from 'react';
 import img from './akil.jpg';
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -24,29 +23,37 @@ function Login() {
   const [staffId, setStaffId] = useState('')
   const [password, setPassword] = useState('')
 
-
   async function submitLogin(event) {
     event.preventDefault()
 
-    const response = await fetch(base_url + '/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        staffId,
-        password,
-      }),
-    })
+    try {
+      const response = await fetch(
+        base_url + `/signin`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            staffId,
+            password
+          })
+        }
+      )
 
-    const data = await response.json()
+      const data = await response.json()
 
-    if (data.user) {
-      localStorage.setItem('token', data.user)
-      alert('Login successful')
-      window.location.href = '/dashboard'
-    } else {
-      alert('Please check your username and/or password')
+      if (data.staffId) {
+        localStorage.setItem('Bearer', 'Bearer ' + data.accessToken)
+        alert('Login successful')
+        window.location.href = '/#/dashboard'
+      } else {
+        alert('Incorrect Staffid or Password')
+      }
+    }
+    catch (err) {
+      console.log(err);
+      throw err;
     }
   }
 
@@ -81,13 +88,11 @@ function Login() {
                       </CInputGroupPrepend>
                       <input
                         className='form-control'
-                        type="text"
+                        type='text'
                         autoComplete='off'
-
                         placeholder="StaffId"
-                        onChange={(e) => setStaffId(e.target.value)}
+                        onChange={(e) => setStaffId(e.target.value.toUpperCase())}
                         value={staffId}
-
                         required />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
@@ -131,6 +136,5 @@ function Login() {
     </div>
   )
 }
-
 
 export default Login
