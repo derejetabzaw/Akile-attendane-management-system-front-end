@@ -5,17 +5,17 @@ import React, { Component } from "react";
 // import "./landing.css";
 import axios from 'axios';
 //import ReactDOM from "react-dom";
+import Calendar from "react-calendar";
 
-
-// import {
+import { Button } from "@coreui/coreui";
 //   Button,
 //   InputGroup,
 //   InputGroupAddon,
 //   InputGroupText,
-//   Modal,
-//   ModalHeader,
-//   ModalBody,
-//   ModalFooter,
+import Modal from "antd/lib/modal/Modal";
+import ModalHeader from "react-bootstrap/esm/ModalHeader";
+import { ModalBody } from "react-bootstrap";
+import { ModalFooter } from "react-bootstrap";
 //   Form,
 //   FormGroup,
 //   Label,
@@ -170,8 +170,40 @@ export default class Dashboard extends Component {
     }))(TableRow);
 
     
+
     return (
       <>
+       {/* <Button 
+        color="primary" 
+        onClick={this.toggleModal} 
+        style={{float:"right", marginBottom: '2%'}}
+        >
+          Show by Date
+          </Button> {" "} */}
+
+         <Modal
+          isOpen={this.state.showModal}
+          modalTransition={{ timeout: 200 }}
+          backdropTransition={{ timeout: 100 }}
+          style={{ width: "50%" }}
+          toggle={this.toggleModal}
+        >
+          <ModalHeader>Select a Date</ModalHeader>
+
+          <Calendar/>
+
+            <ModalFooter>
+            <Button color="primary" onClick={this.handleNameSubmit}>
+              Show
+            </Button>{" "}
+
+            <Button color="secondary" onClick={this.cancelItem_onClick}>
+              Cancel
+            </Button>{" "}
+
+          </ModalFooter>
+        </Modal> 
+
         <div style={{ marginTop: "2%" }}></div>
         <TableContainer component={Paper}>
           <Table aria-label="customized table">

@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import axios from 'axios';
+import Calendar from 'react-calendar';
 
 const base_url = 'http://localhost:9000/api/v1';
 
@@ -260,7 +261,6 @@ class Typography extends React.Component {
 
 
 
-
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
       // var attendance_length = this.state.attendance.attendances.length
       var user_length = this.state.users.users.length
@@ -316,6 +316,7 @@ class Typography extends React.Component {
       salaryAdvance = e.target.value
 
     }
+    
     const calculateNetPay = (name, basic_salaries, commission, allowance, salaryAdvance) => {
 
       let nsal = parseFloat(basic_salaries) + parseFloat(commission) + parseFloat(allowance) + parseFloat(salaryAdvance);
@@ -325,6 +326,7 @@ class Typography extends React.Component {
       localStorage.setItem("netSalary", JSON.stringify(this.state.Netsalary));//consider this for changes on the database, add a column for netsalary
       window.location.reload();
     }
+   
     const Displaytable = React.memo(props => {
       return (
 
@@ -345,6 +347,8 @@ class Typography extends React.Component {
                     <StyledTableCell>Transport Allowance</StyledTableCell>
                     <StyledTableCell>OT1(Night)</StyledTableCell>
                     <StyledTableCell>OT2(Weekend)</StyledTableCell>
+                    <StyledTableCell>Time</StyledTableCell>
+                    <StyledTableCell>Date</StyledTableCell>
                     <StyledTableCell>Comission</StyledTableCell>
                     <StyledTableCell>Total Salary</StyledTableCell>
                     <StyledTableCell>Salary Advance</StyledTableCell>
@@ -356,26 +360,33 @@ class Typography extends React.Component {
                 </TableHead>
                 <TableBody>
                   {namerows.map((krow, idx) => (
+                      <td>
+                        <input>
+                         name = "name"
+                         
 
-                    <StyledTableRow krow={krow} key={krow.rowcount}>
-                      <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.Id[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.Position[idx]}</StyledTableCell>
-                      <StyledTableCell>30</StyledTableCell>
-                      <StyledTableCell>{krows.BSalary[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" onChange={getTPAllowance} /></StyledTableCell>
-                      <StyledTableCell>{krows.DSalary[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.TransportAllowance[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" onChange={getCommission} /></StyledTableCell>
-                      <StyledTableCell>{krows.timeWeekend[idx]}</StyledTableCell>
-                      <StyledTableCell><Form.Control type="text" onChange={getSalaryAdvance} /></StyledTableCell>
-                      <StyledTableCell align="right">{this.state.Netsalary[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.TSalary[idx]}</StyledTableCell>
-                      <StyledTableCell>{krows.SalaryAdvance[idx]}</StyledTableCell>
-                      <StyledTableCell align="right"><Button variant="primary" onClick={() => { calculateNetPay(krows.name[idx], this.state.basic_salaries[idx], commission, allowance, salaryAdvance) }}>calculate</Button></StyledTableCell>
-                      {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
-                    </StyledTableRow>
+                        </input>
+                      </td> 
+               
+              //       <StyledTableRow krow={krow} key={krow.rowcount}>
+              //         <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
+              //         <StyledTableCell>{krows.Id[idx]}</StyledTableCell>
+              //         <StyledTableCell>{krows.Position[idx]}</StyledTableCell>
+              //         <StyledTableCell>30</StyledTableCell>
+              //         <StyledTableCell>{krows.BSalary[idx]}</StyledTableCell>
+              //         <StyledTableCell><Form.Control type="text" onChange={getTPAllowance} /></StyledTableCell>
+              //         <StyledTableCell>{krows.DSalary[idx]}</StyledTableCell>
+              //         <StyledTableCell>{krows.TransportAllowance[idx]}</StyledTableCell>
+              //         <StyledTableCell><Form.Control type="text" onChange={getCommission} /></StyledTableCell>
+              //         <StyledTableCell>{krows.timeWeekend[idx]}</StyledTableCell>
+              //         <StyledTableCell><Form.Control type="text" onChange={getSalaryAdvance} /></StyledTableCell>
+              //         <StyledTableCell align="right">{this.state.Netsalary[idx]}</StyledTableCell>
+              //         <StyledTableCell>{krows.TSalary[idx]}</StyledTableCell>
+              //         <StyledTableCell>{krows.SalaryAdvance[idx]}</StyledTableCell>
+              //         <StyledTableCell align="right"><Button variant="primary" onClick={() => { calculateNetPay(krows.name[idx], this.state.basic_salaries[idx], commission, allowance, salaryAdvance) }}>calculate</Button></StyledTableCell>
+              //         {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+              // <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
+              //       </StyledTableRow>
                   ))}
                 </TableBody>
               </Table>
