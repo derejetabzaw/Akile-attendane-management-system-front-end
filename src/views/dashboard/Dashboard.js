@@ -256,12 +256,13 @@ export default class Dashboard extends Component {
       });
 
     this.refreshPage()
-
-    // this.setState(event => {
-    //   return { 
-    //     showModal2: !this.state.showModal2,
-    //     }
-    // });
+   
+    //this makes the update work
+    this.setState(event => {
+      return { 
+        showModal2: !this.state.showModal2,
+        }
+    });
   }
   //delete-users/
   handleRemoveUser = (id) => {
@@ -279,6 +280,13 @@ export default class Dashboard extends Component {
       });
 
     this.refreshPage()
+
+    // this makes the remove work
+    this.setState(event => {
+      return { 
+        showModal2: !this.state.showModal2,
+        }
+    });
   }
   
   handleItemChanged(i, event) {
@@ -333,7 +341,7 @@ export default class Dashboard extends Component {
       Email,
     };
   };
-
+  
   toggleModal = () => {
     this.setState({
       showModal: !this.state.showModal,
@@ -646,12 +654,12 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row" >
                     <Button color="secondary" onClick={() => {
-                      this.state.id = this.state.database_id[idx]
-                      this.state.place_holder_salary = jrows.Salary[idx]
-                      this.state.place_holder_email = jrows.Email[idx]
-                      this.state.place_holder_device = jrows.DeviceID[idx]
-                      this.state.place_holder_telephone = jrows.Telephone[idx]
-                      this.state.place_holder_position = jrows.Position[idx]
+                     this.state.id = this.state.database_id[idx]
+                     this.state.place_holder_salary = jrows.Salary[idx]
+                     this.state.place_holder_email = jrows.Email[idx]
+                     this.state.place_holder_device = jrows.DeviceID[idx]
+                     this.state.place_holder_telephone = jrows.Telephone[idx]
+                     this.state.place_holder_position = jrows.Position[idx]
 
                       this.toggleUpdate()
                     }}>
@@ -680,9 +688,8 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Email[idx]}</StyledTableCell>
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => { this.handleRemoveUser(krows.StaffID[idx]) }}>
-                      Remove
-                    </Button>{" "}
+                    
+                    <Button color="secondary" onClick={this.handleRemoveUser(krows.StaffID[idx])}>Remove</Button>
                   </StyledTableCell>
                 </StyledTableRow>
 
