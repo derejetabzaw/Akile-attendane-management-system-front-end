@@ -5,8 +5,11 @@ import { Card, Row, Col, Carousel } from "antd";
 // import "./landing.css";
 import axios from 'axios';
 import ReactDOM from "react-dom";
-
-
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css'
+import "./Calendar.css"; 
+// import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import DatePicker from 'react-modern-calendar-datepicker'; 
 import {
   Button,
   InputGroup,
@@ -30,11 +33,14 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { Date } from "core-js";
 
 const { Meta } = Card;
 // const [state, setState] = useState({data: []});
 
 const base_url = 'http://localhost:9000/api/v1';
+
+
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -71,6 +77,18 @@ export default class Dashboard extends Component {
   componentDidMount = () => {
     this.getmongodb();
   };
+
+  cancelItem_onClick = () => {
+    this.setState({
+      showModal: false,
+      showModal2: false,
+      temp: this.refreshPage()
+    });
+  };
+
+  refreshPage() {
+    window.location.reload();
+  }
 
   getmongodb = () => {
     axios.get(base_url + '/attendance/')
@@ -110,7 +128,20 @@ export default class Dashboard extends Component {
   //   if (!posts.length) return null; 
   //   return console.log("Incoming Data")
   // }; 
+// const ReactCalandar = () => {
+//   const [date, setDate] = useState(new Date());
 
+//   const onChange = date => {
+//      setDate(date);
+//   };
+//   return(
+//     <div>
+//       <Calendar onChange={onChange} value={date} />
+//     </div>
+//   );
+
+// };
+// render(<ReactCalandar/>, document.querySelector("#root"))
 
   render() {
 
@@ -201,10 +232,48 @@ export default class Dashboard extends Component {
       },
     }))(TableRow);
 
+    // const App = () => {
+    //   const [selectedDay, setSelectedDay] = useState(null);
+    // }
+
     return (
       <>
-        {/* <Button color="primary" onClick={this.toggleModal} style={{float:"right", marginBottom: '2%'}}>Add </Button> */}
+      
+        <Button 
+        color="primary" 
+        onClick={this.toggleModal} 
+        style={{float:"right", marginBottom: '2%'}}
+        >
+          Show by Date
+          </Button> {" "}
+
+          <Modal
+          isOpen={this.state.showModal}
+          modalTransition={{ timeout: 200 }}
+          backdropTransition={{ timeout: 100 }}
+          style={{ width: "50%" }}
+          toggle={this.toggleModal}
+        >
+          <ModalHeader>Select a Date</ModalHeader>
+          
+          <Calendar
+          />
+          
+  
+            <ModalFooter>
+            <Button color="primary" onClick={this.handleNameSubmit}>
+              Show
+            </Button>{" "}
+
+            <Button color="secondary" onClick={this.cancelItem_onClick}>
+              Cancel
+            </Button>{" "}
+
+          </ModalFooter>
+        </Modal>
+
         <div style={{ marginTop: "2%" }}></div>
+        {/* <Button color="primary" style={{float: 'inherit',marginBottom: '2%'}} >View Calandar</Button>  */}
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
             <TableHead>
@@ -254,5 +323,4 @@ export default class Dashboard extends Component {
       </>
     );
   }
-}
-
+  }
