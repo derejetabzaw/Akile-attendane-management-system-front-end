@@ -189,6 +189,7 @@ export default class Dashboard extends Component {
       deviceId: this.state.deviceid
 
     };
+    console.log("userrrrr" ,user)
 
     axios
       .post(base_url + '/users/signup', user)
@@ -201,7 +202,7 @@ export default class Dashboard extends Component {
         console.error("The Error:", err);
       });
 
-    this.refreshPage()
+    // this.refreshPage()
 
     this.setState(event => {
       return {
@@ -386,11 +387,12 @@ export default class Dashboard extends Component {
           }
         }
       })
-      .catch(err => {
-        alert('Unauthorized! Please Login again', err.message)
-        localStorage.removeItem('Bearer')
-        window.location.href = '/'
-      })
+      //Auth for Dashboard
+      // .catch(err => {
+      //   alert('Unauthorized! Please Login again', err.message)
+      //   localStorage.removeItem('Bearer')
+      //   window.location.href = '/'
+      // })
   }
 
   UNSAFE_componentWillMount() {

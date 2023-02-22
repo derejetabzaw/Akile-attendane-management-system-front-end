@@ -151,7 +151,7 @@ export default function User() {
   //     const user_info = response.data;
   //     const {users} = user_info
   //     console.log(user_info)
-  //     setStaffNames(users)
+  //     // setStaffNames(users)
   //   })
   // }
 
@@ -286,11 +286,11 @@ export default function User() {
       )
       .then(() =>
         console.log('Site Created', Site))
-      .catch(err => {
-        alert('Unauthorized! Please Login again', err.message)
-        localStorage.removeItem('Bearer')
-        window.location.href = '/'
-      })
+      // .catch(err => {
+      //   alert('Unauthorized! Please Login again', err.message)
+      //   localStorage.removeItem('Bearer')
+      //   window.location.href = '/'
+      // })
     addsiteinformation()
   }
 
@@ -408,11 +408,11 @@ export default function User() {
           });
         }
       })
-      .catch(err => {
-        alert('Unauthorized! Please Login again', err.message)
-        localStorage.removeItem('Bearer')
-        window.location.href = '/'
-      })
+      // .catch(err => {
+      //   alert('Unauthorized! Please Login again', err.message)
+      //   localStorage.removeItem('Bearer')
+      //   window.location.href = '/'
+      // })
   }
   const getSiteManagers = () => {
     const users = axios
@@ -432,11 +432,11 @@ export default function User() {
         console.log("management", sitemanagers)
         setSiteManager(sitemanagers);
       })
-      .catch(err => {
-        alert('Unauthorized! Please Login again', err.message)
-        localStorage.removeItem('Bearer')
-        window.location.href = '/'
-      })
+      // .catch(err => {
+      //   alert('Unauthorized! Please Login again', err.message)
+      //   localStorage.removeItem('Bearer')
+      //   window.location.href = '/'
+      // })
   }
 
   //delete-sites/
@@ -450,11 +450,11 @@ export default function User() {
           }
         }
       )
-      .catch(err => {
-        alert('Unauthorized! Please Login again', err.message)
-        localStorage.removeItem('Bearer')
-        window.location.href = '/'
-      })
+      // .catch(err => {
+      //   alert('Unauthorized! Please Login again', err.message)
+      //   localStorage.removeItem('Bearer')
+      //   window.location.href = '/'
+      // })
 
     setSites(site.filter(sid => sid.id !== site_id));
     console.log("operation successfull");
@@ -490,11 +490,11 @@ export default function User() {
           }
         }
       )
-      .catch(err => {
-        alert('Unauthorized! Please Login again', err.message)
-        localStorage.removeItem('Bearer')
-        window.location.href = '/'
-      })
+      // .catch(err => {
+      //   alert('Unauthorized! Please Login again', err.message)
+      //   localStorage.removeItem('Bearer')
+      //   window.location.href = '/'
+      // })
 
     handleCloseUpdatemodal();
 
