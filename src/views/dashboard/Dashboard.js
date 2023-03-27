@@ -30,10 +30,13 @@ export default class Dashboard extends Component {
       showModal2: false,
       showModal: false,
       name: '',
+      lastName: '',
+      firstName: '',
       count: 0,
       users: [],
       items: [],
       positions: [],
+      lastNames:[],
       genders: [],
       deviceids: [],
       staffids: [],
@@ -48,6 +51,7 @@ export default class Dashboard extends Component {
       position: '',
       database_id: [],
       database_name: [],
+      database_lastName: [],
       database_position: [],
       database_gender: [],
       database_deviceid: [],
@@ -84,6 +88,12 @@ export default class Dashboard extends Component {
       names: event.target.value
     });
 
+  }
+
+  handleLastNameChange = (event)=>{
+    this.setState({
+      lastName: event.target.value
+    })
   }
 
   handlePositionchange = (event) => {
@@ -163,6 +173,7 @@ export default class Dashboard extends Component {
     var telephones = this.state.telephones;
     var emails = this.state.emails;
     var passwords = this.state.passwords;
+    var lastNames = this.state.lastNames;
 
     items.push(this.state.names);
     positions.push(this.state.position);
@@ -172,10 +183,12 @@ export default class Dashboard extends Component {
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
     passwords.push(this.state.password);
+    lastNames.push(this.state.lastName);
 
     const user = {
       _id: "",
       name: this.state.names,
+      lastName: this.state.lastName,
       staffId: "AK-" + this.state.vals,
       password: this.state.password,
       position: this.state.position,
@@ -323,6 +336,7 @@ export default class Dashboard extends Component {
 
   createData = (
     name,
+    lastName,
     Position,
     Gender,
     DeviceID,
@@ -333,6 +347,7 @@ export default class Dashboard extends Component {
   ) => {
     return {
       name,
+      lastName,
       Position,
       Gender,
       DeviceID,
@@ -385,6 +400,7 @@ export default class Dashboard extends Component {
           for (var j = 0; j < user_length; j++) {
             this.state.database_id.push(this.state.users.users.at(j)._id);
             this.state.database_name.push(this.state.users.users.at(j).name);
+            this.state.database_lastName.push(this.state.users.users.at(j).lastName);
             this.state.database_position.push(this.state.users.users.at(j).position);
             this.state.database_gender.push(this.state.users.users.at(j).gender);
             this.state.database_deviceid.push(this.state.users.users.at(j).deviceId);
@@ -406,6 +422,7 @@ export default class Dashboard extends Component {
   UNSAFE_componentWillMount() {
     this.getmongodb();
   }
+  
 
   refreshPage() {
     window.location.reload();
@@ -422,6 +439,7 @@ export default class Dashboard extends Component {
     var database_namerows = this.state.database_name;
     var krows = this.createData(
       this.state.items,
+      this.state.lastName,
       this.state.positions,
       this.state.genders,
       this.state.deviceids,
@@ -432,6 +450,7 @@ export default class Dashboard extends Component {
 
     var jrows = this.createData(
       this.state.database_name,
+      this.state.database_lastName,
       this.state.database_position,
       this.state.database_gender,
       this.state.database_deviceid,
@@ -498,8 +517,15 @@ export default class Dashboard extends Component {
             <Form>
               <FormGroup>
                 <InputGroup>
-                  <InputGroupAddon addonType="prepend">Name</InputGroupAddon>
-                  <Input onChange={this.handleNameChange} placeholder="Name of Employee" />
+                  <InputGroupAddon addonType="prepend">First Name</InputGroupAddon>
+                  <Input onChange={this.handleNameChange} placeholder="First name of Employee" />
+                </InputGroup>
+              </FormGroup>
+              
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">Last Name</InputGroupAddon>
+                  <Input onChange={this.handleLastNameChange} placeholder="Last name of Employee" />
                 </InputGroup>
               </FormGroup>
 
@@ -622,7 +648,8 @@ export default class Dashboard extends Component {
           <Table aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell>First Name</StyledTableCell>
+                <StyledTableCell>Last Name</StyledTableCell>
                 <StyledTableCell>Position</StyledTableCell>
                 <StyledTableCell>Gender</StyledTableCell>
                 <StyledTableCell>DeviceID</StyledTableCell>
@@ -647,6 +674,7 @@ export default class Dashboard extends Component {
                 <StyledTableRow krow={krow} key={krow.rowcount}>
 
                   <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.lastName[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.DeviceID[idx]}</StyledTableCell>
@@ -682,6 +710,7 @@ export default class Dashboard extends Component {
               {namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{krows.lastName[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.DeviceID[idx]}</StyledTableCell>
