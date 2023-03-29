@@ -1,27 +1,10 @@
 import React, { Component } from "react";
-
-//import Slider from "react-slick";
-// import { Card } from "antd";
-// import "./landing.css";
 import axios from 'axios';
-//import ReactDOM from "react-dom";
 import Calendar from "react-calendar";
-
 import { Button } from "@coreui/coreui";
-//   Button,
-//   InputGroup,
-//   InputGroupAddon,
-//   InputGroupText,
 import Modal from "antd/lib/modal/Modal";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { ModalBody } from "react-bootstrap";
 import { ModalFooter } from "react-bootstrap";
-//   Form,
-//   FormGroup,
-//   Label,
-//   Input,
-//   FormText,
-// } from "reactstrap";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -34,7 +17,7 @@ import Paper from "@material-ui/core/Paper";
 // const { Meta } = Card;
 // const [state, setState] = useState({data: []});
 
-const base_url = 'http://localhost:9000/api/v1' ;
+const base_url = 'http://localhost:9000/api/v1';
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -66,31 +49,37 @@ export default class Dashboard extends Component {
     });
   };
 
-  componentDidMount = () =>{
+  componentDidMount = () => {
     this.getmongodb();
   };
 
   getmongodb = () => {
-    axios.get(base_url + '/attendance/')
+    axios.get(base_url + '/attendance/',
+      {
+        headers: {
+          'authorization': localStorage.getItem('Bearer')
+        }
+      }
+    )
       .then((response) => {
         const attendance_info = response.data
-        this.setState({attendance:attendance_info});
+        this.setState({ attendance: attendance_info });
       })
       .catch(() => {
         console.log("Error");
       });
-      
-      axios.get(
-        base_url + '/users/',
-        {
-          headers: {
-            'authorization': localStorage.getItem('Bearer')
-          }
+
+    axios.get(
+      base_url + '/users/',
+      {
+        headers: {
+          'authorization': localStorage.getItem('Bearer')
         }
-      )
+      }
+    )
       .then((response) => {
         const users_info = response.data
-        this.setState({users:users_info});
+        this.setState({ users: users_info });
       })
       .catch(() => {
         alert("Error");
@@ -98,25 +87,25 @@ export default class Dashboard extends Component {
   }
 
   render() {
-    
-    const getCurrentDate = () =>{
-      const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-      const d = new Date();
-      let day = weekday[d.getDay()];
+
+    const getCurrentDate = () => {
+      // const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      // const d = new Date();
+      // let day = weekday[d.getDay()];
       var date = ("0" + new Date().getDate()).slice(-2)
       var month = ("0" + (new Date().getMonth() + 1)).slice(-2)
 
       var year = new Date().getFullYear();
       // return day + ',' + ' '+  date + '-' + month + '-' + year;
-      return year + '-'  + month + '-' + date;
+      return year + '-' + month + '-' + date;
 
     }
 
 
 
-    
+
     var today = getCurrentDate();
-    
+
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
       var attendance_length = this.state.attendance.attendances.length
       var user_length = this.state.users.users.length
@@ -125,16 +114,25 @@ export default class Dashboard extends Component {
       // console.log("fromattendace",this.state.attendance.attendances.at(-1).date)
       // console.log(today==this.state.attendance.attendances.at(-1).date)
 
+      this.state.clockins = []
+      this.state.clockouts = []
+      this.state.dates = []
+      this.state.names = []
+      this.state.staffids = []
+      this.state.locations = []
+      this.state.numofcheckins = []
+      this.state.total = []
+
       for (var j = 0; j < user_length; j++) {
         for (var i = 0; i < attendance_length; i++) {
-          if (today===this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id && this.state.attendance.attendances.at(i).numberOfCheckIn === 3 ){
+          if (today === this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id && this.state.attendance.attendances.at(i).numberOfCheckIn === 3) {
             //console.log(this.state.attendance.attendances.at(i).checkInTime)
             //console.log("CHECKS", this.state.attendance.attendances.at(i).numberOfCheckIn)
-            
-            if (this.state.attendance.attendances.at(i).checkOutTime === '' ) {
-              
+
+            if (this.state.attendance.attendances.at(i).checkOutTime === '') {
+
             }
-            else{
+            else {
               this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
               this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
               this.state.dates.push(this.state.attendance.attendances.at(-1).date);
@@ -144,14 +142,14 @@ export default class Dashboard extends Component {
               this.state.numofcheckins.push(this.state.attendance.attendances.at(i).numberOfCheckIn);
               this.state.total.push(this.state.attendance.attendances.at(i).workedHours)
             }
+          }
         }
       }
+
     }
 
-  }
-
     var namerows = this.state.names;
-    var krows = this.createData(this.state.names,this.state.staffids,this.state.clockins,this.state.clockouts,this.state.locations,this.state.dates,this.state.total, this.state.numofcheckins);
+    var krows = this.createData(this.state.names, this.state.staffids, this.state.clockins, this.state.clockouts, this.state.locations, this.state.dates, this.state.total, this.state.numofcheckins);
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -169,11 +167,11 @@ export default class Dashboard extends Component {
       },
     }))(TableRow);
 
-    
+
 
     return (
       <>
-       {/* <Button 
+        {/* <Button 
         color="primary" 
         onClick={this.toggleModal} 
         style={{float:"right", marginBottom: '2%'}}
@@ -181,7 +179,7 @@ export default class Dashboard extends Component {
           Show by Date
           </Button> {" "} */}
 
-         <Modal
+        <Modal
           isOpen={this.state.showModal}
           modalTransition={{ timeout: 200 }}
           backdropTransition={{ timeout: 100 }}
@@ -190,9 +188,9 @@ export default class Dashboard extends Component {
         >
           <ModalHeader>Select a Date</ModalHeader>
 
-          <Calendar/>
+          <Calendar />
 
-            <ModalFooter>
+          <ModalFooter>
             <Button color="primary" onClick={this.handleNameSubmit}>
               Show
             </Button>{" "}
@@ -202,7 +200,7 @@ export default class Dashboard extends Component {
             </Button>{" "}
 
           </ModalFooter>
-        </Modal> 
+        </Modal>
 
         <div style={{ marginTop: "2%" }}></div>
         <TableContainer component={Paper}>
@@ -217,8 +215,8 @@ export default class Dashboard extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              
-              {namerows.map((krow,idx) => ( 
+
+              {namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
@@ -232,6 +230,6 @@ export default class Dashboard extends Component {
         </TableContainer>
       </>
     );
-  }  
+  }
 }
 
