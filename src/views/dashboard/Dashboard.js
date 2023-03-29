@@ -393,6 +393,15 @@ export default class Dashboard extends Component {
         this.setState({ users: users_info });
 
         if (this.state.users.length !== 0) {
+          this.state.database_id = []
+          this.state.database_name = []
+          this.state.database_lastName = []
+          this.state.database_position = []
+          this.state.database_gender = []
+          this.state.database_staffid = []
+          this.state.database_salary = []
+          this.state.database_telephone = []
+          this.state.database_email = []
           var user_length = this.state.users.users.length
           for (var j = 0; j < user_length; j++) {
             this.state.database_id.push(this.state.users.users.at(j)._id);
