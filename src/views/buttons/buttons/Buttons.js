@@ -1,31 +1,21 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component } from "react";
 
-import Slider from "react-slick";
-import { Card, Row, Col, Carousel } from "antd";
+import { Card } from "antd";
 // import "./landing.css";
 import axios from 'axios';
 import ReactDOM from "react-dom";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'
-import "./Calendar.css"; 
+import "./Calendar.css";
 // import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import DatePicker from 'react-modern-calendar-datepicker'; 
+import DatePicker from 'react-modern-calendar-datepicker';
 import {
   Button,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Modal,
   ModalHeader,
-  ModalBody,
   ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
 } from "reactstrap";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -35,7 +25,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { Date } from "core-js";
 
-const { Meta } = Card;
+// const { Meta } = Card;
 // const [state, setState] = useState({data: []});
 
 const base_url = 'http://localhost:9000/api/v1';
@@ -91,7 +81,13 @@ export default class Dashboard extends Component {
   }
 
   getmongodb = () => {
-    axios.get(base_url + '/attendance/')
+    axios.get(base_url + '/attendance/',
+      {
+        headers: {
+          'authorization': localStorage.getItem('Bearer')
+        }
+      }
+    )
       .then((response) => {
         const attendance_info = response.data
         this.setState({ attendance: attendance_info });
@@ -128,20 +124,20 @@ export default class Dashboard extends Component {
   //   if (!posts.length) return null; 
   //   return console.log("Incoming Data")
   // }; 
-// const ReactCalandar = () => {
-//   const [date, setDate] = useState(new Date());
+  // const ReactCalandar = () => {
+  //   const [date, setDate] = useState(new Date());
 
-//   const onChange = date => {
-//      setDate(date);
-//   };
-//   return(
-//     <div>
-//       <Calendar onChange={onChange} value={date} />
-//     </div>
-//   );
+  //   const onChange = date => {
+  //      setDate(date);
+  //   };
+  //   return(
+  //     <div>
+  //       <Calendar onChange={onChange} value={date} />
+  //     </div>
+  //   );
 
-// };
-// render(<ReactCalandar/>, document.querySelector("#root"))
+  // };
+  // render(<ReactCalandar/>, document.querySelector("#root"))
 
   render() {
 
@@ -158,9 +154,9 @@ export default class Dashboard extends Component {
     ];
 
     const getCurrentDate = () => {
-      const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      const d = new Date();
-      let day = weekday[d.getDay()];
+      // const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      // const d = new Date();
+      // let day = weekday[d.getDay()];
       var date = ("0" + new Date().getDate()).slice(-2)
       var month = ("0" + (new Date().getMonth() + 1)).slice(-2)
 
@@ -182,6 +178,14 @@ export default class Dashboard extends Component {
       // console.log("today:",today)
       // console.log("fromattendace",this.state.attendance.attendances.at(-1).date)
       // console.log(today==this.state.attendance.attendances.at(-1).date)
+
+      this.state.clockins = []
+      this.state.clockouts = []
+      this.state.dates = []
+      this.state.names = []
+      this.state.staffids = []
+      this.state.locations = []
+      this.state.total = []
 
       for (var j = 0; j < user_length; j++) {
         for (var i = 0; i < attendance_length; i++) {
@@ -238,16 +242,16 @@ export default class Dashboard extends Component {
 
     return (
       <>
-      
-        <Button 
-        color="primary" 
-        onClick={this.toggleModal} 
-        style={{float:"right", marginBottom: '2%'}}
+
+        <Button
+          color="primary"
+          onClick={this.toggleModal}
+          style={{ float: "right", marginBottom: '2%' }}
         >
           Show by Date
-          </Button> {" "}
+        </Button> {" "}
 
-          <Modal
+        <Modal
           isOpen={this.state.showModal}
           modalTransition={{ timeout: 200 }}
           backdropTransition={{ timeout: 100 }}
@@ -255,12 +259,12 @@ export default class Dashboard extends Component {
           toggle={this.toggleModal}
         >
           <ModalHeader>Select a Date</ModalHeader>
-          
+
           <Calendar
           />
-          
-  
-            <ModalFooter>
+
+
+          <ModalFooter>
             <Button color="primary" onClick={this.handleNameSubmit}>
               Show
             </Button>{" "}
@@ -323,4 +327,4 @@ export default class Dashboard extends Component {
       </>
     );
   }
-  }
+}
