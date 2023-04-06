@@ -35,7 +35,7 @@ export default class Dashboard extends Component {
       users: [],
       items: [],
       positions: [],
-      lastNames:[],
+      lastNames: [],
       genders: [],
       // deviceids: [],
       staffIds: [],
@@ -90,14 +90,15 @@ export default class Dashboard extends Component {
 
   }
 
-  handleLastNameChange = (event)=>{
+  handleLastNameChange = (event) => {
     this.setState({
       lastName: event.target.value
     })
   }
-  handlestaffidChange = (event)=>{
+
+  handleStaffIdChange = (event) => {
     this.setState({
-      staffid: event.target.value
+      staffId: event.target.value
     })
   }
 
@@ -152,9 +153,6 @@ export default class Dashboard extends Component {
   }
 
   handleEmailchange = (event) => {
-    const target = event.target;
-    const name = target.name
-    const email = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
       // [name]:value
       email: event.target.value
@@ -168,29 +166,23 @@ export default class Dashboard extends Component {
 
   handleNameSubmit = (event) => {
     event.preventDefault()
-    var vals =  Math.floor(1000 + Math.random() * 9000);
+    var vals = Math.floor(1000 + Math.random() * 9000)
 
-    var items = this.state.items;
-    var positions = this.state.positions;
-    var genders = this.state.genders;
-    var staffIds = this.state.staffIds;
-    // var deviceids = this.state.deviceids;
-    var salarys = this.state.salarys;
-    var telephones = this.state.telephones;
-    var emails = this.state.emails;
+    var staffIds = [], items = [], lastNames = [], genders = [], positions = [], salarys = [], telephones = [], emails = []
     // var passwords = this.state.passwords;
-    var lastNames = this.state.lastNames;
+    // var deviceids = this.state.deviceids;
 
+    staffIds.push(vals)
     items.push(this.state.names);
-    positions.push(this.state.position);
+    lastNames.push(this.state.lastName);
     genders.push(this.state.gender);
-    // deviceids.push(this.state.deviceid);
+    positions.push(this.state.position);
     salarys.push(this.state.salary);
     telephones.push(this.state.new_telephone);
     emails.push(this.state.email);
+
     // passwords.push(this.state.password);
-    lastNames.push(this.state.lastName);
-    staffIds.push(vals);
+    // deviceids.push(this.state.deviceid);
 
 
 
@@ -216,11 +208,9 @@ export default class Dashboard extends Component {
       .post(base_url + '/users/signup', user)
       .then(() => {
         alert("User Created")
-        console.log('User Created', user)
       })
       .catch(err => {
-        alert("User Not Created");
-        console.error("The Error:", err);
+        alert("User Not Created")
       });
 
     this.refreshPage()
@@ -271,18 +261,20 @@ export default class Dashboard extends Component {
           'authorization': localStorage.getItem('Bearer')
         }
       })
-      .then(() => alert("User Successfully Updated"))
+      .then(
+      () => alert("User Successfully Updated")
+    )
       .catch(err => {
         alert.error("Couldn't Update User", err)
       });
 
     this.refreshPage()
-   
+
     //this makes the update work
     this.setState(event => {
-      return { 
+      return {
         showModal2: !this.state.showModal2,
-        }
+      }
     });
   }
   //delete-users/
@@ -295,7 +287,9 @@ export default class Dashboard extends Component {
             'authorization': localStorage.getItem('Bearer')
           }
         })
-      .then(() => alert("User Successfully Deleted"))
+      .then(
+      () => alert("User Successfully Deleted")
+    )
       .catch(err => {
         alert.error("Couldn't Delete User", err)
       });
@@ -304,12 +298,12 @@ export default class Dashboard extends Component {
 
     // this makes the remove work
     this.setState(event => {
-      return { 
+      return {
         showModal2: !this.state.showModal2,
-        }
+      }
     });
   }
-  
+
   handleItemChanged(i, event) {
     var items = this.state.items;
     this.setState({
@@ -364,17 +358,17 @@ export default class Dashboard extends Component {
       Email,
     };
   };
-  
+
   toggleModal = () => {
     this.state.count = this.state.count + 1
     this.setState({
       showModal: !this.state.showModal,
-      
+
     });
   };
 
   toggleModalAdd = () => {
-    this.state.count  =  this.state.count + 1
+    this.state.count = this.state.count + 1
     this.setState({
       showModal: !this.state.showModal,
     });
@@ -408,7 +402,7 @@ export default class Dashboard extends Component {
         if (this.state.users.length !== 0 && this.state.rows === 0) {
           var user_length = this.state.users.users.length
           this.state.rows = user_length
-          
+
           for (var j = 0; j < user_length; j++) {
             this.state.database_id.push(this.state.users.users.at(j)._id);
             this.state.database_name.push(this.state.users.users.at(j).name);
@@ -433,7 +427,7 @@ export default class Dashboard extends Component {
   UNSAFE_componentWillMount() {
     this.getmongodb();
   }
-  
+
 
   refreshPage() {
     window.location.reload();
@@ -445,10 +439,10 @@ export default class Dashboard extends Component {
   //   </div>
   // }
 
-  
+
 
   render() {
-    const database_namerows = this.state.database_name ;
+    const database_namerows = this.state.database_name;
     var jrows = this.createData(
       this.state.database_name,
       this.state.database_lastName,
@@ -463,7 +457,7 @@ export default class Dashboard extends Component {
     );
 
     var rowcount = this.state.rows;
-    
+
 
 
 
@@ -501,7 +495,7 @@ export default class Dashboard extends Component {
     //     }
     //   }
     // }, [history])
-    
+
     return (
       <>
         <Button
@@ -518,7 +512,7 @@ export default class Dashboard extends Component {
           backdropTransition={{ timeout: 100 }}
           style={{ width: "50%" }}
           toggle={this.toggleModal}
-          
+
         >
           <ModalHeader>Add Employee</ModalHeader>
           <ModalBody>
@@ -529,7 +523,7 @@ export default class Dashboard extends Component {
                   <Input onChange={this.handleNameChange} placeholder="First name of Employee" />
                 </InputGroup>
               </FormGroup>
-              
+
               <FormGroup>
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">Last Name</InputGroupAddon>
@@ -677,49 +671,49 @@ export default class Dashboard extends Component {
                     and also from the database after the right authentications from admins
                   //FetchId from table when clicking that row's edit button
               */}
-            {database_namerows.map((krow, idx) => (
+              {database_namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={rowcount}>
-                  <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>                   <StyledTableCell component="th" scope="row">{jrows.lastName[idx]}</StyledTableCell>  
-                  <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell> 
-                  <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell> 
+                  <StyledTableCell component="th" scope="row">{jrows.name[idx]}</StyledTableCell>                   <StyledTableCell component="th" scope="row">{jrows.lastName[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   {/* <StyledTableCell component="th" scope="row">{jrows.DeviceID[idx]}</StyledTableCell> */}
-                  <StyledTableCell component="th" scope="row">{jrows.StaffID[idx]}</StyledTableCell> 
-                  <StyledTableCell component="th" scope="row">{jrows.Salary[idx]}</StyledTableCell> 
-                  <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell> 
-                  <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell> 
+                  <StyledTableCell component="th" scope="row">{jrows.StaffID[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Salary[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row" >
                     <Button color="secondary" onClick={() => {
-                    this.state.id = this.state.database_id[idx]
-                    this.state.place_holder_salary = jrows.Salary[idx]
-                    this.state.place_holder_email = jrows.Email[idx]
-                    //  this.state.place_holder_device = jrows.DeviceID[idx]
-                    this.state.place_holder_telephone = jrows.Telephone[idx]
-                    this.state.place_holder_position = jrows.Position[idx]
+                      this.state.id = this.state.database_id[idx]
+                      this.state.place_holder_salary = jrows.Salary[idx]
+                      this.state.place_holder_email = jrows.Email[idx]
+                      //  this.state.place_holder_device = jrows.DeviceID[idx]
+                      this.state.place_holder_telephone = jrows.Telephone[idx]
+                      this.state.place_holder_position = jrows.Position[idx]
 
                       this.toggleUpdate()
                     }}>
                       Edit
                     </Button>{" "}
-                  </StyledTableCell> 
+                  </StyledTableCell>
 
-                  <StyledTableCell align="left"> 
+                  <StyledTableCell align="left">
                     <Button color="secondary" onClick={() => { this.handleRemoveUser(jrows.StaffID[idx]) }}>
                       Remove
                     </Button>{" "}
                   </StyledTableCell>
                 </StyledTableRow>
-                
+
 
               ))}
 
-              
 
 
 
-              
-              
 
-              
+
+
+
+
               <Modal
                 isOpen={this.state.showModal2}
                 modalTransition={{ timeout: 200 }}
