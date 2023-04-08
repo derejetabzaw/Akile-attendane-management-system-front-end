@@ -131,7 +131,7 @@ var userID;
 var siteChoice;
 
 var sites = [];
-const url = 'http://localhost:9000/api/v1/sites/'
+const url = 'https://akille-4cfc3.firebaseapp.com/api/v1/sites/'
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
   const [showModal, setShow] = useState(false);
@@ -277,7 +277,7 @@ export default function User() {
     }
     console.log(Site);
     axios
-      .post('http://localhost:9000/api/v1/sites/addsite', Site,
+      .post('https://akille-4cfc3.firebaseapp.com/api/v1/sites/addsite', Site,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -416,7 +416,7 @@ export default function User() {
   }
   const getSiteManagers = () => {
     const users = axios
-      .get('http://localhost:9000/api/v1/users/',
+      .get('https://akille-4cfc3.firebaseapp.com/api/v1/users/',
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -443,7 +443,7 @@ export default function User() {
   const removeSite = (id) => {
     var site_id = id;
     axios
-      .delete('http://localhost:9000/api/v1/sites/delete-sites/' + id,
+      .delete('https://akille-4cfc3.firebaseapp.com/api/v1/sites/delete-sites/' + id,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -483,7 +483,7 @@ export default function User() {
     }
 
     axios
-      .put('http://localhost:9000/api/v1/sites/update-sites/' + site_id, Site,
+      .put('https://akille-4cfc3.firebaseapp.com/api/v1/sites/update-sites/' + site_id, Site,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
