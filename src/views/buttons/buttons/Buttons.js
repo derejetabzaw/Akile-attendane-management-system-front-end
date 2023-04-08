@@ -28,7 +28,7 @@ import { Date } from "core-js";
 // const { Meta } = Card;
 // const [state, setState] = useState({data: []});
 
-const base_url = 'http://localhost:9000/api/v1';
+const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
 
 
 
