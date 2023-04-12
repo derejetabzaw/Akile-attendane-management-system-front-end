@@ -12,7 +12,6 @@ import axios from 'axios';
 import Calendar from 'react-calendar';
 
 const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
-
 // const base_url = 'http://localhost:9000/api/v1';
 
 class Typography extends React.Component {
@@ -35,7 +34,6 @@ class Typography extends React.Component {
       database_salary: [],
       Netsalary: [],
     };
-
   }
 
   createData = (
@@ -113,8 +111,8 @@ class Typography extends React.Component {
       })
       .catch(err => {
         alert('Unauthorized! Please Login again', err.message)
-        // localStorage.removeItem('Bearer')
-        // window.location.href = '/'
+        localStorage.removeItem('Bearer')
+        window.location.href = '/'
       })
   }
 
@@ -131,7 +129,7 @@ class Typography extends React.Component {
     this.getmongodb();
     this.getLocalStorage();
   }
-  
+
   refreshPage() {
     window.location.reload();
   }
@@ -164,18 +162,17 @@ class Typography extends React.Component {
 
     const getTPAllowance = (e) => {
       allowance = e.target.value
-
     }
+
     const getCommission = (e) => {
       commission = e.target.value
     }
+
     const getSalaryAdvance = (e) => {
       salaryAdvance = e.target.value
-
     }
 
     const calculateNetPay = (name, basic_salaries, commission, allowance, salaryAdvance) => {
-
       let nsal = parseFloat(basic_salaries) + parseFloat(commission) - parseFloat(allowance) - parseFloat(salaryAdvance);
       let index = this.state.database_name.indexOf(name);
 
@@ -247,15 +244,19 @@ class Typography extends React.Component {
                   <StyledTableCell align="center">
 
                   </StyledTableCell>
+
                   <StyledTableCell align="center">
 
                   </StyledTableCell>
+
                   <StyledTableCell align="center">
 
                   </StyledTableCell>
+
                   <StyledTableCell align="center">
 
                   </StyledTableCell>
+
                   <StyledTableCell align="center">
                     <Form.Control type="text" onChange={getCommission} />
                   </StyledTableCell>
@@ -290,7 +291,7 @@ class Typography extends React.Component {
                   </StyledTableCell>
                 </StyledTableRow>
 
-
+                // Left for reference
                 //       <StyledTableRow krow={krow} key={krow.rowcount}>
                 //         <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                 //         <StyledTableCell>{krows.Id[idx]}</StyledTableCell>
@@ -310,7 +311,6 @@ class Typography extends React.Component {
                 //         {/* <StyledTableCell align="right">{row.carbs}</StyledTableCell>
                 // <StyledTableCell align="right">{row.protein}</StyledTableCell> */}
                 //       </StyledTableRow>
-
 
               ))}
             </TableBody>

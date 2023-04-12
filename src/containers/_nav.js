@@ -64,12 +64,12 @@ export default [
     to: "/theme/typography",
     icon: "cil-pencil",
   },
-  {
-    _tag: "CSidebarNavItem",
-    name: "Assignments",
-    to: "/theme/colors",
-    icon: "cil-file",
-  },
+  // {
+  //   _tag: "CSidebarNavItem",
+  //   name: "Assignments",
+  //   to: "/theme/colors",
+  //   icon: "cil-file",
+  // },
   {
     _tag: "CSidebarNavItem",
     name: "Sites",

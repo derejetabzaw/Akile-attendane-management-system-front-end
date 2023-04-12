@@ -1,20 +1,9 @@
 import React, { Component } from "react";
-
-import { Card } from "antd";
-// import "./landing.css";
 import axios from 'axios';
-import ReactDOM from "react-dom";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'
 import "./Calendar.css";
-// import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import DatePicker from 'react-modern-calendar-datepicker';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalFooter,
-} from "reactstrap";
+import { Button, Modal, ModalHeader, ModalFooter, } from "reactstrap";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -25,12 +14,9 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { Date } from "core-js";
 
-// const { Meta } = Card;
-// const [state, setState] = useState({data: []});
 
 const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
-
-
+// const base_url = 'http://localhost:9000/api/v1'
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -44,15 +30,12 @@ export default class Dashboard extends Component {
       clockins: [],
       clockouts: [],
       locations: [],
-      // deviceids: [],
       dates: [],
       total: [],
     };
 
     this.toggleModal = this.toggleModal.bind(this);
   }
-
-
 
   createData = (name, Id, CIN, COUT, Location, date, time) => {
     return { name, Id, CIN, COUT, Location, date, time };
@@ -114,8 +97,6 @@ export default class Dashboard extends Component {
       });
   }
 
-
-
   // This will help to check when new information[Checking in/Checking Out] is added to the database
 
   // displaymongodbpost = (posts) => {
@@ -141,43 +122,18 @@ export default class Dashboard extends Component {
 
   render() {
 
-    const rows = [
-      this.createData(
-        "Beamlak Teshome",
-        "AK-12156",
-        "",
-        "",
-        "",
-        "",
-        ""
-      ),
-    ];
-
     const getCurrentDate = () => {
-      // const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      // const d = new Date();
-      // let day = weekday[d.getDay()];
       var date = ("0" + new Date().getDate()).slice(-2)
       var month = ("0" + (new Date().getMonth() + 1)).slice(-2)
-
       var year = new Date().getFullYear();
-      // return day + ',' + ' '+  date + '-' + month + '-' + year;
       return year + '-' + month + '-' + date;
-
     }
-
-
-
 
     var today = getCurrentDate();
 
     if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
       var attendance_length = this.state.attendance.attendances.length
       var user_length = this.state.users.users.length
-      // const id = this.state.attendance.attendances.at(-1)._id
-      // console.log("today:",today)
-      // console.log("fromattendace",this.state.attendance.attendances.at(-1).date)
-      // console.log(today==this.state.attendance.attendances.at(-1).date)
 
       this.state.clockins = []
       this.state.clockouts = []
@@ -190,9 +146,6 @@ export default class Dashboard extends Component {
       for (var j = 0; j < user_length; j++) {
         for (var i = 0; i < attendance_length; i++) {
           if (today === this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id) {
-            // console.log(this.state.attendance.attendances.at(i).checkInTime)
-            // console.log(this.state.attendance.attendances.at(i).checkOutTime === '')
-
             //  if (this.state.attendance.attendances.at(i).checkOutTime === '') {
             //   this.state.total.push("")
             // }
@@ -203,22 +156,29 @@ export default class Dashboard extends Component {
             this.state.names.push(this.state.users.users.at(j).name);
             this.state.staffids.push(this.state.users.users.at(j).staffId);
             this.state.locations.push(this.state.users.users.at(j).workingSite);
-            //console.log(this.state.attendance.attendances.at(i).checkOutTime === '')
+
             if (this.state.attendance.attendances.at(i).checkOutTime === '') {
               this.state.total.push("")
             }
             else {
               this.state.total.push(this.state.attendance.attendances.at(i).workedHours)
             }
-
           }
         }
       }
-
     }
 
     var namerows = this.state.names;
-    var krows = this.createData(this.state.names, this.state.staffids, this.state.clockins, this.state.clockouts, this.state.locations, this.state.dates, this.state.total);
+    var krows = this.createData(
+      this.state.names,
+      this.state.staffids,
+      this.state.clockins,
+      this.state.clockouts,
+      this.state.locations,
+      this.state.dates,
+      this.state.total
+    );
+
     const StyledTableCell = withStyles((theme) => ({
       head: {
         backgroundColor: theme.palette.common.black,
@@ -228,6 +188,7 @@ export default class Dashboard extends Component {
         fontSize: 14,
       },
     }))(TableCell);
+
     const StyledTableRow = withStyles((theme) => ({
       root: {
         "&:nth-of-type(odd)": {
@@ -260,9 +221,7 @@ export default class Dashboard extends Component {
         >
           <ModalHeader>Select a Date</ModalHeader>
 
-          <Calendar
-          />
-
+          <Calendar />
 
           <ModalFooter>
             <Button color="primary" onClick={this.handleNameSubmit}>
@@ -277,7 +236,6 @@ export default class Dashboard extends Component {
         </Modal>
 
         <div style={{ marginTop: "2%" }}></div>
-        {/* <Button color="primary" style={{float: 'inherit',marginBottom: '2%'}} >View Calandar</Button>  */}
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
             <TableHead>
@@ -287,29 +245,12 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Clock-In</StyledTableCell>
                 <StyledTableCell>Clock-Out</StyledTableCell>
                 <StyledTableCell>Location</StyledTableCell>
-                {/* <StyledTableCell>Device ID</StyledTableCell> */}
                 <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>
-                  Total Daily Work Hour
-                </StyledTableCell>
+                <StyledTableCell>Total Daily Work Hour</StyledTableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {/* {rows.map((row) => (
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
-                  </StyledTableCell>
-                  <StyledTableCell>{row.Id}</StyledTableCell>
-                  <StyledTableCell>{row.CIN}</StyledTableCell>
-                  <StyledTableCell>{row.COUT}</StyledTableCell>
-                  <StyledTableCell>{row.Location}</StyledTableCell> */}
-              {/* <StyledTableCell>{row.DId}</StyledTableCell> */}
-              {/* <StyledTableCell>{row.date}</StyledTableCell>
-                  <StyledTableCell align="right">{row.time}</StyledTableCell>
-                </StyledTableRow>
-              ))} */}
 
+            <TableBody>
               {namerows.map((krow, idx) => (
                 <StyledTableRow krow={krow} key={krow.rowcount}>
                   <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
