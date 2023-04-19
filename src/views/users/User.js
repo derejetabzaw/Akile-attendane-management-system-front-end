@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect ,useEffect, useRef  } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 import "./MapViewerComp.css";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
+
 
 import {
   Map,
@@ -14,6 +15,11 @@ import {
   FeatureGroup,
   Circle,
 } from "react-leaflet";
+
+
+
+import "leaflet/dist/leaflet.css";
+
 import L from "leaflet";
 import { EditControl } from "./src";
 import { Tabs } from "antd";
@@ -30,6 +36,11 @@ import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
 // import { concat } from "core-js/core/array";
 // import Form from "antd/lib/form/Form";
 
+
+
+
+
+var mapRef = React.createRef();
 const { TabPane } = Tabs;
 
 
@@ -66,6 +77,8 @@ const rows = [
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
+
+
 function GetIcon(icon) {
   return L.icon({
     // iconUrl: require("../../assets/icons/logo.jpg"),
@@ -73,6 +86,20 @@ function GetIcon(icon) {
     iconSize: icon,
   });
 }
+
+const ResizeMap = () => {
+  if (mapRef.current != null) {
+    var map = mapRef.current.leafletElement;
+    
+    //Time out for Map Resizing
+    setTimeout(() => {  }, 500); 
+    map.invalidateSize();
+    
+  }
+  return null;
+};
+
+
 
 // const akile_icon = GetIcon(30) 
 
@@ -131,11 +158,12 @@ var userID;
 var siteChoice;
 
 var sites = [];
-const url = 'https://akille-4cfc3.firebaseapp.com/api/v1/sites/'
+const url = 'https://hrserver.akillepainting.com/api/v1/sites/'
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
   const [showModal, setShow] = useState(false);
   const [showModal2, setShow2] = useState(false);
+
   const [fullscreen, setFullscreen] = useState(true);
   const [site, setSites] = useState([])
   const [sitemanager, setSiteManager] = useState([])
@@ -143,6 +171,7 @@ export default function User() {
   const [endDate, setEndDate] = useState(new Date());
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [allEmployees, setallEmployees] = useState([]);
+
 
 
 
@@ -201,6 +230,8 @@ export default function User() {
   // }
 
   const mapopener = () => {
+    
+
     setShow2(true);
   };
 
@@ -277,7 +308,7 @@ export default function User() {
     }
     console.log(Site);
     axios
-      .post('https://akille-4cfc3.firebaseapp.com/api/v1/sites/addsite', Site,
+      .post('https://hrserver.akillepainting.com/api/v1/sites/addsite', Site,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -354,6 +385,7 @@ export default function User() {
     if (layerType === "marker") {
       const { _leaflet_id } = layer;
       const { _latlng } = layer;
+      console.log(_latlng, "latlng")
 
       setMapLayer((layer) => [...layer, { id: _leaflet_id, latlng: _latlng }]);
       pinlocation(_latlng)
@@ -416,7 +448,7 @@ export default function User() {
   }
   const getSiteManagers = () => {
     const users = axios
-      .get('https://akille-4cfc3.firebaseapp.com/api/v1/users/',
+      .get('https://hrserver.akillepainting.com/api/v1/users/',
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -443,7 +475,7 @@ export default function User() {
   const removeSite = (id) => {
     var site_id = id;
     axios
-      .delete('https://akille-4cfc3.firebaseapp.com/api/v1/sites/delete-sites/' + id,
+      .delete('https://hrserver.akillepainting.com/api/v1/sites/delete-sites/' + id,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -483,7 +515,7 @@ export default function User() {
     }
 
     axios
-      .put('https://akille-4cfc3.firebaseapp.com/api/v1/sites/update-sites/' + site_id, Site,
+      .put('https://hrserver.akillepainting.com/api/v1/sites/update-sites/' + site_id, Site,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -531,6 +563,12 @@ export default function User() {
     getSiteManagers();
 
   }, [])
+
+
+
+
+
+
 
 
   const handleOpenUpdateModal = (id) => {
@@ -758,19 +796,31 @@ export default function User() {
                 <br />
 
                 <Modal show={showModal2} fullscreen={fullscreen} onHide={closeModal2}>
+                  
+                  
+
                   <Modal.Header >
                     <Modal.Title> Pin on Map</Modal.Title>
                   </Modal.Header>
                   <Modal.Body >
-                    <Map
+                    <Map ref = {mapRef}
+                    
+                    
                       center={[8.980336155918469, 38.75667572021485]}
                       zoom={12}
                       scrollWheelZoom={true}
                       className="mapContainer"
+
+                      
+
+
                     >
+                      <ResizeMap/>
                       <TileLayer
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        
+
                       />
                       <Marker position={[8.980603, 38.757759]} icon={GetIcon(30)}>
                         <Popup>
