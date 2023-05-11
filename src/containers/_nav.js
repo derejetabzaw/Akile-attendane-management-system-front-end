@@ -59,10 +59,30 @@ export default [
     ],
   },
   {
-    _tag: "CSidebarNavItem",
-    name: "Payroll",
-    to: "/theme/typography",
+    _tag: "CSidebarNavDropdown",
+    name: "Salary Management",
+    route: "/theme",
     icon: "cil-pencil",
+    _children: [
+      {
+        _tag: "CSidebarNavItem",
+        name: "Payroll Records",
+        to: "/theme/typography",
+        icon: "cil-calendar-today",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "Allowance / Advance",
+        to: "/theme/colors",
+        icon: "cil-calendar-today",
+      },
+            {
+        _tag: "CSidebarNavItem",
+        name: "Overtime Management",
+        to: "/theme/overtime",
+        icon: "cil-calendar-today",
+      },
+    ],
   },
   // {
   //   _tag: "CSidebarNavItem",

@@ -19,8 +19,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
 
-const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
-// const base_url = 'http://localhost:9000/api/v1'
+// const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
+const base_url = 'http://localhost:9000/api/v1'
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -405,11 +405,11 @@ export default class Dashboard extends Component {
     return (
       <>
         <Button
-          color="primary"
+          color="success"
           onClick={this.toggleModal}
           style={{ float: "right", marginBottom: "2%" }}
         >
-          Add
+          Add Employee
         </Button>{" "}
 
         <Modal
@@ -550,7 +550,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row" >
-                    <Button color="secondary" onClick={() => {
+                    <Button color="primary" onClick={() => {
                       this.state.id = this.state.database_id[idx]
                       this.state.place_holder_salary = jrows.Salary[idx]
                       this.state.place_holder_email = jrows.Email[idx]
@@ -564,7 +564,7 @@ export default class Dashboard extends Component {
                   </StyledTableCell>
 
                   <StyledTableCell align="left">
-                    <Button color="secondary" onClick={() => { this.handleRemoveUser(jrows.StaffID[idx]) }}>
+                    <Button color="danger" onClick={() => { this.handleRemoveUser(jrows.StaffID[idx]) }}>
                       Remove
                     </Button>{" "}
                   </StyledTableCell>
