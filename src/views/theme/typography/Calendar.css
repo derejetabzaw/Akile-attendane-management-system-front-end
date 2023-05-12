@@ -1,5 +1,5 @@
 .react-calendar { 
-    width: 400px;
+    width: 600px;
     max-width: 100%;
     background-color: #fff;
     color: #222;
@@ -87,19 +87,11 @@
     color: white;
    }
 
-  .custom-calendar-container {
-  display: flex;
-  justify-content: flex-start;
-}
-
 .custom-calendar-input {
-  width: 30%;
-  display: flex;
-  flex-direction: column;
+  width: auto;
   margin-bottom: 20px;
 }
 
 .custom-calendar-input label {
   margin-bottom: 10px;
 }
-   

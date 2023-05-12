@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -40,7 +40,7 @@ class Typography extends React.Component {
       selectedOption: 'daily',
       startDate: new Date(),
       endDate: new Date(),
-      showCalendars: false,
+      showCalendarsModal: false,
     };
   }
 
@@ -174,20 +174,6 @@ class Typography extends React.Component {
       //   );
       //   break;
 
-      // case 'monthly':
-      //   const monthStartDate = new Date(this.state.startDate);
-      //   monthStartDate.setDate(1);
-
-      //   this.state.startDate = monthStartDate;
-
-      //   alert(
-      //     'Monthly option selected start date: ' +
-      //     this.state.startDate +
-      //     ' end date:' +
-      //     this.state.endDate
-      //   );
-      //   break;
-
       case 'monthly':
         const monthStartDate = new Date(this.state.startDate);
         monthStartDate.setDate(1);
@@ -227,7 +213,11 @@ class Typography extends React.Component {
   };
 
   handleSelectByDateClick = () => {
-    this.setState({ showCalendars: !this.state.showCalendars });
+    this.setState({ showCalendarsModal: true });
+  };
+
+  handleCloseCalendarsModal = () => {
+    this.setState({ showCalendarsModal: false });
   };
 
   render() {
@@ -315,8 +305,12 @@ class Typography extends React.Component {
             Generate PDF
           </Button>
 
-          {this.state.showCalendars && (
-            <>
+          <Modal isOpen={this.state.showCalendarsModal} toggle={this.handleCloseCalendarsModal}>
+            <ModalHeader toggle={this.handleCloseCalendarsModal}>
+              Select Date Range
+            </ModalHeader>
+
+            <ModalBody>
               <Tabs
                 defaultActiveKey="daily"
                 activeKey={this.state.selectedOption}
@@ -361,7 +355,7 @@ class Typography extends React.Component {
                 </TabPane>
 
                 <TabPane tab="Custom" key="custom">
-                  <div className="custom-calendar-container">
+                  <div>
                     <div className="custom-calendar-input">
                       <label>Start Date:</label>
                       <Calendar
@@ -384,10 +378,12 @@ class Typography extends React.Component {
                   </Button>
                 </TabPane>
               </Tabs>
+            </ModalBody>
 
-            </>
-          )}
-
+            <ModalFooter>
+              <Button color="secondary" onClick={this.handleCloseCalendarsModal}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
         </div>
 
         <TableContainer component={Paper}>
