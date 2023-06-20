@@ -33,6 +33,10 @@ import { InputGroup, InputGroupAddon, Input } from 'reactstrap';
 const { TabPane } = Tabs;
 
 
+// const url = 'https://akille-4cfc3.firebaseapp.com/api/v1/sites/'
+const url = 'http://localhost:9000/api/v1';
+
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -131,7 +135,7 @@ var userID;
 var siteChoice;
 
 var sites = [];
-const url = 'https://akille-4cfc3.firebaseapp.com/api/v1/sites/'
+
 export default function User() {
   const [mapLayers, setMapLayer] = useState([]);
   const [showModal, setShow] = useState(false);
@@ -277,7 +281,7 @@ export default function User() {
     }
     console.log(Site);
     axios
-      .post('https://akille-4cfc3.firebaseapp.com/api/v1/sites/addsite', Site,
+      .post(url + '/addsite', Site,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
@@ -286,11 +290,11 @@ export default function User() {
       )
       .then(() =>
         console.log('Site Created', Site))
-      // .catch(err => {
-      //   alert('Unauthorized! Please Login again', err.message)
-      //   localStorage.removeItem('Bearer')
-      //   window.location.href = '/'
-      // })
+    // .catch(err => {
+    //   alert('Unauthorized! Please Login again', err.message)
+    //   localStorage.removeItem('Bearer')
+    //   window.location.href = '/'
+    // })
     addsiteinformation()
   }
 
@@ -408,11 +412,11 @@ export default function User() {
           });
         }
       })
-      // .catch(err => {
-      //   alert('Unauthorized! Please Login again', err.message)
-      //   localStorage.removeItem('Bearer')
-      //   window.location.href = '/'
-      // })
+    // .catch(err => {
+    //   alert('Unauthorized! Please Login again', err.message)
+    //   localStorage.removeItem('Bearer')
+    //   window.location.href = '/'
+    // })
   }
   const getSiteManagers = () => {
     const users = axios
@@ -432,29 +436,29 @@ export default function User() {
         console.log("management", sitemanagers)
         setSiteManager(sitemanagers);
       })
-      // .catch(err => {
-      //   alert('Unauthorized! Please Login again', err.message)
-      //   localStorage.removeItem('Bearer')
-      //   window.location.href = '/'
-      // })
+    // .catch(err => {
+    //   alert('Unauthorized! Please Login again', err.message)
+    //   localStorage.removeItem('Bearer')
+    //   window.location.href = '/'
+    // })
   }
 
   //delete-sites/
   const removeSite = (id) => {
     var site_id = id;
     axios
-      .delete('https://akille-4cfc3.firebaseapp.com/api/v1/sites/delete-sites/' + id,
+      .delete(url + '/delete-sites/' + id,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
           }
         }
       )
-      // .catch(err => {
-      //   alert('Unauthorized! Please Login again', err.message)
-      //   localStorage.removeItem('Bearer')
-      //   window.location.href = '/'
-      // })
+    // .catch(err => {
+    //   alert('Unauthorized! Please Login again', err.message)
+    //   localStorage.removeItem('Bearer')
+    //   window.location.href = '/'
+    // })
 
     setSites(site.filter(sid => sid.id !== site_id));
     console.log("operation successfull");
@@ -483,18 +487,18 @@ export default function User() {
     }
 
     axios
-      .put('https://akille-4cfc3.firebaseapp.com/api/v1/sites/update-sites/' + site_id, Site,
+      .put(url + '/update-sites/' + site_id, Site,
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')
           }
         }
       )
-      // .catch(err => {
-      //   alert('Unauthorized! Please Login again', err.message)
-      //   localStorage.removeItem('Bearer')
-      //   window.location.href = '/'
-      // })
+    // .catch(err => {
+    //   alert('Unauthorized! Please Login again', err.message)
+    //   localStorage.removeItem('Bearer')
+    //   window.location.href = '/'
+    // })
 
     handleCloseUpdatemodal();
 
@@ -665,8 +669,10 @@ export default function User() {
                             </button>{" "}
                             <Button
                               color="primary"
-                              onClick={addsiteinformation}
-                              onClick={updateSites}
+                              onClick={() => {
+                                addsiteinformation()
+                                updateSites()
+                              }}
                               style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
                             >
 
@@ -822,8 +828,10 @@ export default function User() {
 
                 <Button
                   color="primary"
-                  onClick={addsiteinformation}
-                  onClick={handleSiteSubmit}
+                  onClick={() => {
+                    addsiteinformation()
+                    handleSiteSubmit()
+                  }}
                   style={{ float: "right", marginBottom: "2%", marginRight: "1%" }}
                 >
                   Save{" "}
@@ -834,12 +842,58 @@ export default function User() {
             </Modal.Body>
           </Modal>
         </TabPane>
-       
+
         <TabPane tab="Assign Site" key="3">
           <TableContainer component={Paper}>
             <Table aria-label="customized table">
               <TableHead>
                 <TableRow>
+                  <StyledTableCell>Employee Name</StyledTableCell>
+                  <StyledTableCell>Assignment</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {allEmployees.map((krow, idy) => (
+                  <StyledTableRow krow={krow} key={krow.rowcount}>
+                    <StyledTableCell component="th" scope="row">{krow.name}</StyledTableCell>
+                    <StyledTableCell>
+                      <Input onChange={(e) => { siteChoice = e.target.value; }} type="select" name="backdrop" id="backdrop">
+                        <option value="">Choose Site</option>
+                        {site.map((site, idz) => (
+                          <option value={site.sitename}>{site.sitename}</option>
+                        ))}
+                      </Input>
+                      <button
+                        class="btn btn-secondary"
+                        onClick={addsiteinformation}
+                        style={{ float: "right", marginTop: "2%" }}
+                      >
+                        Change
+                      </button>
+                      <button
+                        class="btn btn-primary"
+                        onClick={() => { userID = krow._id }}
+                        style={{ float: "right", marginTop: "2%", marginRight: "2%" }}
+                      >
+                        Assign
+                      </button>
+
+                    </StyledTableCell>
+
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TabPane>
+
+        <TabPane tab="Assignments" key="4">
+          <TableContainer component={Paper}>
+            <Table aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Employee Name</StyledTableCell>
+                  <StyledTableCell>Assignment</StyledTableCell>
                   <StyledTableCell>Employee Name</StyledTableCell>
                   <StyledTableCell>Assignment</StyledTableCell>
                 </TableRow>

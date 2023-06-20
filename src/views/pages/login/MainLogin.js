@@ -18,7 +18,8 @@ import CIcon from '@coreui/icons-react';
 
 
 function Login() {
-  const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
+  // const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
+  const base_url = 'http://localhost:9000/api/v1'
 
   const [staffId, setStaffId] = useState('')
   const [password, setPassword] = useState('')

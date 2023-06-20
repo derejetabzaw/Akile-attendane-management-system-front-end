@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Button } from 'react-bootstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,9 +10,13 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import axios from 'axios';
 import Calendar from 'react-calendar';
+import "./Calendar.css";
+import { Tabs } from "antd";
 
-const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
-// const base_url = 'http://localhost:9000/api/v1';
+const { TabPane } = Tabs;
+
+// const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
+const base_url = 'http://localhost:9000/api/v1';
 
 class Typography extends React.Component {
   constructor(props) {
@@ -33,6 +37,10 @@ class Typography extends React.Component {
       database_position: [],
       database_salary: [],
       Netsalary: [],
+      selectedOption: 'daily',
+      startDate: new Date(),
+      endDate: new Date(),
+      showCalendarsModal: false,
     };
   }
 
@@ -134,6 +142,84 @@ class Typography extends React.Component {
     window.location.reload();
   }
 
+  handleOptionChange = (e) => {
+    this.setState({ selectedOption: e.target.value });
+  };
+
+  handleStartDateChange = (date) => {
+    this.setState({ startDate: date });
+  };
+
+  handleEndDateChange = (date) => {
+    this.setState({ endDate: date });
+  };
+
+  handleApplyButtonClick = () => {
+    switch (this.state.selectedOption) {
+      case 'daily':
+        alert('Daily option selected: ' + this.state.startDate);
+        break;
+
+      // case 'weekly':
+      //   const weekEndDate = new Date(this.state.startDate);
+      //   weekEndDate.setDate(this.state.startDate.getDate() + 6);
+
+      //   this.state.endDate = weekEndDate;
+
+      //   alert(
+      //     'Weekly option selected start date: ' +
+      //     this.state.startDate +
+      //     ' end date:' +
+      //     this.state.endDate
+      //   );
+      //   break;
+
+      case 'monthly':
+        const monthStartDate = new Date(this.state.startDate);
+        monthStartDate.setDate(1);
+
+        this.state.startDate = monthStartDate;
+
+        const monthEndDate = new Date(this.state.startDate);
+        monthEndDate.setMonth(monthEndDate.getMonth() + 1);
+        monthEndDate.setDate(this.state.endDate.getDate());
+
+        this.state.endDate = monthEndDate;
+
+        alert(
+          'Monthly option selected start date: ' +
+          this.state.startDate +
+          ' end date: ' +
+          this.state.endDate
+        );
+        break;
+
+      case 'custom':
+        alert(
+          'Custom option selected. start date: ' +
+          this.state.startDate +
+          ' end date:' +
+          this.state.endDate
+        );
+        break;
+
+      default:
+        alert('No option selected');
+    }
+  };
+
+  handleTabClick = (key) => {
+    this.setState({ selectedOption: key });
+  };
+
+  handleSelectByDateClick = () => {
+    this.setState({ showCalendarsModal: true });
+  };
+
+  handleCloseCalendarsModal = () => {
+    this.setState({ showCalendarsModal: false });
+  };
+
   render() {
     const database_namerows = this.state.database_name;
 
@@ -173,7 +259,7 @@ class Typography extends React.Component {
     }
 
     const calculateNetPay = (name, basic_salaries, commission, allowance, salaryAdvance) => {
-      let nsal = parseFloat(basic_salaries) + parseFloat(commission) - parseFloat(allowance) - parseFloat(salaryAdvance);
+      let nsal = parseFloat(basic_salaries) + parseFloat(allowance) - parseFloat(salaryAdvance);
       let index = this.state.database_name.indexOf(name);
 
       this.state.Netsalary.splice(index, 1, nsal)
@@ -209,8 +295,97 @@ class Typography extends React.Component {
     return (
       <>
         <div className="card-header">
-          <p>Monthly Payroll </p>
+          <p>Payroll Information</p>
+
+          <Button color="primary" onClick={this.handleSelectByDateClick}>
+            Show by Date
+          </Button>
+
+          <Button color="success" style={{ float: "right", marginBottom: "2%" }}>
+            Generate PDF
+          </Button>
+
+          <Modal isOpen={this.state.showCalendarsModal} toggle={this.handleCloseCalendarsModal}>
+            <ModalHeader toggle={this.handleCloseCalendarsModal}>
+              Select Date Range
+            </ModalHeader>
+
+            <ModalBody>
+              <Tabs
+                defaultActiveKey="daily"
+                activeKey={this.state.selectedOption}
+                onTabClick={this.handleTabClick}
+              >
+                <TabPane tab="Daily" key="daily">
+                  <div className="custom-calendar-input">
+                    <label>Start Date:</label>
+                    <Calendar
+                      selected={this.state.startDate}
+                      onChange={this.handleStartDateChange}
+                    />
+                  </div>
+
+                  <Button color="success" onClick={this.handleApplyButtonClick}>
+                    Confirm Selected Day
+                  </Button>
+                </TabPane>
+
+                {/* <TabPane tab="Weekly" key="weekly">
+              <div>
+                <label>Start Date:</label>
+                <Calendar
+                  selected={this.state.startDate}
+                  onChange={this.handleStartDateChange}
+                />
+              </div>
+            </TabPane> */}
+
+                <TabPane tab="Monthly" key="monthly">
+                  <div className="custom-calendar-input">
+                    <label>Start Date:</label>
+                    <Calendar
+                      selected={this.state.endDate}
+                      onChange={this.handleEndDateChange}
+                    />
+                  </div>
+
+                  <Button color="success" onClick={this.handleApplyButtonClick}>
+                    Confirm Selected Month
+                  </Button>
+                </TabPane>
+
+                <TabPane tab="Custom" key="custom">
+                  <div>
+                    <div className="custom-calendar-input">
+                      <label>Start Date:</label>
+                      <Calendar
+                        selected={this.state.startDate}
+                        onChange={this.handleStartDateChange}
+                      />
+                    </div>
+
+                    <div className="custom-calendar-input">
+                      <label>End Date:</label>
+                      <Calendar
+                        selected={this.state.endDate}
+                        onChange={this.handleEndDateChange}
+                      />
+                    </div>
+                  </div>
+
+                  <Button color="success" onClick={this.handleApplyButtonClick}>
+                    Confirm Selected Dates
+                  </Button>
+                </TabPane>
+              </Tabs>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button color="secondary" onClick={this.handleCloseCalendarsModal}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
         </div>
+
         <TableContainer component={Paper}>
           <Table aria-label="customized table">
             <TableHead>
@@ -218,17 +393,17 @@ class Typography extends React.Component {
                 <StyledTableCell>Name of Employee</StyledTableCell>
                 <StyledTableCell>Position</StyledTableCell>
                 <StyledTableCell>Basic Salary</StyledTableCell>
-                <StyledTableCell>Work Day</StyledTableCell>
-                <StyledTableCell>Daily Salary</StyledTableCell>
                 <StyledTableCell>OT1(Night)</StyledTableCell>
                 <StyledTableCell>OT2(Weekend)</StyledTableCell>
-                <StyledTableCell>Time</StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Commission</StyledTableCell>
                 <StyledTableCell>Transport Allowance</StyledTableCell>
                 <StyledTableCell>Salary Advance</StyledTableCell>
-                <StyledTableCell>Total Salary</StyledTableCell>
-                <StyledTableCell></StyledTableCell>
+
+                {/* <StyledTableCell>
+
+                  REMOVE???
+
+                </StyledTableCell> */}
+
                 <StyledTableCell>NET Salary</StyledTableCell>
               </TableRow>
             </TableHead>
@@ -239,8 +414,6 @@ class Typography extends React.Component {
                   <StyledTableCell>{jrows.name[idx]} {jrows.lastName[idx]}</StyledTableCell>
                   <StyledTableCell>{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell>{jrows.Salary[idx]}</StyledTableCell>
-                  <StyledTableCell align="center">30</StyledTableCell>
-                  <StyledTableCell align="center">{(jrows.Salary[idx] / 30).toFixed(2)}</StyledTableCell>
                   <StyledTableCell align="center">
 
                   </StyledTableCell>
@@ -248,26 +421,13 @@ class Typography extends React.Component {
                   <StyledTableCell align="center">
 
                   </StyledTableCell>
-
                   <StyledTableCell align="center">
-
-                  </StyledTableCell>
-
-                  <StyledTableCell align="center">
-
-                  </StyledTableCell>
-
-                  <StyledTableCell align="center">
-                    <Form.Control type="text" onChange={getCommission} />
+                    {/* <Form.Control type="text" onChange={getTPAllowance} /> */}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    <Form.Control type="text" onChange={getTPAllowance} />
+                    {/* <Form.Control type="text" onChange={getSalaryAdvance} /> */}
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Form.Control type="text" onChange={getSalaryAdvance} />
-                  </StyledTableCell>
-                  <StyledTableCell align="center">Total Salary</StyledTableCell>
-                  <StyledTableCell align="right">
+                  {/* <StyledTableCell align="right">
                     <Button
                       variant="primary"
                       onClick={() => {
@@ -281,7 +441,7 @@ class Typography extends React.Component {
                       }}>
                       Calculate
                     </Button>
-                  </StyledTableCell>
+                  </StyledTableCell> */}
 
                   <StyledTableCell align="center">
                     {
@@ -316,6 +476,7 @@ class Typography extends React.Component {
             </TableBody>
           </Table>
         </TableContainer>
+
       </>
     );
   }
