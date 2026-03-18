@@ -420,7 +420,8 @@ export default function User() {
   }
   const getSiteManagers = () => {
     const users = axios
-      .get('https://akille-4cfc3.firebaseapp.com/api/v1/users/',
+      // .get('https://akille-4cfc3.firebaseapp.com/api/v1/users/',
+      .get('http://localhost:9000/api/v1/users/',
         {
           headers: {
             'authorization': localStorage.getItem('Bearer')

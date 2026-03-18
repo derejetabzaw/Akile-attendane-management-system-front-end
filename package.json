@@ -14,7 +14,7 @@
       "url": "https://github.com/orgs/coreui/people"
     }
   ],
-  "homepage": ".",
+  "homepage": "https://hr.akillepainting.com/",
   "copyright": "Copyright 2017-2020 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "private": true,
@@ -60,7 +60,7 @@
     "react-dom": "^17.0.0",
     "react-id-generator": "^3.0.1",
     "react-leaflet": "^2.7.0",
-    "react-leaflet-draw": "^0.19.0",
+    "react-leaflet-draw": "^0.19.8",
     "react-map-gl": "^6.0.2",
     "react-mapbox-gl": "^5.1.1",
     "react-modern-calendar-datepicker": "^3.1.6",
@@ -107,7 +107,7 @@
     ]
   },
   "engines": {
-    "node": "==12.19.0",
-    "npm": "==6.14.8"
+    "node": ">=10",
+    "npm": ">=6"
   }
 }
