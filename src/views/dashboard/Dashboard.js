@@ -22,6 +22,7 @@ import Paper from "@material-ui/core/Paper";
 // const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
 const base_url = 'http://localhost:9000/api/v1'
 
+
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +35,8 @@ export default class Dashboard extends Component {
       count: 0,
       render_count: 0,
       users: [],
+      sites: [],
+      workingSite: '',
       items: [],
       positions: [],
       lastNames: [],
@@ -57,13 +60,15 @@ export default class Dashboard extends Component {
       database_salary: [],
       database_telephone: [],
       database_email: [],
+      database_site: [],
       intial_load: 0,
       id: "",
       place_holder_salary: "",
       place_holder_email: "",
       place_holder_telephone: "",
       place_holder_device: "",
-      place_holder_position: ""
+      place_holder_position: "",
+      place_holder_site: ""
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -73,6 +78,11 @@ export default class Dashboard extends Component {
 
   beforeUploadFile = (file) => {
     this.setState({ uploadFile: [file] });
+    const reader = new FileReader();
+    reader.addEventListener("load", () =>
+      this.setState({ src: reader.result })
+    );
+    reader.readAsDataURL(file);
     return false;
   };
 
@@ -124,6 +134,12 @@ export default class Dashboard extends Component {
     });
   }
 
+  handleSitechange = (event) => {
+    this.setState({
+      workingSite: event.target.value
+    });
+  }
+
   setPlaceHolder(obj) {
     this.state.items = obj
   }
@@ -160,8 +176,8 @@ export default class Dashboard extends Component {
       isAdmin: false,
       email: this.state.email,
       gender: this.state.gender,
-      imageUrl: "",
-      workingSite: "Piassa",
+      imageUrl: this.state.src || "",
+      workingSite: this.state.workingSite,
       salary: this.state.salary,
       telephone: this.state.new_telephone
     };
@@ -199,7 +215,7 @@ export default class Dashboard extends Component {
       email: this.state.email,
       isAdmin: false,
       position: this.state.position,
-      workingSite: "Bole",
+      workingSite: this.state.workingSite,
       salary: this.state.salary,
       telephone: this.state.new_telephone
     };
@@ -269,13 +285,7 @@ export default class Dashboard extends Component {
   };
 
   onSelectFile = (file, list, e) => {
-    // if (file) {
-    //   const reader = new FileReader();
-    //   reader.addEventListener("load", () =>
-    //     this.setState({ src: reader.result })
-    //   );
-    //   reader.readAsDataURL(file.file);
-    // }
+
   };
 
   createData = (
@@ -326,40 +336,36 @@ export default class Dashboard extends Component {
   };
 
   getmongodb() {
-    axios.get(
-      base_url + '/users/',
-      {
-        headers: {
-          'authorization': localStorage.getItem('Bearer')
+    axios.all([
+      axios.get(base_url + '/users/', { headers: { 'authorization': localStorage.getItem('Bearer') } }),
+      axios.get(base_url + '/sites/', { headers: { 'authorization': localStorage.getItem('Bearer') } })
+    ]).then(axios.spread((usersRes, sitesRes) => {
+      const users_info = usersRes.data;
+      const sites_info = sitesRes.data.sites || [];
+      this.setState({ users: users_info, sites: sites_info });
+
+      if (this.state.users.length !== 0 && this.state.rows === 0) {
+        var user_length = this.state.users.users.length
+        this.state.rows = user_length
+
+        for (var j = 0; j < user_length; j++) {
+          this.state.database_id.push(this.state.users.users.at(j)._id);
+          this.state.database_name.push(this.state.users.users.at(j).name);
+          this.state.database_lastName.push(this.state.users.users.at(j).lastName);
+          this.state.database_position.push(this.state.users.users.at(j).position);
+          this.state.database_gender.push(this.state.users.users.at(j).gender);
+          this.state.database_staffid.push(this.state.users.users.at(j).staffId);
+          this.state.database_salary.push(this.state.users.users.at(j).salary);
+          this.state.database_telephone.push(this.state.users.users.at(j).telephone);
+          this.state.database_email.push(this.state.users.users.at(j).email);
+          this.state.database_site.push(this.state.users.users.at(j).workingSite);
         }
       }
-    )
-      .then((response) => {
-        const users_info = response.data
-        this.setState({ users: users_info });
-
-        if (this.state.users.length !== 0 && this.state.rows === 0) {
-          var user_length = this.state.users.users.length
-          this.state.rows = user_length
-
-          for (var j = 0; j < user_length; j++) {
-            this.state.database_id.push(this.state.users.users.at(j)._id);
-            this.state.database_name.push(this.state.users.users.at(j).name);
-            this.state.database_lastName.push(this.state.users.users.at(j).lastName);
-            this.state.database_position.push(this.state.users.users.at(j).position);
-            this.state.database_gender.push(this.state.users.users.at(j).gender);
-            this.state.database_staffid.push(this.state.users.users.at(j).staffId);
-            this.state.database_salary.push(this.state.users.users.at(j).salary);
-            this.state.database_telephone.push(this.state.users.users.at(j).telephone);
-            this.state.database_email.push(this.state.users.users.at(j).email);
-          }
-        }
-      })
-      .catch(err => {
-        alert('Unauthorized! Please Login again', err.message)
-        localStorage.removeItem('Bearer')
-        window.location.href = '/'
-      })
+    })).catch(err => {
+      alert('Unauthorized! Please Login again', err.message)
+      localStorage.removeItem('Bearer')
+      window.location.href = '/'
+    })
   }
 
   UNSAFE_componentWillMount() {
@@ -464,6 +470,20 @@ export default class Dashboard extends Component {
               <FormGroup>
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">
+                    Working Site
+                  </InputGroupAddon>
+                  <Input onChange={this.handleSitechange} type="select" value={this.state.workingSite}>
+                    <option value="">Select Site</option>
+                    {this.state.sites.map((site) => (
+                      <option key={site._id} value={site.sitename}>{site.sitename} - {site.location}</option>
+                    ))}
+                  </Input>
+                </InputGroup>
+              </FormGroup>
+
+              <FormGroup>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
                     Basic Salary
                   </InputGroupAddon>
                   <Input
@@ -531,11 +551,12 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Position</StyledTableCell>
                 <StyledTableCell>Gender</StyledTableCell>
                 <StyledTableCell>StaffID</StyledTableCell>
+                <StyledTableCell>Working Site</StyledTableCell>
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
-                <StyledTableCell>Edit</StyledTableCell>
-                <StyledTableCell>Remove</StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -546,6 +567,7 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.StaffID[idx]}</StyledTableCell>
+                  <StyledTableCell component="th" scope="row">{this.state.database_site[idx] || '-'}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>
@@ -556,6 +578,7 @@ export default class Dashboard extends Component {
                       this.state.place_holder_email = jrows.Email[idx]
                       this.state.place_holder_telephone = jrows.Telephone[idx]
                       this.state.place_holder_position = jrows.Position[idx]
+                      this.state.place_holder_site = this.state.database_site[idx] || ''
 
                       this.toggleUpdate()
                     }}>
@@ -622,6 +645,20 @@ export default class Dashboard extends Component {
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
                         <Input onChange={this.handleEmailchange} placeholder={this.state.place_holder_email} id="email" />
+                      </InputGroup>
+                    </FormGroup>
+
+                    <FormGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          Working Site
+                        </InputGroupAddon>
+                        <Input onChange={this.handleSitechange} type="select" value={this.state.workingSite || this.state.place_holder_site}>
+                          <option value="">Select Site</option>
+                          {this.state.sites.map((site) => (
+                            <option key={site._id} value={site.sitename}>{site.sitename} - {site.location}</option>
+                          ))}
+                        </Input>
                       </InputGroup>
                     </FormGroup>
                   </Form>

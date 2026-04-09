@@ -68,19 +68,19 @@ export default [
         _tag: "CSidebarNavItem",
         name: "Payroll Records",
         to: "/theme/typography",
-        icon: "cil-calendar-today",
+        icon: "cil-file",
       },
       {
         _tag: "CSidebarNavItem",
         name: "Allowance / Advance",
         to: "/theme/colors",
-        icon: "cil-calendar-today",
+        icon: "cil-credit-card",
       },
-            {
+      {
         _tag: "CSidebarNavItem",
         name: "Overtime Management",
         to: "/theme/overtime",
-        icon: "cil-calendar-today",
+        icon: "cil-calculator",
       },
     ],
   },
@@ -93,8 +93,8 @@ export default [
   {
     _tag: "CSidebarNavItem",
     name: "Sites",
-    to: "/users/User",
-    icon: "cil-paper-plane",
+    to: "/sites",
+    icon: "cil-location-pin",
   },
   // {
   //   _tag: "CSidebarNavItem",

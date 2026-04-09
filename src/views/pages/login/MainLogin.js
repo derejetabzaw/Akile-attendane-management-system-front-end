@@ -28,14 +28,22 @@ function Login() {
     event.preventDefault()
 
 
+
+
     if (staffId === "ADMIN" && password === "ADMIN") {
-      // localStorage.setItem('Bearer', 'Bearer ' + data.accessToken)
-      alert('Login successful')
-      window.location.href = '/#/dashboard'
+      // Create a dummy token for admin
+      const adminToken = "ADMIN-DUMMY-TOKEN";
+
+      // Store it in localStorage just like a real login
+      localStorage.setItem('Bearer', 'Bearer ' + adminToken);
+      console.log("TOKEN STORED (ADMIN):", localStorage.getItem('Bearer'));
+
+      alert('Login successful');
+      window.location.href = '/#/dashboard';
     } else {
       try {
         const response = await fetch(
-          base_url + `/signin`,
+          base_url + `/auth/login`,
           {
             method: 'POST',
             headers: {
@@ -49,6 +57,7 @@ function Login() {
         )
 
         const data = await response.json()
+        
 
         if (data.staffId) {
           localStorage.setItem('Bearer', 'Bearer ' + data.accessToken)
