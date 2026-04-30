@@ -12,6 +12,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const base_url = 'http://localhost:9000/api/v1'
 
@@ -99,6 +101,53 @@ export default class Overtime extends Component {
             });
       }
 
+      generatePDF = () => {
+            try {
+                  const { rows } = this.state;
+                  
+                  if (!rows || rows.length === 0) {
+                        alert("No overtime records found to generate PDF.");
+                        return;
+                  }
+
+                  const doc = new jsPDF();
+                  doc.setFontSize(18);
+                  doc.text("Overtime Management Report", 14, 22);
+                  doc.setFontSize(11);
+                  doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 30);
+
+                  const tableColumn = ["Name", "Staff ID", "OT1 (Night)", "OT2 (Weekend)", "Date"];
+                  const tableRows = rows.map(row => [
+                        row.name,
+                        row.staffId,
+                        row.ot1,
+                        row.ot2,
+                        row.date
+                  ]);
+
+                  if (typeof autoTable === 'function') {
+                        autoTable(doc, {
+                              head: [tableColumn],
+                              body: tableRows,
+                              startY: 35,
+                              theme: 'grid',
+                        });
+                  } else if (doc.autoTable) {
+                        doc.autoTable({
+                              head: [tableColumn],
+                              body: tableRows,
+                              startY: 35,
+                              theme: 'grid',
+                        });
+                  }
+
+                  doc.save(`Overtime_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+            } catch (error) {
+                  console.error("PDF Export Error:", error);
+                  alert("Failed to export PDF.");
+            }
+      };
+
       render() {
             const { rows, confirmModal, actionFeedback } = this.state;
 
@@ -113,13 +162,17 @@ export default class Overtime extends Component {
 
             return (
                   <>
-                        <div className="card-header">
-                              <p>Overtime Management</p>
-                              {actionFeedback && (
-                                    <div style={{ background: '#d4edda', padding: '8px 12px', borderRadius: 4, color: '#155724', marginTop: 8 }}>
-                                          {actionFeedback}
-                                    </div>
-                              )}
+                        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <div>
+                                    {actionFeedback && (
+                                          <div style={{ background: '#d4edda', padding: '8px 12px', borderRadius: 4, color: '#155724' }}>
+                                                {actionFeedback}
+                                          </div>
+                                    )}
+                              </div>
+                              <Button color="success" onClick={this.generatePDF}>
+                                    Generate PDF
+                              </Button>
                         </div>
 
                         <TableContainer component={Paper}>

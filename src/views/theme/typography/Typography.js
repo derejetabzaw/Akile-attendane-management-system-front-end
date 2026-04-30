@@ -12,6 +12,8 @@ import axios from 'axios';
 import Calendar from 'react-calendar';
 import "./Calendar.css";
 import { Tabs } from "antd";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const { TabPane } = Tabs;
 
@@ -220,6 +222,47 @@ class Typography extends React.Component {
     this.setState({ showCalendarsModal: false });
   };
 
+  generatePDF = () => {
+    try {
+      const { database_name, database_lastName, database_position, database_salary, Netsalary } = this.state;
+      const doc = new jsPDF('l', 'mm', 'a4'); // landscape
+      
+      doc.setFontSize(18);
+      doc.text("Payroll Report", 14, 22);
+      doc.setFontSize(11);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 30);
+
+      const tableColumn = ["Name", "Position", "Basic Salary", "NET Salary"];
+      const tableRows = database_name.map((name, i) => [
+        `${name} ${database_lastName[i]}`,
+        database_position[i] || "-",
+        database_salary[i] || "0",
+        Netsalary[i] || "-"
+      ]);
+
+      if (typeof autoTable === 'function') {
+        autoTable(doc, {
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      } else if (doc.autoTable) {
+        doc.autoTable({
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      }
+
+      doc.save(`Payroll_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (error) {
+      console.error("PDF Export Error:", error);
+      alert("Failed to export PDF.");
+    }
+  };
+
   render() {
     const database_namerows = this.state.database_name;
 
@@ -294,19 +337,18 @@ class Typography extends React.Component {
 
     return (
       <>
-        <div className="card-header">
-          <p>Payroll Information</p>
-
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
           <Button color="primary" onClick={this.handleSelectByDateClick}>
             Show by Date
           </Button>
 
-          <Button color="success" style={{ float: "right", marginBottom: "2%" }}>
+          <Button color="success" onClick={this.generatePDF}>
             Generate PDF
           </Button>
+        </div>
 
-          <Modal isOpen={this.state.showCalendarsModal} toggle={this.handleCloseCalendarsModal}>
-            <ModalHeader toggle={this.handleCloseCalendarsModal}>
+        <Modal isOpen={this.state.showCalendarsModal} toggle={this.handleCloseCalendarsModal}>
+          <ModalHeader toggle={this.handleCloseCalendarsModal}>
               Select Date Range
             </ModalHeader>
 
@@ -384,7 +426,7 @@ class Typography extends React.Component {
               <Button color="secondary" onClick={this.handleCloseCalendarsModal}>Cancel</Button>
             </ModalFooter>
           </Modal>
-        </div>
+        {/* </div> */}
 
         <TableContainer component={Paper}>
           <Table aria-label="customized table">

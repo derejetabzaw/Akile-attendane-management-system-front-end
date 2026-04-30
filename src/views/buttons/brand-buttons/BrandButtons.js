@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import axios from 'axios';
-import { Button } from "@coreui/coreui";
+import { Button } from "reactstrap";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,6 +9,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 
 // const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
@@ -16,25 +18,126 @@ const base_url = 'http://localhost:9000/api/v1'
 
 export default class Dashboard extends Component {
   constructor(props) {
-      super(props);
-      const today = new Date();
+    super(props);
+    const today = new Date();
     const formattedToday = today.getFullYear() + "-" + ("0" + (today.getMonth() + 1)).slice(-2) + "-" + ("0" + today.getDate()).slice(-2);
     this.state = {
-      showModal: false,
       startDate: formattedToday,
       endDate: formattedToday,
       attendance: [],
-        users: [],
-        names: [],
-        staffids: [],
-        clockins: [],
-        clockouts: [],
-        locations: [],
-        numofcheckins: [],
-        dates: [],
-        total: [],
-      };
+      users: [],
+    };
+  }
+
+  formatDate = (date) => {
+    const d = new Date(date);
+    const day = ("0" + d.getDate()).slice(-2);
+    const month = ("0" + (d.getMonth() + 1)).slice(-2);
+    const year = d.getFullYear();
+    return year + '-' + month + '-' + day;
+  }
+
+  getFilteredAttendanceData = () => {
+    const { attendance, users, startDate, endDate } = this.state;
+    
+    let dates = [];
+    let names = [];
+    let staffids = [];
+    let numofcheckins = [];
+    let total = [];
+
+    if (attendance && attendance.attendances && users && users.users) {
+      const attendance_records = attendance.attendances;
+      const user_list = users.users;
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+
+      // Create a map to group by user and date: key = userId_date
+      const aggregated = {};
+
+      attendance_records.forEach(record => {
+        if (!record || !record.date || !record.user) return;
+        
+        const recordDate = new Date(record.date);
+        if (recordDate >= start && recordDate <= end) {
+          const key = `${record.user}_${record.date}`;
+          if (!aggregated[key]) {
+            aggregated[key] = {
+              userId: record.user,
+              date: record.date,
+              maxCheckIn: record.numberOfCheckIn || 0,
+              totalHours: record.workedHours || 0
+            };
+          } else {
+            aggregated[key].maxCheckIn = Math.max(aggregated[key].maxCheckIn, record.numberOfCheckIn || 0);
+            aggregated[key].totalHours += (record.workedHours || 0);
+          }
+        }
+      });
+
+      // Map aggregated data back to arrays for the table, matching with user info
+      Object.values(aggregated).forEach(item => {
+        const user = user_list.find(u => u._id === item.userId);
+        if (user) {
+          names.push(user.name + " " + user.lastName);
+          staffids.push(user.staffId);
+          dates.push(item.date);
+          numofcheckins.push(item.maxCheckIn);
+          total.push(item.totalHours.toFixed(2));
+        }
+      });
     }
+
+    return { names, staffids, dates, total, numofcheckins };
+  };
+
+  generatePDF = () => {
+    try {
+      const { names, staffids, numofcheckins, dates, total } = this.getFilteredAttendanceData();
+      
+      if (!names || names.length === 0) {
+        alert("No attendance records found for the selected date range to generate PDF.");
+        return;
+      }
+
+      const doc = new jsPDF();
+      doc.setFontSize(18);
+      doc.text("Attendance Report", 14, 22);
+      doc.setFontSize(11);
+      doc.text(`Range: ${this.state.startDate} to ${this.state.endDate}`, 14, 30);
+
+      const tableColumn = ["Staff ID", "Name", "Check-Ins", "Date", "Worked Hours"];
+      const tableRows = names.map((name, i) => [
+        staffids[i] || "-",
+        name || "-",
+        numofcheckins[i] || "0",
+        dates[i] || "-",
+        total[i] || "0"
+      ]);
+
+      if (typeof autoTable === 'function') {
+        autoTable(doc, {
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      } else if (doc.autoTable) {
+        doc.autoTable({
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      }
+
+      doc.save(`Attendance_Report_${this.state.startDate}_to_${this.state.endDate}.pdf`);
+    } catch (error) {
+      console.error("PDF Generation Error:", error);
+      alert("Failed to generate PDF. Check console for details.");
+    }
+  };
 
   createData = (name, Id, CIN, COUT, Location, date, time, numofcheckins) => {
     return { name, Id, CIN, COUT, Location, date, time, numofcheckins };
@@ -78,64 +181,9 @@ export default class Dashboard extends Component {
   }
 
   render() {
-
-    if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
-      var attendance_length = this.state.attendance.attendances.length;
-      var user_length = this.state.users.users.length;
-
-      this.state.clockins = [];
-      this.state.clockouts = [];
-      this.state.dates = [];
-      this.state.names = [];
-      this.state.staffids = [];
-      this.state.locations = [];
-      this.state.numofcheckins = [];
-      this.state.total = [];
-
-      const startDate = new Date(this.state.startDate);
-      const endDate = new Date(this.state.endDate);
-      // to include the full end date, set time to end of day
-      endDate.setHours(23, 59, 59, 999);
-
-      for (var j = 0; j < user_length; j++) {
-        for (var i = 0; i < attendance_length; i++) {
-          const attendanceRecord = this.state.attendance.attendances.at(i);
-          const recordDateStr = attendanceRecord.date || "";
-          
-          let isInRange = false;
-          if (recordDateStr) {
-            const recordDate = new Date(recordDateStr);
-            isInRange = recordDate >= startDate && recordDate <= endDate;
-          }
-
-          if (isInRange && attendanceRecord.user === this.state.users.users.at(j)._id && attendanceRecord.numberOfCheckIn === 3) {
-
-            if (!(attendanceRecord.checkOutTime === '')) {
-              this.state.clockins.push(attendanceRecord.checkInTime);
-              this.state.clockouts.push(attendanceRecord.checkOutTime);
-              this.state.dates.push(attendanceRecord.date);
-              this.state.names.push(this.state.users.users.at(j).name);
-              this.state.staffids.push(this.state.users.users.at(j).staffId);
-              this.state.locations.push(this.state.users.users.at(j).workingSite);
-              this.state.numofcheckins.push(attendanceRecord.numberOfCheckIn);
-              this.state.total.push(attendanceRecord.workedHours)
-            }
-          }
-        }
-      }
-    }
-
-    var namerows = this.state.names;
-    var krows = this.createData(
-      this.state.names,
-      this.state.staffids,
-      this.state.clockins,
-      this.state.clockouts,
-      this.state.locations,
-      this.state.dates,
-      this.state.total,
-      this.state.numofcheckins
-    );
+    const { names, staffids, numofcheckins, dates, total } = this.getFilteredAttendanceData();
+    const namerows = names;
+    const krows = this.createData(names, staffids, null, null, null, dates, total, numofcheckins);
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -178,6 +226,14 @@ export default class Dashboard extends Component {
               onChange={(e) => this.setState({ endDate: e.target.value })} 
             />
           </div>
+          <Button 
+            color="success" 
+            variant="outline"
+            onClick={this.generatePDF}
+            style={{ height: '38px', marginLeft: '10px' }}
+          >
+            Generate PDF
+          </Button>
         </div>
 
         <div style={{ marginTop: "2%" }}></div>
@@ -193,9 +249,12 @@ export default class Dashboard extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-
-              {namerows.map((krow, idx) => (
-                <StyledTableRow krow={krow} key={krow.rowcount}>
+              {namerows.length === 0 ? (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={5} align="center">No attendance records found for this range.</StyledTableCell>
+                </StyledTableRow>
+              ) : namerows.map((krow, idx) => (
+                <StyledTableRow krow={krow} key={idx}>
                   <StyledTableCell component="th" scope="row">{krows.Id[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.name[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{krows.numofcheckins[idx]}</StyledTableCell>
@@ -203,7 +262,6 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{krows.time[idx]}</StyledTableCell>
                 </StyledTableRow>
               ))}
-
             </TableBody>
           </Table>
         </TableContainer>

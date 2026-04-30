@@ -16,6 +16,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 
 // const base_url = 'https://akille-4cfc3.firebaseapp.com/api/v1';
@@ -183,6 +185,9 @@ export default class Colors extends Component {
 
 
   handleRemoveUser = (id) => {
+    if (!window.confirm("Are you sure you want to delete this employee?")) {
+      return;
+    }
     axios
       .delete(
         base_url + '/users/delete-user/' + id,
@@ -210,6 +215,47 @@ export default class Colors extends Component {
     this.setState({
       showModal: false,
     });
+  };
+
+  generatePDF = () => {
+    try {
+      const { database_name, database_lastName, database_staffid, database_salary } = this.state;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(18);
+      doc.text("Allowance / Advance Report", 14, 22);
+      doc.setFontSize(11);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 30);
+
+      const tableColumn = ["Name", "Staff ID", "Transport Allowance", "Salary Advance"];
+      const tableRows = database_name.map((name, i) => [
+        `${name} ${database_lastName[i]}`,
+        database_staffid[i] || "-",
+        "0", // Placeholder values from current UI
+        "0"
+      ]);
+
+      if (typeof autoTable === 'function') {
+        autoTable(doc, {
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      } else if (doc.autoTable) {
+        doc.autoTable({
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      }
+
+      doc.save(`Allowance_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (error) {
+      console.error("PDF Export Error:", error);
+      alert("Failed to export PDF.");
+    }
   };
 
   createData = (
@@ -332,17 +378,21 @@ export default class Colors extends Component {
 
     return (
       <>
-        <div className="card-header">
-          <p>Transport Allowance / Salary Advance Information</p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px', gap: '10px' }}>
+          <Button
+            color="success"
+            onClick={this.generatePDF}
+            variant="outline"
+          >
+            Generate PDF
+          </Button>
+          <Button
+            color="success"
+            onClick={this.toggleModal}
+          >
+            Add Record
+          </Button>
         </div>
-
-        <Button
-          color="success"
-          onClick={this.toggleModal}
-          style={{ float: "right", marginBottom: "2%" }}
-        >
-          Add Record
-        </Button>
 
         <Modal
           isOpen={this.state.showModal}

@@ -4,10 +4,12 @@ export default [
     name: "Employee",
     to: "/dashboard",
     icon: "cil-people",
-    // badge: {
-    //   color: 'info',
-    //   text: 'NEW',
-    // }
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Pending Approvals",
+    to: "/users/pending",
+    icon: "cil-user-follow",
   },
   // {
   //   _tag: 'CSidebarNavTitle',
@@ -42,12 +44,12 @@ export default [
         _tag: "CSidebarNavItem",
         name: "Daily Attendance",
         to: "/buttons/buttons",
-        icon: "cil-calendar-today",
+        icon: "cil-calendar",
       },
       {
         _tag: "CSidebarNavItem",
         name: "Attendance Report",
-        icon: "cil-calendar-today",
+        icon: "cil-spreadsheet",
         to: "/buttons/brand-buttons",
       },
       // {
@@ -59,30 +61,10 @@ export default [
     ],
   },
   {
-    _tag: "CSidebarNavDropdown",
+    _tag: "CSidebarNavItem",
     name: "Salary Management",
-    route: "/theme",
-    icon: "cil-pencil",
-    _children: [
-      {
-        _tag: "CSidebarNavItem",
-        name: "Payroll Records",
-        to: "/theme/typography",
-        icon: "cil-file",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Allowance / Advance",
-        to: "/theme/colors",
-        icon: "cil-credit-card",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "Overtime Management",
-        to: "/theme/overtime",
-        icon: "cil-calculator",
-      },
-    ],
+    to: "/salary-management",
+    icon: "cil-dollar",
   },
   // {
   //   _tag: "CSidebarNavItem",

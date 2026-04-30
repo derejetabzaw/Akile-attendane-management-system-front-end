@@ -242,6 +242,9 @@ export default class Dashboard extends Component {
   }
 
   handleRemoveUser = (id) => {
+    if (!window.confirm("Are you sure you want to delete this employee?")) {
+      return;
+    }
     axios
       .delete(
         base_url + '/users/delete-user/' + id,
@@ -410,138 +413,6 @@ export default class Dashboard extends Component {
 
     return (
       <>
-        <Button
-          color="success"
-          onClick={this.toggleModal}
-          style={{ float: "right", marginBottom: "2%" }}
-        >
-          Add Employee
-        </Button>{" "}
-
-        <Modal
-          isOpen={this.state.showModal}
-          modalTransition={{ timeout: 200 }}
-          backdropTransition={{ timeout: 100 }}
-          style={{ width: "50%" }}
-          toggle={this.toggleModal}
-        >
-          <ModalHeader>Add Employee</ModalHeader>
-          <ModalBody>
-            <Form>
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">First Name</InputGroupAddon>
-                  <Input onChange={this.handleNameChange} placeholder="First name of Employee" />
-                </InputGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">Last Name</InputGroupAddon>
-                  <Input onChange={this.handleLastNameChange} placeholder="Last name of Employee" />
-                </InputGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    Position
-                  </InputGroupAddon>
-                  <Input onChange={this.handlePositionchange} type="select" name="backdrop" id="backdrop" value={this.state.position}>
-                    <option value=" ">Select Position</option>
-                    <option value="Site Manager">Site Manager</option>
-                    <option value="Project Manager">Project Manager</option>
-                    <option value="PMP">Professional Machine Painter - PMP</option>
-                    <option value="Painter">Painter</option>
-                  </Input>
-                </InputGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">Gender</InputGroupAddon>
-                  <Input onChange={this.handleGenderchange} type="select" name="backdrop" id="backdrop" value={this.state.gender}>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </Input>
-                </InputGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    Working Site
-                  </InputGroupAddon>
-                  <Input onChange={this.handleSitechange} type="select" value={this.state.workingSite}>
-                    <option value="">Select Site</option>
-                    {this.state.sites.map((site) => (
-                      <option key={site._id} value={site.sitename}>{site.sitename} - {site.location}</option>
-                    ))}
-                  </Input>
-                </InputGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    Basic Salary
-                  </InputGroupAddon>
-                  <Input
-                    onChange={this.handleSalarychange}
-                    type="number"
-                    placeholder="Salary"
-                  />
-                </InputGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    Telephone
-                  </InputGroupAddon>
-                  <Input
-                    onChange={this.handleTelephonechange}
-                    placeholder="Phone Number of Employee"
-                    type="phone"
-                  />
-                </InputGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">Email</InputGroupAddon>
-                  <Input
-                    onChange={this.handleEmailchange}
-                    placeholder="Email of Employee"
-                    type="email"
-                    required
-                  />
-                </InputGroup>
-              </FormGroup>
-
-              <Upload
-                accept="image/*"
-                beforeUpload={this.beforeUploadFile}
-                onRemove={this.onRemove}
-                onChange={this.onSelectFile}
-                listType="picture"
-              >
-                <Button icon={<UploadOutlined />}>Upload</Button>
-              </Upload>
-            </Form>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button color="primary" onClick={this.handleNameSubmit}>
-              Add Employee
-            </Button>{" "}
-
-            <Button color="secondary" onClick={this.cancelItem_onClick}>
-              Cancel
-            </Button>{" "}
-          </ModalFooter>
-        </Modal>
-
         <div style={{ marginTop: "2%" }}></div>
         <TableContainer component={Paper}>
           <Table aria-label="customized table">

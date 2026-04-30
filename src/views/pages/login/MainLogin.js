@@ -59,12 +59,12 @@ function Login() {
         const data = await response.json()
         
 
-        if (data.staffId) {
+        if (response.ok && data.staffId) {
           localStorage.setItem('Bearer', 'Bearer ' + data.accessToken)
           alert('Login successful')
           window.location.href = '/#/dashboard'
         } else {
-          alert('Incorrect Staffid or Password')
+          alert(data.error || 'Incorrect Staffid or Password')
         }
       }
       catch (err) {

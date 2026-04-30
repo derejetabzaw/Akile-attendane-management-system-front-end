@@ -245,7 +245,7 @@ export default class Inventory extends Component {
           style={{ width: "50%" }}
           toggle={this.toggleModal}
         >
-          <ModalHeader toggle={this.toggleModal}>Add Employee</ModalHeader>
+          <ModalHeader toggle={this.toggleModal}>Add Machine</ModalHeader>
           <ModalBody>
             <Form>
               <FormGroup>

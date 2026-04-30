@@ -12,6 +12,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 import { Date } from "core-js";
 
 
@@ -25,13 +27,7 @@ export default class Dashboard extends Component {
       showModal: false,
       attendance: [],
       users: [],
-      names: [],
-      staffids: [],
-      clockins: [],
-      clockouts: [],
-      locations: [],
-      dates: [],
-      total: [],
+      selectedDate: new Date(),
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -62,6 +58,113 @@ export default class Dashboard extends Component {
   refreshPage() {
     window.location.reload();
   }
+
+  formatDate = (date) => {
+    var d = new Date(date);
+    var day = ("0" + d.getDate()).slice(-2);
+    var month = ("0" + (d.getMonth() + 1)).slice(-2);
+    var year = d.getFullYear();
+    return year + '-' + month + '-' + day;
+  }
+
+  getFilteredAttendanceData = () => {
+    const { attendance, users, selectedDate } = this.state;
+    const today = this.formatDate(selectedDate);
+    
+    let clockins = [];
+    let clockouts = [];
+    let dates = [];
+    let names = [];
+    let staffids = [];
+    let locations = [];
+    let total = [];
+
+    if (attendance && attendance.attendances && users && users.users) {
+      const attendance_length = attendance.attendances.length;
+      const user_length = users.users.length;
+
+      for (let j = 0; j < user_length; j++) {
+        for (let i = 0; i < attendance_length; i++) {
+          const record = attendance.attendances[i];
+          const user = users.users[j];
+          if (today === record.date && record.user === user._id) {
+            clockins.push(record.checkInTime);
+            clockouts.push(record.checkOutTime);
+            dates.push(record.date);
+            names.push(user.name + " " + user.lastName);
+            staffids.push(user.staffId);
+            locations.push(user.workingSite);
+            total.push(record.checkOutTime === '' ? "" : record.workedHours);
+          }
+        }
+      }
+    }
+
+    return { names, staffids, clockins, clockouts, locations, dates, total };
+  };
+
+  handleDateChange = (date) => {
+    this.setState({ selectedDate: date });
+  };
+
+  handleShowClick = () => {
+    this.setState({ showModal: false });
+  };
+
+  generatePDF = () => {
+    try {
+      const { names, staffids, clockins, clockouts, locations, total } = this.getFilteredAttendanceData();
+      
+      if (!names || names.length === 0) {
+        alert("No attendance records found for the selected date to generate PDF.");
+        return;
+      }
+
+      const doc = new jsPDF();
+      const dateStr = this.formatDate(this.state.selectedDate);
+
+      doc.setFontSize(18);
+      doc.text("Daily Attendance Report", 14, 22);
+      doc.setFontSize(11);
+      doc.text(`Date: ${dateStr}`, 14, 30);
+
+      const tableColumn = ["Staff ID", "Name", "Clock-In", "Clock-Out", "Location", "Worked Hours"];
+      const tableRows = names.map((name, i) => [
+        staffids[i] || "-",
+        name || "-",
+        clockins[i] || "-",
+        clockouts[i] || "-",
+        locations[i] || "-",
+        total[i] || "0"
+      ]);
+
+      console.log("Generating PDF with autoTable:", typeof autoTable);
+
+      if (typeof autoTable === 'function') {
+        autoTable(doc, {
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      } else if (doc.autoTable) {
+        doc.autoTable({
+          head: [tableColumn],
+          body: tableRows,
+          startY: 35,
+          theme: 'grid',
+        });
+      } else {
+        alert("Error: PDF AutoTable plugin not found.");
+        return;
+      }
+
+      doc.save(`Attendance_Report_${dateStr}.pdf`);
+    } catch (error) {
+      console.error("PDF Generation Error:", error);
+      alert("Failed to generate PDF. Check console for details.");
+    }
+  };
 
   getmongodb = () => {
     axios.get(base_url + '/attendance/',
@@ -121,63 +224,9 @@ export default class Dashboard extends Component {
   // render(<ReactCalandar/>, document.querySelector("#root"))
 
   render() {
-
-    const getCurrentDate = () => {
-      var date = ("0" + new Date().getDate()).slice(-2)
-      var month = ("0" + (new Date().getMonth() + 1)).slice(-2)
-      var year = new Date().getFullYear();
-      return year + '-' + month + '-' + date;
-    }
-
-    var today = getCurrentDate();
-
-    if (this.state.attendance.length !== 0 && this.state.users.length !== 0) {
-      var attendance_length = this.state.attendance.attendances.length
-      var user_length = this.state.users.users.length
-
-      this.state.clockins = []
-      this.state.clockouts = []
-      this.state.dates = []
-      this.state.names = []
-      this.state.staffids = []
-      this.state.locations = []
-      this.state.total = []
-
-      for (var j = 0; j < user_length; j++) {
-        for (var i = 0; i < attendance_length; i++) {
-          if (today === this.state.attendance.attendances.at(i).date && this.state.attendance.attendances.at(i).user === this.state.users.users.at(j)._id) {
-            //  if (this.state.attendance.attendances.at(i).checkOutTime === '') {
-            //   this.state.total.push("")
-            // }
-            // else{
-            this.state.clockins.push(this.state.attendance.attendances.at(i).checkInTime);
-            this.state.clockouts.push(this.state.attendance.attendances.at(i).checkOutTime);
-            this.state.dates.push(this.state.attendance.attendances.at(-1).date);
-            this.state.names.push(this.state.users.users.at(j).name);
-            this.state.staffids.push(this.state.users.users.at(j).staffId);
-            this.state.locations.push(this.state.users.users.at(j).workingSite);
-
-            if (this.state.attendance.attendances.at(i).checkOutTime === '') {
-              this.state.total.push("")
-            }
-            else {
-              this.state.total.push(this.state.attendance.attendances.at(i).workedHours)
-            }
-          }
-        }
-      }
-    }
-
-    var namerows = this.state.names;
-    var krows = this.createData(
-      this.state.names,
-      this.state.staffids,
-      this.state.clockins,
-      this.state.clockouts,
-      this.state.locations,
-      this.state.dates,
-      this.state.total
-    );
+    const { names, staffids, clockins, clockouts, locations, dates, total } = this.getFilteredAttendanceData();
+    const namerows = names;
+    const krows = this.createData(names, staffids, clockins, clockouts, locations, dates, total);
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
@@ -207,9 +256,17 @@ export default class Dashboard extends Component {
         <Button
           color="primary"
           onClick={this.toggleModal}
-          style={{ float: "right", marginBottom: '2%' }}
+          style={{ float: "right", marginBottom: '2%', marginLeft: '10px' }}
         >
           Show by Date
+        </Button> {" "}
+
+        <Button
+          color="success"
+          onClick={this.generatePDF}
+          style={{ float: "right", marginBottom: '2%' }}
+        >
+          Generate PDF
         </Button> {" "}
 
         <Modal
@@ -221,10 +278,13 @@ export default class Dashboard extends Component {
         >
           <ModalHeader>Select a Date</ModalHeader>
 
-          <Calendar />
+          <Calendar
+            onChange={this.handleDateChange}
+            value={this.state.selectedDate}
+          />
 
           <ModalFooter>
-            <Button color="primary" onClick={this.handleNameSubmit}>
+            <Button color="primary" onClick={this.handleShowClick}>
               Show
             </Button>{" "}
 
