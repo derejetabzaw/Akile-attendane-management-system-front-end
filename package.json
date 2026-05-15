@@ -82,14 +82,15 @@
     "sass-loader": "^10.5.2",
     "swr": "^0.3.11",
     "tailwindcss": "^4.2.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "react-scripts": "^3.4.3"
   },
   "devDependencies": {
     "react-scripts": "^3.4.3"
   },
   "scripts": {
-    "start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
@@ -116,7 +117,7 @@
     ]
   },
   "engines": {
-    "node": "16.20.2",
+    "node": "18",
     "npm": ">=6"
   }
 }
