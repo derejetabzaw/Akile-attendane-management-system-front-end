@@ -149,7 +149,7 @@ export default class Sites extends Component {
     const { sites, feedback } = this.state;
 
     const StyledTableCell = withStyles((theme) => ({
-      head: { backgroundColor: theme.palette.common.black, color: theme.palette.common.white },
+      head: { backgroundColor: "#4f46e5", color: theme.palette.common.white },
       body: { fontSize: 14 },
     }))(TableCell);
 

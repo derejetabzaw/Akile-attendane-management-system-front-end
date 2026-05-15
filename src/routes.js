@@ -41,6 +41,7 @@ const Users = React.lazy(() => import('./views/users/Users'));
 const User = React.lazy(() => import('./views/users/User'));
 const PendingApprovals = React.lazy(() => import('./views/users/PendingApprovals'));
 const Sites = React.lazy(() => import('./views/sites/Sites'));
+const AssignmentsView = React.lazy(() => import('./views/assignments/Assignments'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -83,6 +84,7 @@ const routes = [
   { path: '/users/pending', exact: true, name: 'Pending Approvals', component: PendingApprovals },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/sites', exact: true, name: 'Sites', component: Sites },
+  { path: '/assignments', exact: true, name: 'Assignments', component: AssignmentsView },
 ];
 
 export default routes;

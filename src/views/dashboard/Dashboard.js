@@ -396,7 +396,7 @@ export default class Dashboard extends Component {
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
-        backgroundColor: theme.palette.common.black,
+        backgroundColor: "#4f46e5",
         color: theme.palette.common.white,
       },
       body: {
@@ -422,7 +422,6 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Position</StyledTableCell>
                 <StyledTableCell>Gender</StyledTableCell>
                 <StyledTableCell>StaffID</StyledTableCell>
-                <StyledTableCell>Working Site</StyledTableCell>
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
@@ -438,7 +437,6 @@ export default class Dashboard extends Component {
                   <StyledTableCell component="th" scope="row">{jrows.Position[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Gender[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.StaffID[idx]}</StyledTableCell>
-                  <StyledTableCell component="th" scope="row">{this.state.database_site[idx] || '-'}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Salary[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Telephone[idx]}</StyledTableCell>
                   <StyledTableCell component="th" scope="row">{jrows.Email[idx]}</StyledTableCell>

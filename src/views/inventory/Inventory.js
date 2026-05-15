@@ -150,7 +150,7 @@ export default class Inventory extends Component {
 
     const StyledTableCell = withStyles((theme) => ({
       head: {
-        backgroundColor: theme.palette.common.black,
+        backgroundColor: "#4f46e5",
         color: theme.palette.common.white,
       },
       body: {

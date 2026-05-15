@@ -66,12 +66,12 @@ export default [
     to: "/salary-management",
     icon: "cil-dollar",
   },
-  // {
-  //   _tag: "CSidebarNavItem",
-  //   name: "Assignments",
-  //   to: "/theme/colors",
-  //   icon: "cil-file",
-  // },
+  {
+    _tag: "CSidebarNavItem",
+    name: "Assignments",
+    to: "/assignments",
+    icon: "cil-task",
+  },
   {
     _tag: "CSidebarNavItem",
     name: "Sites",

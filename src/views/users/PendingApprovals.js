@@ -17,7 +17,7 @@ const base_url = 'http://localhost:9000/api/v1';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#4f46e5",
     color: theme.palette.common.white,
   },
   body: {
@@ -147,7 +147,6 @@ const PendingApprovals = () => {
                 <StyledTableCell>Position</StyledTableCell>
                 <StyledTableCell>Gender</StyledTableCell>
                 <StyledTableCell>StaffID</StyledTableCell>
-                <StyledTableCell>Working Site</StyledTableCell>
                 <StyledTableCell>Basic Salary</StyledTableCell>
                 <StyledTableCell>Telephone</StyledTableCell>
                 <StyledTableCell>Email</StyledTableCell>
@@ -169,7 +168,6 @@ const PendingApprovals = () => {
                     <StyledTableCell component="th" scope="row">{user.position || '—'}</StyledTableCell>
                     <StyledTableCell component="th" scope="row">{user.gender || '—'}</StyledTableCell>
                     <StyledTableCell component="th" scope="row">{user.staffId || '—'}</StyledTableCell>
-                    <StyledTableCell component="th" scope="row">{user.workingSite || '—'}</StyledTableCell>
                     <StyledTableCell component="th" scope="row">{user.salary || '—'}</StyledTableCell>
                     <StyledTableCell component="th" scope="row">{user.telephone || '—'}</StyledTableCell>
                     <StyledTableCell component="th" scope="row">{user.email || '—'}</StyledTableCell>

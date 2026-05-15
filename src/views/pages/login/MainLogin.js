@@ -84,27 +84,26 @@ function Login() {
                 <CCardBody>
                   <form onSubmit={submitLogin} >
 
-                    <div style={{ marginLeft: 'auto', marginRight: 'auto', display: 'block' }}>
-                      <div>
-                        <img
-                          src={img}
-                          style={{ borderRadius: '50%', marginLeft: 'auto', marginRight: 'auto', display: "block", width: '20%' }}
-                          alt='Akile Logo' />
-                      </div>
-                      <h1 style={{ paddingLeft: '40%', paddingTop: '2%' }}>Login</h1>
-                      <p className="text-muted" style={{ paddingLeft: '32%', paddingBottom: '3%' }}>
+                    <div className="text-center mb-4">
+                      <img
+                        src={img}
+                        style={{ borderRadius: '50%', margin: '0 auto 1.5rem', display: "block", width: '80px' }}
+                        alt='Akile Logo' />
+                      <h1 className="h3 mb-3 font-weight-normal">Login</h1>
+                      <p className="text-muted">
                         Sign In to your account
                       </p>
-
                     </div>
-                    <CInputGroup className="mb-4">
+
+                    <CInputGroup className="mb-3">
                       <CInputGroupPrepend>
-                        <CInputGroupText>
+                        <CInputGroupText style={{ backgroundColor: 'transparent', borderRight: 'none' }}>
                           <CIcon name="cil-user" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <input
-                        className='form-control'
+                        className='form-control shadow-none'
+                        style={{ borderLeft: 'none' }}
                         type='text'
                         autoComplete='off'
                         placeholder="StaffId"
@@ -114,12 +113,13 @@ function Login() {
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
-                        <CInputGroupText>
+                        <CInputGroupText style={{ backgroundColor: 'transparent', borderRight: 'none' }}>
                           <CIcon name="cil-lock-locked" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <input
-                        className='form-control'
+                        className='form-control shadow-none'
+                        style={{ borderLeft: 'none' }}
                         type="password"
                         placeholder="Password"
                         autoComplete='off'
@@ -128,17 +128,18 @@ function Login() {
                         required />
                     </CInputGroup>
                     <CRow>
-                      <CCol xs="6">
+                      <CCol xs="12">
                         <button
-                          color="primary"
-                          className="px-4 btn btn-primary">
-                          LOGIN
+                          type="submit"
+                          className="btn btn-primary btn-block py-2 font-weight-bold shadow-sm"
+                          style={{ borderRadius: '8px' }}>
+                          SIGN IN
                         </button>
                       </CCol>
-                      <CCol xs="6" className="text-right">
+                      <CCol xs="12" className="text-center mt-3">
                         <CButton
                           color="link"
-                          className="px-0">
+                          className="px-0 text-muted small">
                           Forgot Password?
                         </CButton>
                       </CCol>

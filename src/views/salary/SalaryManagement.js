@@ -14,7 +14,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 
-import PayrollRecords from "../theme/typography/Typography";
+import PayrollRecords from "./PayrollRecords";
 import AllowanceAdvance from "../theme/colors/Colors";
 import OvertimeManagement from "../theme/overtime/Overtime";
 

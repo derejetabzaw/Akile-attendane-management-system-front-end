@@ -306,7 +306,7 @@ export default class Dashboard extends Component {
                 <StyledTableCell>Clock-Out</StyledTableCell>
                 <StyledTableCell>Location</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Total Daily Work Hour</StyledTableCell>
+                <StyledTableCell>Work Hours</StyledTableCell>
               </TableRow>
             </TableHead>
 

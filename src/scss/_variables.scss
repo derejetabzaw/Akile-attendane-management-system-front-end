@@ -1,1 +1,30 @@
 // Variable overrides
+
+// Custom Palette
+$indigo-600: #4f46e5;
+$slate-900: #0f172a;
+$slate-800: #1e293b;
+$slate-700: #334155;
+$slate-600: #475569;
+$slate-50: #f8fafc;
+$emerald-500: #10b981;
+
+// CoreUI / Bootstrap Overrides
+$primary: $indigo-600;
+$dark: $slate-900;
+$body-bg: $slate-50;
+$body-color: $slate-700;
+
+$sidebar-bg: $slate-900;
+$header-bg: $slate-800;
+
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $slate-600,
+  "success": $emerald-500,
+  "info": #3b82f6,
+  "warning": #f59e0b,
+  "danger": #ef4444,
+  "light": $slate-50,
+  "dark": $slate-900
+);
